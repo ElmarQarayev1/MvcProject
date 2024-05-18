@@ -1,0 +1,36 @@
+﻿@model Info
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Infos</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            Create
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <form class="user" asp-action="Edit" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input asp-for="Date" class="form-control" id="date" placeholder=" ">
+                    <span class="text-danger" asp-validation-for="Date"></span>
+                </div>
+                <div class="form-group">
+                    <label for="descInput">Desc</label>
+                    <textarea asp-for="Desc" class="form-control" id="descInput" placeholder=" "></textarea>
+                    <span class="text-danger" asp-validation-for="Desc"></span>
+                </div>
+                <button class="btn btn-primary" type="submit">
+                    Edit Info
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Html.Partial("_ValidationScriptPartials");
+}

@@ -22,6 +22,70 @@ namespace MvcProject.Areas.Manage.Controllers
             return View(PaginatedList<Info>.Create(query,page,2));
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Info info)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(info);
+            }
+
+            _context.Infos.Add(info);
+            _context.SaveChanges();
+            return RedirectToAction("index");
+        }
+        public IActionResult Edit(int id)
+        {
+            Info info = _context.Infos.Find(id);
+            if (info == null)
+            {
+                return RedirectToAction("notfound", "error");
+            }
+            return View(info);
+        }
+        [HttpPost]
+        public IActionResult Edit(Info info)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(info);
+            }
+
+            Info existInfo = _context.Infos.Find(info.Id);
+
+            if (existInfo == null)
+            {
+                return RedirectToAction("notfound", "error");
+            }
+
+            existInfo.Date = info.Date;
+            existInfo.Desc = info.Desc;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("index");
+        }
+
+        public IActionResult Delete(int id)
+        {
+            Info info = _context.Infos.Find(id);
+            if (info == null)
+            {
+                return RedirectToAction("notfound", "error");
+            }
+            _context.Infos.Remove(info);
+            _context.SaveChanges();
+
+            return RedirectToAction("index");
+
+
+        }
 	}
 }
 

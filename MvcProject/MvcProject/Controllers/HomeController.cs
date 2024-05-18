@@ -12,16 +12,14 @@ public class HomeController : Controller
     public HomeController(AppDbContext context)
     {
         _context = context;
-    }
-   
+    } 
     public IActionResult Index()
     {
         HomeViewModel homeViewModel = new HomeViewModel()
         {
             Sliders = _context.Sliders.OrderBy(x => x.Order).ToList(),
             Features = _context.Features.ToList(),
-            Infos= _context.Infos.ToList()
-
+            Infos= _context.Infos.OrderBy(x=>x.Date).ToList()
         };
 
         return View(homeViewModel);

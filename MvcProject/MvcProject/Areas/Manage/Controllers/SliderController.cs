@@ -81,7 +81,6 @@ namespace MvcProject.Areas.Manage.Controllers
                 deletedFile = existSlider.ImageName;
                 existSlider.ImageName = FileManager.Save(slider.ImageFile, _env.WebRootPath, "uploads/slider");
             }
-
             existSlider.Title1 = slider.Title1;
             existSlider.Title2 = slider.Title2;
             existSlider.Desc = slider.Desc;
@@ -93,7 +92,6 @@ namespace MvcProject.Areas.Manage.Controllers
             {
                 FileManager.Delete(_env.WebRootPath, "uploads/slider", deletedFile);
             }
-
             _context.SaveChanges();
             return RedirectToAction("index");
         }
