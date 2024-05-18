@@ -173,7 +173,7 @@
                                 <span>Please login using account detail bellow.</span>
                             </div>
                             <div class="login-form">
-                                <form  method="post">
+                                <form method="post">
                                     <div class="form-group">
                                         <input asp-for="UserName" class="form-control form-control-user"
                                                placeholder="Enter UserName..">
@@ -192,10 +192,14 @@
                                                 </label>
                                             </div>
                                         </div>
-                                       
+                                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
                                         <button type="submit" class="default-btn">Login</button>
                                     </div>
                                 </form>
+                            </div>
+                            <div class="text-center">
+                                <a class="small" href="forgot-password.html">Forgot Password?</a>
                             </div>
                         </div>
                     </div>
