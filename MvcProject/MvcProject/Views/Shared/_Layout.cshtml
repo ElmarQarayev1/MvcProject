@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Eduhome - Educational HTML Template</title>
+    <title>@ViewData["Title"]</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -47,18 +47,18 @@
                                 @if (User.Identity.IsAuthenticated && User.IsInRole("member"))
                                 {
                                     <li><a asp-action="profile" asp-controller="account" class="font-weight-bold">@User.Identity.Name</a></li>
-                                  
+
                                     <li><a asp-action="logout" asp-controller="account">Log out</a></li>
 
                                 }
                                 else
                                 {
                                     <li><a asp-action="login" asp-controller="account" class="font-weight-bold">Login</a></li>
-                               
+
                                     <span>or</span>
                                     <li><a asp-action="register" asp-controller="account">Sign Up</a></li>
                                 }
-                               
+
                             </ul>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                                 <nav>
                                     <ul>
                                         <li>
-                                            <a href="index.html">Home</a>
+                                            <a asp-action="index" asp-controller="home">Home</a>
                                             <ul>
                                                 <li><a href="index.html">Home One</a></li>
                                                 <li><a href="index-2.html">Home Two</a></li>
@@ -91,14 +91,14 @@
                                         </li>
                                         <li><a href="about.html">About</a></li>
                                         <li>
-                                            <a href="course.html">courses</a>
+                                            <a asp-action="index" asp-controller="course">courses</a>
                                             <ul>
                                                 <li><a href="course.html">courses</a></li>
                                                 <li><a href="course-details.html">courses details</a></li>
                                             </ul>
                                         </li>
                                         <li>
-                                            <a  asp-action="index" asp-controller="event">event</a>
+                                            <a asp-action="index" asp-controller="event">event</a>
                                             <ul>
                                                 <li><a asp-action="index" asp-controller="event">event</a></li>
                                                 <li><a href="event-left-side-bar.html">event left sidebar</a></li>
@@ -107,7 +107,7 @@
                                             </ul>
                                         </li>
                                         <li class="hidden-sm">
-                                            <a href="teacher.html">teacher</a>
+                                            <a asp-action="index" asp-controller="teacher">teacher</a>
                                             <ul>
                                                 <li><a href="teacher.html">teacher</a></li>
                                                 <li><a href="teacher-details.html">teacher details</a></li>
@@ -122,7 +122,7 @@
                                                 <li><a href="blog-details.html">blog details</a></li>
                                             </ul>
                                         </li>
-                                        <li><a href="contact.html">Contact</a></li>
+                                        <li><a asp-action="index" asp-controller="contact">Contact</a></li>
                                         <li><a href="#">Buy Now</a>
                                     </ul>
                                 </nav>
@@ -158,9 +158,8 @@
     </header>
     <!-- Header Area End -->
     <!-- Banner Area Start -->
-   
     <!-- Banner Area End -->
-   @RenderBody()
+    @RenderBody()
     <!-- Footer Start -->
     <footer class="footer-area">
         <div class="main-footer">
@@ -238,6 +237,7 @@
     <script src="~js/jquery.nicescroll.min.js"></script>
     <script src="~js/plugins.js"></script>
     <script src="~js/main.js"></script>
+    @RenderSection("elmm", required: false)
 </body>
 
 <!-- Mirrored from demo.devitems.com/eduhome/signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 21 Jun 2020 19:44:02 GMT -->

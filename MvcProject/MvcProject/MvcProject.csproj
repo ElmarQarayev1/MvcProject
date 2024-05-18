@@ -29,6 +29,9 @@
     <None Remove="Areas\Manage\Views\Account\" />
     <None Remove="Views\Account\" />
     <None Remove="Views\Event\" />
+    <None Remove="Views\Teacher\" />
+    <None Remove="Views\Course\" />
+    <None Remove="Views\Contact\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -55,6 +58,9 @@
     <Folder Include="Areas\Manage\Views\Account\" />
     <Folder Include="Views\Account\" />
     <Folder Include="Views\Event\" />
+    <Folder Include="Views\Teacher\" />
+    <Folder Include="Views\Course\" />
+    <Folder Include="Views\Contact\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.19" />
