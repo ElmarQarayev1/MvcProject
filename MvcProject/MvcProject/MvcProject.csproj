@@ -28,6 +28,7 @@
     <None Remove="Areas\Manage\Views\Info\" />
     <None Remove="Areas\Manage\Views\Account\" />
     <None Remove="Views\Account\" />
+    <None Remove="Views\Event\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -53,6 +54,7 @@
     <Folder Include="Areas\Manage\Views\Info\" />
     <Folder Include="Areas\Manage\Views\Account\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="Views\Event\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.19" />

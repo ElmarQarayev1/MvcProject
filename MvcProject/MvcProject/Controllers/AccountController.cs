@@ -95,7 +95,6 @@ namespace MvcProject.Controllers
             return RedirectToAction("index", "home");
         }
 
-
     }
 }
 
