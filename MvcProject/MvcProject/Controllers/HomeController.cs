@@ -1,32 +1,31 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using MvcProject.Models;
+using MvcProject.Data;
+using MvcProject.ViewModels;
 
 namespace MvcProject.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly AppDbContext _context;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(AppDbContext context)
     {
-        _logger = logger;
+        _context = context;
     }
-
+   
     public IActionResult Index()
     {
-        return View();
-    }
+        HomeViewModel homeViewModel = new HomeViewModel()
+        {
+            Sliders = _context.Sliders.OrderBy(x => x.Order).ToList(),
+            Features = _context.Features.ToList(),
+            Infos= _context.Infos.ToList()
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        };
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(homeViewModel);
     }
+   
 }
 
