@@ -14,4 +14,3 @@ namespace MvcProject.Areas.Manage.Controllers
 		
 	}
 }
-
