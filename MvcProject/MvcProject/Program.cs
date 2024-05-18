@@ -36,7 +36,7 @@ builder.Services.ConfigureApplicationCookie(opt =>
         else
         {
             var uri = new Uri(context.RedirectUri);
-            context.Response.Redirect("/account/login" + uri.Query);
+            context.Response.Redirect("/account/logn" + uri.Query);
         }
 
         return Task.CompletedTask;
@@ -58,6 +58,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

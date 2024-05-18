@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MvcProject.Data;
@@ -62,6 +64,38 @@ namespace MvcProject.Controllers
         {
             return View();
         }
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> Login(MemberLoginViewModel member, string returnUrl)
+        {
+            if (member.Password == null)
+            {
+                ModelState.AddModelError("Password", "Password mustn't be null");
+                return View(member);
+            }
+            AppUser appUser = await _userManager.FindByEmailAsync(member.Email);
+
+            if (appUser == null || !await _userManager.IsInRoleAsync(appUser, "member"))
+            {
+                ModelState.AddModelError("", "Email or Password is incorrect");
+                return View(member);
+            }
+            var result = await _signInManager.PasswordSignInAsync(appUser, member.Password, false, true);
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Email or Password is incorrect");
+                return View(member);
+            }
+            return returnUrl != null ? Redirect(returnUrl) : RedirectToAction("index", "home");
+        }
+        [Authorize(Roles = "member")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("index", "home");
+        }
+
+
     }
 }
 

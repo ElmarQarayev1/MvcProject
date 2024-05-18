@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MvcProject.Data;
 using MvcProject.ViewModels;
 
 namespace MvcProject.Controllers;
+
 
 public class HomeController : Controller
 {
