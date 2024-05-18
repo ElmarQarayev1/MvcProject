@@ -27,6 +27,7 @@
     <None Remove="Areas\Manage\Views\Error\" />
     <None Remove="Areas\Manage\Views\Info\" />
     <None Remove="Areas\Manage\Views\Account\" />
+    <None Remove="Views\Account\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -51,6 +52,7 @@
     <Folder Include="Areas\Manage\Views\Error\" />
     <Folder Include="Areas\Manage\Views\Info\" />
     <Folder Include="Areas\Manage\Views\Account\" />
+    <Folder Include="Views\Account\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.19" />
