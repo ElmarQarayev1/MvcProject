@@ -20,6 +20,7 @@ namespace MvcProject.Models
         public string Desc { get; set; }
 
         public List<EventTag> EventTags { get; set; }
+
         public List<EventTeacher> EventTeachers { get; set; }
         
 

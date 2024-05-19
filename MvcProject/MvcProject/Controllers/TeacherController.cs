@@ -1,17 +1,23 @@
 ﻿
 using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MvcProject.Data;
 
 namespace MvcProject.Controllers
 {
 	public class TeacherController:Controller
 	{
-		public TeacherController()
+        private readonly AppDbContext _context;
+
+        public TeacherController(AppDbContext context)
 		{
-		}
+            _context = context;
+        }
 		public IActionResult Index()
 		{
-			return View();
+			var teacher = _context.Teachers.Include(x => x.SocialMedias).ToList();
+			return View(teacher);
 		}
 	}
 }
