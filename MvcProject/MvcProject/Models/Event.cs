@@ -3,6 +3,8 @@ namespace MvcProject.Models
 {
 	public class Event:BaseEntity
 	{
+        public string Img { get; set; }
+
         public DateTime StartTime { get; set; }
 
         public DateTime EndTime { get; set; }

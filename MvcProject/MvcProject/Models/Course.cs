@@ -3,6 +3,8 @@ namespace MvcProject.Models
 {
 	public class Course:BaseEntity
 	{
+		public string Img { get; set; }
+
 		public string Name { get; set; }
 
 		public string Desc { get; set; }
