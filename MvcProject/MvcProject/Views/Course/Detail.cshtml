@@ -107,7 +107,7 @@
                             <ul>
                                 @foreach (var item in Model.Categories)
                                 {
-                                    <li><a href="#">@item.Name</a></li>
+                                    <li><a asp-action="FilterByCategory" asp-route-id="@item.Id">@item.Name</a></li>
 
                                 }
 

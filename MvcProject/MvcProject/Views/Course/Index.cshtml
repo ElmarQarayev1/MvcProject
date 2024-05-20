@@ -1,4 +1,4 @@
-﻿@model CourseViewModel
+﻿@model List<Course>
 @{
 
     ViewData["Title"] = "Course";
@@ -39,7 +39,7 @@
         </div>
         <div class="row" id="courseList">
     
-            @foreach (var item in Model.Courses)
+            @foreach (var item in Model)
             {
                 <div class="col-md-4 col-sm-6 col-xs-12">
                     <div class="single-course mb-70">

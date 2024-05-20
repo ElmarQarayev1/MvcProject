@@ -19,13 +19,12 @@ namespace MvcProject.Controllers
 
 		public IActionResult Index()
 		{
-			CourseViewModel cv = new CourseViewModel()
-			{
-				Courses = _context.Courses.Include(x => x.CourseTags).ToList(),	
-			};
-			return View(cv);
-		}
 
+
+            var courses = _context.Courses.Include(x => x.CourseTags).ToList();
+			
+			return View(courses);
+		}
         public IActionResult Detail(int id)
         {
             var course = _context.Courses
@@ -68,6 +67,25 @@ namespace MvcProject.Controllers
 
             return View("Index", cv); 
         }
+        public IActionResult FilterByCategory(int Id)
+        {
+            var courseQuery = _context.Courses.Include(e => e.Category).AsQueryable();
+
+            if (Id != 0)
+            {
+                courseQuery = courseQuery.Where(e => e.CategoryId == Id);
+            }
+
+            var courses = courseQuery.ToList();
+
+            if (courses.Count == 0)
+            {
+                courses = _context.Courses.ToList();
+            }
+
+            return View("Index", courses);
+        }
+
     }
 
 }
