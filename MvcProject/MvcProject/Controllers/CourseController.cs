@@ -48,6 +48,28 @@ namespace MvcProject.Controllers
             return View(cdv);
         }
 
+       [HttpPost]
+        public IActionResult Search(string searchTerm)
+        {
+           
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return RedirectToAction("Index");
+            }        
+            var courses = _context.Courses
+                .Include(x => x.CourseTags)
+                .Where(c => c.Name.Contains(searchTerm) || c.Desc.Contains(searchTerm))
+                .ToList();
+         
+            CourseViewModel cv = new CourseViewModel()
+            {
+                Courses = courses
+            };
+
+            return View("Index", cv); 
+        }
     }
+
 }
+
 
