@@ -20,14 +20,16 @@
                         <th scope="col">#</th>
                         <th scope="col">Name</th>
                         <th scope="col">Desc</th>
-                        <th scope="col">Crtf</th>
+                        @*<th scope="col">Crtf</th>*@
                         <th scope="col">SDate</th>
                         <th scope="col">Dur</th>
                         <th scope="col">CDur</th>
                         <th scope="col">Lang</th>
                         <th scope="col">SCount</th>
                         <th scope="col">Price</th>
-                        <th scope="col">HTA</th>
+                        @*<th scope="col">HTA</th>*@
+                        @*<th scope="col">CateN</th>*@
+
                         <th scope="col">CTag</th>
                         <th scope="col">Image</th>
                         <th scope="col">Action</th>
@@ -40,26 +42,29 @@
                             <th scope="row">@(++order)</th>
                             <td>@item.Name</td>
                             <td>@item.Desc</td>
-                            <td>@item.Certification</td>
+                            @*<td>@item.Certification</td>*@
                             <td>@item.StartDate.ToString("dd-MMM")</td>
                             <td>@item.Duration</td>
                             <td>@item.ClassDuration</td>
                             <td>@item.Language</td>
                             <td>@item.StudentsCount</td>
                             <td>@item.Price</td>
-                            <td>@item.HowtoApply</td>            
+                            @*<td>@item.HowtoApply</td>*@
+                            
+                            @*<td>
+                                @item.Category.Name
+                            </td>*@
+                           
                             <td>
                                 <ul>
                                     @foreach (var v in item.CourseTags)
                                     {
 
                                         <li>@v.Tag.Name</li>
-
                                     }
-
                                 </ul>
                             </td>
-
+                            <br />
                             <td>
                                 <img width="150" src="~/uploads/course/@item.Img" alt="@item.Name" />
                             </td>

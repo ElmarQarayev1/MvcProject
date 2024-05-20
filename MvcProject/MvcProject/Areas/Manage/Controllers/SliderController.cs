@@ -39,7 +39,6 @@ namespace MvcProject.Areas.Manage.Controllers
                 ModelState.AddModelError("ImageFile", "ImageFile is required!!");
             }
             if (!ModelState.IsValid) return View();
-
             
             if (slider.ImageFile != null)
             {
@@ -101,13 +100,13 @@ namespace MvcProject.Areas.Manage.Controllers
             existSlider.Desc = slider.Desc;
             existSlider.Order = slider.Order;
             existSlider.BtnUrl = slider.BtnUrl;
-            existSlider.BtnText = slider.BtnText;
+            existSlider.BtnText = slider.BtnText;       
+            _context.SaveChanges();
 
             if (deletedFile != null)
             {
                 FileManager.Delete(_env.WebRootPath, "uploads/slider", deletedFile);
             }
-            _context.SaveChanges();
             return RedirectToAction("index");
         }
         public IActionResult Delete(int id)
@@ -128,4 +127,4 @@ namespace MvcProject.Areas.Manage.Controllers
 
     }
 }
-
+ 

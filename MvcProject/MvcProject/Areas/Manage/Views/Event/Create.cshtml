@@ -1,0 +1,68 @@
+﻿@model Event
+@{
+    ViewData["Title"] = "Create";
+}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Events</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            Create
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <form class="user" asp-action="create" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title1Input">Name</label>
+                    <input asp-for="Name" class="form-control" id="title1Input" placeholder=" ">
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+                <div class="form-group">
+                    <label for="startTime">StartTime</label>
+                    <input asp-for="StartTime" class="form-control" id="startTime" placeholder=" ">
+                    <span class="text-danger" asp-validation-for="StartTime"></span>
+                </div>
+                <div class="form-group">
+                    <label for="startTime">EndTime</label>
+                    <input asp-for="EndTime" class="form-control" id="endTime" placeholder=" ">
+                    <span class="text-danger" asp-validation-for="EndTime"></span>
+                </div>
+                <div class="form-group">
+                    <label for="descInput">Desc</label>
+                    <textarea asp-for="Desc" class="form-control" id="descInput" placeholder=" "></textarea>
+                    <span class="text-danger" asp-validation-for="Desc"></span>
+                </div>
+                <div class="form-group">
+                    <label for="venue">Venue</label>
+                    <textarea asp-for="Venue" class="form-control" id="venue" placeholder=" "></textarea>
+                    <span class="text-danger" asp-validation-for="Venue"></span>
+                </div>
+                <div class="form-group">
+                    <label for="categoryId"> Categories </label>
+                    <select asp-for="CategoryId" class="form-control" id="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, nameof(Category.Id), nameof(Category.Name)))">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tagId"> Tags </label>
+                    <select asp-for="TagIds" class="form-control" id="TagId" multiple asp-items="@(new SelectList(ViewBag.Tags, nameof(Tag.Id), nameof(Tag.Name)))">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="imgInput">Image</label>
+                    <input asp-for="ImageFile" class="form-control imgInput" placeholder=" ">
+                    <div class="preview-box">
+                        <img width="200" class="previewImg" />
+                    </div>
+                    <span class="text-danger" asp-validation-for="ImageFile"></span>
+                </div>
+                <button class="btn btn-primary" type="submit">
+                    Create Event
+                </button>
+            </form>
+    </div>
+    </div>
+</div>
+
+@section scripts {
+    @Html.Partial("_ValidationScriptPartials");
+}

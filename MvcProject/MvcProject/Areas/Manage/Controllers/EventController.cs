@@ -24,6 +24,62 @@ namespace MvcProject.Areas.Manage.Controllers
             var query = _context.Events.Include(x => x.EventTeachers).ThenInclude(x=>x.Teacher).Include(x => x.Category).Include(x=>x.EventTags).ThenInclude(x=>x.Tag);
             return View(PaginatedList<Event>.Create(query,page,2));
         }
+        public IActionResult Create()
+        {
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Tags = _context.Tags.ToList();
+    
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Event Event)
+        {
+            if (Event.ImageFile == null)
+            {
+                ModelState.AddModelError("ImageFile", "ImageFile is required!!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = _context.Categories.ToList();
+                ViewBag.Tags = _context.Tags.ToList();
+                return View(Event);
+            }
+            if (!_context.Categories.Any(x => x.Id == Event.CategoryId))
+                return RedirectToAction("notfound", "error");
+
+            foreach (var tagId in Event.TagIds)
+            {
+                if (!_context.Tags.Any(x => x.Id == tagId)) return RedirectToAction("notfound", "error");
+
+                 EventTag eventTag = new EventTag
+                {
+                    TagId = tagId,
+                };
+                Event.EventTags.Add(eventTag);
+
+            }
+            if (Event.ImageFile != null)
+            {
+                if (Event.ImageFile.Length > 2 *  1024 * 1024)
+                {
+                    ModelState.AddModelError("ImageFile", "File must be less or equal than 2MB");
+                }
+
+                if (Event.ImageFile.ContentType != "image/png" && Event.ImageFile.ContentType != "image/jpeg")
+                {
+                    ModelState.AddModelError("ImageFile", "File type must be png,jpeg or jpg");
+                }
+            }
+
+            Event.Img = FileManager.Save(Event.ImageFile, _env.WebRootPath, "uploads/event");
+
+            _context.Events.Add(Event);
+
+            _context.SaveChanges();
+
+           return RedirectToAction("index");
+        }
         public IActionResult Delete(int id)
         {
             Event Event = _context.Events.FirstOrDefault(m => m.Id == id);
@@ -39,6 +95,77 @@ namespace MvcProject.Areas.Manage.Controllers
 
             return RedirectToAction("Index");
         }
+        public IActionResult Edit(int id)
+        {
+            Event Event = _context.Events.FirstOrDefault(x => x.Id == id);
+
+            if (Event == null) return RedirectToAction("notfound", "error");
+
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Tags = _context.Tags.ToList();     
+            Event.TagIds = Event.EventTags.Select(x => x.TagId).ToList();
+            return View(Event);
+        }
+        [HttpPost]
+        public IActionResult Edit(Event Event)
+        {
+            Event? existsEvent = _context.Events.Include(x => x.EventTeachers).Include(x => x.EventTags).FirstOrDefault(x => x.Id == Event.Id);
+
+            if (existsEvent == null) return RedirectToAction("notfound", "error");
+
+            if (Event.CategoryId != existsEvent.CategoryId && !_context.Categories.Any(x => x.Id == Event.CategoryId))
+                return RedirectToAction("notfound", "error");
+
+            existsEvent.EventTags.RemoveAll(x => !Event.TagIds.Contains(x.TagId));
+
+
+            foreach (var tagId in Event.TagIds.FindAll(x => !existsEvent.EventTags.Any(bt => bt.TagId == x)))
+            {
+                if (!_context.Tags.Any(x => x.Id == tagId)) return RedirectToAction("notfound", "error");
+
+                EventTag eventTag = new EventTag
+                {
+                    TagId = tagId,
+                };
+                existsEvent.EventTags.Add(eventTag);
+            }
+                string deletedFile = null;
+
+                if (Event.ImageFile != null)
+                {
+                    if (Event.ImageFile.Length > 2 * 1024 * 1024)
+                    {
+                        ModelState.AddModelError("ImageFile", "File must be less or equal than 2MB");
+                        return View();
+                    }
+
+                    if (Event.ImageFile.ContentType != "image/png" && Event.ImageFile.ContentType != "image/jpeg")
+                    {
+                        ModelState.AddModelError("ImageFile", "File type must be png,jpeg or jpg");
+                        return View();
+                    }
+
+                    deletedFile = existsEvent.Img;
+
+                    existsEvent.Img = FileManager.Save(Event.ImageFile, _env.WebRootPath, "uploads/event");
+                }              
+
+                    Event.Name = existsEvent.Name;
+                    Event.Desc = existsEvent.Desc;
+                    Event.StartTime = existsEvent.StartTime;
+                    Event.EndTime = existsEvent.EndTime;
+
+                    _context.SaveChanges();
+
+                    if (deletedFile != null)
+                    {
+                        FileManager.Delete(_env.WebRootPath, "uploads/event", deletedFile);
+                    }
+
+                    return RedirectToAction("index");
+                
+            }
+        }
     }
-}
+
 

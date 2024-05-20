@@ -25,6 +25,7 @@ namespace MvcProject.Areas.Manage.Controllers
             var query = _context.Courses.Include(x => x.Category).Include(x => x.CourseTags).ThenInclude(x => x.Tag);
             return View(PaginatedList<Course>.Create(query,page,2));
         }
+    
         public IActionResult Delete(int id)
         {
             Course course = _context.Courses.FirstOrDefault(m => m.Id == id);
@@ -40,8 +41,6 @@ namespace MvcProject.Areas.Manage.Controllers
 
             return RedirectToAction("Index");
         }
-
-
     }
 }
 

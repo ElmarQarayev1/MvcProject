@@ -31,6 +31,7 @@ namespace MvcProject.Models
 
 		public List<CourseTag> CourseTags { get; set; }
 
+
 	}
 }
 

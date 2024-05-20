@@ -45,6 +45,7 @@ namespace MvcProject.Areas.Manage.Controllers
             _context.SaveChanges();
             return RedirectToAction("index");       
         }
+
         public IActionResult Delete(int id)
         {
             Teacher teacher = _context.Teachers.FirstOrDefault(m => m.Id == id);

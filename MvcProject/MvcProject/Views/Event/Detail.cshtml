@@ -19,8 +19,6 @@
             </div>
         </div>
     </div>
-    <!-- Banner Area End -->
-    <!-- Event Details Start -->
     <div class="event-details-area blog-area pt-150 pb-140">
         <div class="container">
             <div class="row">
@@ -106,7 +104,7 @@
                             <ul>
                                 @foreach (var item in Model.Categories)
                                 {
-                                    <li><a href="#">@item.Name</a></li>
+                                    <li><a asp-action="FilterByCategory" asp-route-id="@item.Id">@item.Name</a></li>
 
                                 }
 
@@ -167,9 +165,9 @@
                             <h3>tags</h3>
                             <div class="single-tag">
 
-                                @foreach (var item in Model.Tags)
+                                @foreach (var item in Model.Event.EventTags)
                                 {
-                                    <a href="blog-details.html" class="mb-10">@item.Name</a>
+                                    <a href="blog-details.html" class="mb-10">@item.Event.Name</a>
 
 
                                 }
