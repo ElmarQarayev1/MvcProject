@@ -31,8 +31,6 @@ namespace MvcProject.Data
 
         public DbSet<EventTeacher> EventTeachers { get; set; }
 
-        public DbSet<SocialMedia> SocialMedias { get; set; }
-
         public DbSet<Tag> Tags { get; set; }
 
         public DbSet<Teacher> Teachers { get; set; }

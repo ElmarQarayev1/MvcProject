@@ -19,8 +19,6 @@ namespace MvcProject.Controllers
 
 		public IActionResult Index()
 		{
-
-
             var courses = _context.Courses.Include(x => x.CourseTags).ToList();
 			
 			return View(courses);
@@ -43,31 +41,24 @@ namespace MvcProject.Controllers
                 Tags = _context.Tags.ToList(),
                 Categories = _context.Categories.ToList()
             };
-
             return View(cdv);
         }
-
-       [HttpPost]
+        [HttpPost]
         public IActionResult Search(string searchTerm)
         {
-           
+
             if (string.IsNullOrEmpty(searchTerm))
             {
                 return RedirectToAction("Index");
-            }        
+            }
             var courses = _context.Courses
                 .Include(x => x.CourseTags)
                 .Where(c => c.Name.Contains(searchTerm) || c.Desc.Contains(searchTerm))
                 .ToList();
-         
-            CourseViewModel cv = new CourseViewModel()
-            {
-                Courses = courses
-            };
-
-            return View("Index", cv); 
+            return View("Index", courses);
         }
-        public IActionResult FilterByCategory(int Id)
+    
+    public IActionResult FilterByCategory(int Id)
         {
             var courseQuery = _context.Courses.Include(e => e.Category).AsQueryable();
 
@@ -82,10 +73,25 @@ namespace MvcProject.Controllers
             {
                 courses = _context.Courses.ToList();
             }
-
             return View("Index", courses);
         }
+        public IActionResult FilterByTag(int Id)
+        {
+            var courseQuery = _context.Courses.Include(e => e.CourseTags).ThenInclude(x => x.Tag).AsQueryable();
 
+            if (Id != 0)
+            {
+                courseQuery = courseQuery.Where(x=>x.CourseTags.Any(w=>w.TagId==Id));
+            }
+
+            var courses = courseQuery.ToList();
+
+            if (courses.Count == 0)
+            {
+                courses = _context.Courses.ToList();
+            }
+            return View("Index", courses);
+        }
     }
 
 }

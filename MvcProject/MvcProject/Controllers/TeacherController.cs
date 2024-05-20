@@ -16,7 +16,7 @@ namespace MvcProject.Controllers
         }
 		public IActionResult Index()
 		{
-			var teacher = _context.Teachers.Include(x => x.SocialMedias).ToList();
+			var teacher = _context.Teachers.ToList();
 			return View(teacher);
 		}
 	}

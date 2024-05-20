@@ -54,6 +54,24 @@ namespace MvcProject.Controllers
 
             return View("Index", events);
         }
+        public IActionResult FilterByTag(int Id)
+        {
+            var eventQuery = _context.Events.Include(e => e.EventTags).ThenInclude(x => x.Tag).AsQueryable();
+
+            if (Id != 0)
+            {
+                eventQuery = eventQuery.Where(x => x.EventTags.Any(w => w.TagId == Id));
+            }
+
+            var events = eventQuery.ToList();
+
+            if (events.Count == 0)
+            {
+                events = _context.Events.ToList();
+            }
+            return View("Index", events);
+        }
+
 
 
     }

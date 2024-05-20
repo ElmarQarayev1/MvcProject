@@ -84,6 +84,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.19" />
+    <PackageReference Include="MailKit" Version="4.6.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\manage\" />

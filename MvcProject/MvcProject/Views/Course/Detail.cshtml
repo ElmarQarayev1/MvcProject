@@ -169,11 +169,9 @@
                             <div class="single-tag">
                                 @foreach (var item in Model.Tags)
                                 {
-                                    <a href="blog-details.html" class="mb-10">@item.Name</a>
+                                    <a asp-action="FilterByTag" asp-route-id="@item.Id" class="mb-10">@item.Name</a>
 
                                 }
-
-
 
                             </div>
                         </div>

@@ -21,7 +21,6 @@
                         <th scope="col">FullName</th>
                         <th scope="col">Position</th>
                         <th scope="col">Desc</th>
-                        <th scope="col">SocialMedia</th>
                         <th scope="col">TeacherEvent</th>
                         <th scope="col">Image</th>
                         <th scope="col">Action</th>
@@ -35,7 +34,7 @@
                             <td>@item.FullName</td>
                             <td>@item.Position</td>
                             <td>@item.Desc</td>
-                            <td>
+                            @*<td>
                                 <ul>
                                     @foreach (var i in item.SocialMedias)
                                     {
@@ -45,7 +44,7 @@
                                     }
 
                                 </ul>
-                            </td>
+                            </td>*@
                             <td>
                                 <ul>
                                     @foreach (var i in item.EventTeachers)

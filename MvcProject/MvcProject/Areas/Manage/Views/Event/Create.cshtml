@@ -48,6 +48,11 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label for="TeacherId"> Teachers </label>
+                    <select asp-for="TeacherIds" class="form-control" id="TeacherId" multiple asp-items="@(new SelectList(ViewBag.Teachers, nameof(Teacher.Id), nameof(Teacher.FullName)))">
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="imgInput">Image</label>
                     <input asp-for="ImageFile" class="form-control imgInput" placeholder=" ">
                     <div class="preview-box">

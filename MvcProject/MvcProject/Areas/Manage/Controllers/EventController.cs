@@ -5,7 +5,6 @@ using MvcProject.Areas.Manage.ViewModels;
 using MvcProject.Data;
 using MvcProject.Helpers;
 using MvcProject.Models;
-
 namespace MvcProject.Areas.Manage.Controllers
 {
     [Area("manage")]
@@ -22,13 +21,20 @@ namespace MvcProject.Areas.Manage.Controllers
         public IActionResult Index(int page = 1)
         {
             var query = _context.Events.Include(x => x.EventTeachers).ThenInclude(x=>x.Teacher).Include(x => x.Category).Include(x=>x.EventTags).ThenInclude(x=>x.Tag);
-            return View(PaginatedList<Event>.Create(query,page,2));
+
+            var pageData = PaginatedList<Event>.Create(query, page, 2);
+            if (pageData.TotalPages < page)
+            {
+                return RedirectToAction("index", new { page = pageData.TotalPages });
+            }
+            return View(pageData);
+           
         }
         public IActionResult Create()
         {
             ViewBag.Categories = _context.Categories.ToList();
             ViewBag.Tags = _context.Tags.ToList();
-    
+            ViewBag.Teachers = _context.Teachers.ToList();
             return View();
         }
         [HttpPost]
@@ -43,11 +49,11 @@ namespace MvcProject.Areas.Manage.Controllers
             {
                 ViewBag.Categories = _context.Categories.ToList();
                 ViewBag.Tags = _context.Tags.ToList();
+                ViewBag.Teachers = _context.Teachers.ToList();
                 return View(Event);
             }
             if (!_context.Categories.Any(x => x.Id == Event.CategoryId))
                 return RedirectToAction("notfound", "error");
-
             foreach (var tagId in Event.TagIds)
             {
                 if (!_context.Tags.Any(x => x.Id == tagId)) return RedirectToAction("notfound", "error");
@@ -57,8 +63,18 @@ namespace MvcProject.Areas.Manage.Controllers
                     TagId = tagId,
                 };
                 Event.EventTags.Add(eventTag);
-
             }
+            foreach (var teacherId in Event.TeacherIds)
+            {
+                if (!_context.Teachers.Any(x => x.Id == teacherId)) return RedirectToAction("notfound", "error");
+
+                EventTeacher eventTeacher = new EventTeacher
+                {
+                    TeacherId = teacherId,
+                };
+                Event.EventTeachers.Add(eventTeacher);
+            }
+
             if (Event.ImageFile != null)
             {
                 if (Event.ImageFile.Length > 2 *  1024 * 1024)
@@ -71,7 +87,6 @@ namespace MvcProject.Areas.Manage.Controllers
                     ModelState.AddModelError("ImageFile", "File type must be png,jpeg or jpg");
                 }
             }
-
             Event.Img = FileManager.Save(Event.ImageFile, _env.WebRootPath, "uploads/event");
 
             _context.Events.Add(Event);
@@ -89,22 +104,26 @@ namespace MvcProject.Areas.Manage.Controllers
             string deletedFile = Event.Img;
 
             _context.Events.Remove(Event);
-
+            Event.IsDeleted = true;
+            Event.ModifiedAt = DateTime.UtcNow;
             _context.SaveChanges();
-            FileManager.Delete(_env.WebRootPath, "uploads/event", deletedFile);
 
+            FileManager.Delete(_env.WebRootPath, "uploads/event", deletedFile);
+     
             return RedirectToAction("Index");
         }
         public IActionResult Edit(int id)
         {
-            Event Event = _context.Events.FirstOrDefault(x => x.Id == id);
+            Event eevent = _context.Events.Include(x=>x.EventTags).Include(x=>x.EventTeachers).FirstOrDefault(x => x.Id == id);
 
-            if (Event == null) return RedirectToAction("notfound", "error");
+            if (eevent == null) return RedirectToAction("notfound", "error");
 
             ViewBag.Categories = _context.Categories.ToList();
-            ViewBag.Tags = _context.Tags.ToList();     
-            Event.TagIds = Event.EventTags.Select(x => x.TagId).ToList();
-            return View(Event);
+            ViewBag.Tags = _context.Tags.ToList();
+            eevent.TagIds = eevent.EventTags.Select(x => x.TagId).ToList();
+            ViewBag.Teachers = _context.Teachers.ToList();
+            eevent.TeacherIds = eevent.EventTeachers.Select(x => x.TeacherId).ToList();
+            return View(eevent);
         }
         [HttpPost]
         public IActionResult Edit(Event Event)
@@ -117,7 +136,6 @@ namespace MvcProject.Areas.Manage.Controllers
                 return RedirectToAction("notfound", "error");
 
             existsEvent.EventTags.RemoveAll(x => !Event.TagIds.Contains(x.TagId));
-
 
             foreach (var tagId in Event.TagIds.FindAll(x => !existsEvent.EventTags.Any(bt => bt.TagId == x)))
             {

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MvcProject.Data;
 using MvcProject.Models;
 using MvcProject.ViewModels;
+using MvcProject.Services;
 
 namespace MvcProject.Controllers
 {
@@ -14,9 +15,11 @@ namespace MvcProject.Controllers
         private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly EmailService _emailService;
 
-        public AccountController(AppDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(AppDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, EmailService emailService)
         {
+            _emailService = emailService;
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -93,6 +96,96 @@ namespace MvcProject.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
+        }
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgetPassword(ForgetPasswordViewModel vm)
+        {
+            if (!ModelState.IsValid) return View(vm);
+
+            AppUser? user = _userManager.FindByEmailAsync(vm.Email).Result;
+
+            if (user == null || !_userManager.IsInRoleAsync(user, "member").Result)
+            {
+                ModelState.AddModelError("", "Account is not exist");
+                return View();
+            }
+            var token = _userManager.GeneratePasswordResetTokenAsync(user).Result;
+
+            var url = Url.Action("verify", "account", new { email = vm.Email, token = token }, Request.Scheme);
+            TempData["EmailSent"] = vm.Email;
+
+            var subject = "Reset Password Link";
+            var body = $"<h1>Click <a href=\"{url}\">here</a> to reset your password</h1>";
+
+            _emailService.Send(user.Email, subject, body);
+            return View();
+        }
+        public IActionResult Verify(string email, string token)
+        {
+            AppUser? user = _userManager.FindByEmailAsync(email).Result;
+
+            if (user == null || !_userManager.IsInRoleAsync(user, "member").Result)
+            {
+                return RedirectToAction("notfound", "error");
+            }
+
+            if (!_userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", token).Result)
+            {
+                return RedirectToAction("notfound", "error");
+            }
+
+            TempData["email"] = email;
+            TempData["token"] = token;
+
+            return RedirectToAction("resetPassword");
+        }
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ResetPassword(ResetPasswordViewModel vm)
+        {
+            TempData["email"] = vm.Email;
+            TempData["token"] = vm.Token;
+            if (!ModelState.IsValid) return View(vm);
+
+            AppUser? user = _userManager.FindByEmailAsync(vm.Email).Result;
+
+            if (user == null || !_userManager.IsInRoleAsync(user, "member").Result)
+            {
+                ModelState.AddModelError("", "Account is not exist");
+                return View();
+            }
+
+            if (!_userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", vm.Token).Result)
+            {
+                ModelState.AddModelError("", "Account is not exist");
+                return View();
+            }
+            var result = _userManager.ResetPasswordAsync(user, vm.Token, vm.NewPassword).Result;
+
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+                return View();
+            }
+
+            return RedirectToAction("login");
+        }
+        public IActionResult Users()
+        {
+            var users = _userManager.Users.ToList();
+
+            return View(users);
         }
 
     }

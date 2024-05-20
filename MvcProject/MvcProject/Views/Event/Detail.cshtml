@@ -167,8 +167,7 @@
 
                                 @foreach (var item in Model.Event.EventTags)
                                 {
-                                    <a href="blog-details.html" class="mb-10">@item.Event.Name</a>
-
+                                    <a asp-action="FilterByTag" asp-route-id="@item.Id" class="mb-10">@item.Event.Name</a>
 
                                 }
 

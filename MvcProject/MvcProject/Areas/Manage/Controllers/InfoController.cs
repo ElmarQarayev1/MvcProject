@@ -19,7 +19,14 @@ namespace MvcProject.Areas.Manage.Controllers
         public IActionResult Index(int page=1)
         {
             var query = _context.Infos;
-            return View(PaginatedList<Info>.Create(query,page,2));
+            var pageData = PaginatedList<Info>.Create(query, page, 2);
+            if (pageData.TotalPages < page)
+            {
+                return RedirectToAction("index", new { page = pageData.TotalPages });
+
+            }
+            return View(pageData);
+           
         }
 
         public IActionResult Create()
