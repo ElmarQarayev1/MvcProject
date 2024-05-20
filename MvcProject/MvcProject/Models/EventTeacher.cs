@@ -7,9 +7,9 @@ namespace MvcProject.Models
 
 		public int TeacherId { get; set; }
 
-		public Event Event { get; set; }
+		public Event? Event { get; set; }
 
-		public Teacher Teacher { get; set; }
+		public Teacher? Teacher { get; set; }
 
 	}
 }

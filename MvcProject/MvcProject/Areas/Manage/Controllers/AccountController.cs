@@ -44,13 +44,20 @@ namespace MvcProject.Areas.Manage.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(AdminLoginViewModel admin, string returnUrl)
         {
-            AppUser appUser = await _userManager.FindByNameAsync(admin.UserName);
-
-            if (admin == null || (!await _userManager.IsInRoleAsync(appUser, "admin")))
+            if (admin == null)
             {
                 ModelState.AddModelError("", "UserName or Password is not true");
                 return View();
             }
+
+            AppUser appUser = await _userManager.FindByNameAsync(admin.UserName);
+
+            if (appUser == null || !await _userManager.IsInRoleAsync(appUser, "admin"))
+            {
+                ModelState.AddModelError("", "UserName or Password is not true");
+                return View();
+            }
+
             var result = await _signInManager.PasswordSignInAsync(appUser, admin.Password, admin.RememberMe, false);
 
             if (!result.Succeeded)

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MvcProject.Data;
 using MvcProject.Models;
+using MvcProject.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(option =>
     option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(10);
     option.Lockout.MaxFailedAccessAttempts = 5;
 }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.AddScoped<LayoutService>();
 
 builder.Services.ConfigureApplicationCookie(opt =>
 {

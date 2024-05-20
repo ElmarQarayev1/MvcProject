@@ -23,7 +23,7 @@ namespace MvcProject.Controllers
 
         public IActionResult Detail(int id)
         {
-            var Event = _context.Events.Include(x => x.EventTeachers).Include(x => x.EventTags).Include(x => x.Category).FirstOrDefault(x => x.Id == id);
+            var Event = _context.Events.Include(x => x.EventTeachers).ThenInclude(x=>x.Teacher).Include(x => x.EventTags).Include(x => x.Category).FirstOrDefault(x => x.Id == id);
 
             if (Event == null)
             {

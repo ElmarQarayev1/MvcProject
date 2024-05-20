@@ -1,0 +1,74 @@
+﻿@model Teacher
+@{
+    ViewData["Title"] = "Create";
+}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Teachers</h1>
+        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            Create 
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <form class="user" asp-action="create" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="Name">FullName</label>
+                    <input asp-for="FullName" class="form-control" id="Name" placeholder=" ">
+                    <span class="text-danger" asp-validation-for="FullName"></span>
+                </div>
+                <div class="form-group">
+                    <label>Social Medias</label>
+                    <div id="socialMediaContainer">
+                        <select id="socialMediaSelect" name="SocialMedia" multiple>
+                            @for (int i = 0; i < ViewBag.Socials.Count; i++)
+                            {
+                                <option value="@ViewBag.Socials[i].Media">
+                                    @ViewBag.Socials[i].Media
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Events</label>
+                    <div id="event">
+                        <select id="eventselectlist" name="event" multiple>
+                            @for (int i = 0; i < ViewBag.Events.Count; i++)
+                            {
+                                <option value="@ViewBag.Events[i].Name">
+                                    @ViewBag.Events[i].Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Desc">Position</label>
+                    <input asp-for="Position" class="form-control" id="Desc">
+                    <span class="text-danger" asp-validation-for="Position"></span>
+                </div>
+                <div class="form-group">
+                    <label for="imgInput">Image</label>
+                    <input asp-for="ImageFile" class="form-control imgInput" placeholder=" ">
+                    <div class="preview-box">
+                        <img width="200" class="previewImg" />
+                    </div>
+                    <span class="text-danger" asp-validation-for="ImageFile"></span>
+                </div>
+
+                <button class="btn btn-primary" type="submit">
+                    Create Book
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Html.Partial("_ValidationScriptPartials");
+}

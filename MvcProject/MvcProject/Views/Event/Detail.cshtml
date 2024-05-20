@@ -3,8 +3,6 @@
 
     ViewData["Title"] = "Event Detail";
 }
-
-
     <!-- Banner Area Start -->
     <div class="banner-area-wrapper">
         <div class="banner-area text-center">
@@ -31,7 +29,7 @@
                         <div class="event-details-img">
                             <img src="~/img/event/@Model.Event.Img" alt="event-details">
                             <div class="event-date">
-                                <h3>@Model.Event.StartTime.ToString("dd")<span>jun</span></h3>
+                                <h3>@Model.Event.StartTime.ToString("dd")<span>@Model.Event.StartTime.ToString("MMM")</span></h3>
                             </div>
                         </div>
                         <div class="event-details-content">
@@ -45,25 +43,22 @@
                             <p>I must explain to you how all this a mistaken idea of denouncing great explorer of the rut the is lder of human happiness pcias unde omnis iste natus error sit voluptatem accusantium doloremque laudantium</p>
                             <div class="speakers-area fix">
                                 <h4>speakers</h4>
-                                @if (Model.Event.EventTeachers != null)
-                                {
+                               
+                                
                                     @foreach (var item in Model.Event.EventTeachers)
                                     {
                                         <div class="single-speaker">
                                             <div class="speaker-img">
-                                                <img src="~/img/event/@item.Teacher?.Img" alt="speaker">
+                                                <img src="~/img/teacher/@item.Teacher.Img" alt="speaker">
                                             </div>
                                             <div class="speaker-name">
-                                                <h5>@item.Teacher?.FullName</h5>
-                                                <p>@item.Teacher?.Position </p>
+                                                <h5>@item.Teacher.FullName</h5>
+                                                <p>@item.Teacher.Position </p>
                                             </div>
                                         </div>
                                     }
-                                }
-                                else
-                                {
-                                    <p>No speakers available for this event.</p>
-                                }
+                                
+                              
                             </div>
 
                         </div>

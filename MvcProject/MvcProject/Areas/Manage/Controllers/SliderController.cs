@@ -40,12 +40,26 @@ namespace MvcProject.Areas.Manage.Controllers
             }
             if (!ModelState.IsValid) return View();
 
+            
+            if (slider.ImageFile != null)
+            {
+                if (slider.ImageFile.Length > 2 * 1024 * 1024) 
+                {
+                    ModelState.AddModelError("ImageFile", "File must be less or equal than 2MB");
+                }
+
+                if (slider.ImageFile.ContentType != "image/png" && slider.ImageFile.ContentType != "image/jpeg") 
+                {
+                    ModelState.AddModelError("ImageFile", "File type must be png,jpeg or jpg");
+                }
+            }
+
+            if (!ModelState.IsValid) return View(); 
+
             slider.ImageName = FileManager.Save(slider.ImageFile, _env.WebRootPath, "uploads/slider");
             _context.Sliders.Add(slider);
             _context.SaveChanges();
-
             return RedirectToAction("index");
-
         }
         public IActionResult Edit(int id)
         {
@@ -79,6 +93,7 @@ namespace MvcProject.Areas.Manage.Controllers
                 }
 
                 deletedFile = existSlider.ImageName;
+
                 existSlider.ImageName = FileManager.Save(slider.ImageFile, _env.WebRootPath, "uploads/slider");
             }
             existSlider.Title1 = slider.Title1;
