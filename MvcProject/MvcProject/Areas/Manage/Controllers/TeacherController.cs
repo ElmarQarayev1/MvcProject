@@ -43,9 +43,23 @@ namespace MvcProject.Areas.Manage.Controllers
             teacher.Img = FileManager.Save(teacher.ImageFile, _env.WebRootPath, "uploads/teacher");
             _context.Teachers.Add(teacher);
             _context.SaveChanges();
-            return RedirectToAction("index");
-
-          
+            return RedirectToAction("index");       
         }
+        public IActionResult Delete(int id)
+        {
+            Teacher teacher = _context.Teachers.FirstOrDefault(m => m.Id == id);
+
+            if (teacher is null) return RedirectToAction("notfound", "error");
+
+            string deletedFile = teacher.Img;
+
+            _context.Teachers.Remove(teacher);
+
+            _context.SaveChanges();
+            FileManager.Delete(_env.WebRootPath, "uploads/teacher", deletedFile);
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

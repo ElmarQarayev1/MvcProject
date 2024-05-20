@@ -35,6 +35,8 @@
     <None Remove="Views\Error\" />
     <None Remove="Areas\Manage\Views\Teacher\" />
     <None Remove="Services\" />
+    <None Remove="Areas\Manage\Views\Event\" />
+    <None Remove="Areas\Manage\Views\Course\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -69,6 +71,10 @@
     <Folder Include="Areas\Manage\Views\Teacher\" />
     <Folder Include="wwwroot\uploads\teacher\" />
     <Folder Include="Services\" />
+    <Folder Include="Areas\Manage\Views\Event\" />
+    <Folder Include="wwwroot\uploads\event\" />
+    <Folder Include="Areas\Manage\Views\Course\" />
+    <Folder Include="wwwroot\uploads\course\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.19" />
@@ -85,5 +91,7 @@
     <Content Remove="wwwroot\uploads\" />
     <Content Remove="wwwroot\uploads\slider\" />
     <Content Remove="wwwroot\uploads\teacher\" />
+    <Content Remove="wwwroot\uploads\event\" />
+    <Content Remove="wwwroot\uploads\course\" />
   </ItemGroup>
 </Project>

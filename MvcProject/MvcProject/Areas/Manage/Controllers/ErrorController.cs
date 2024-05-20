@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using MvcProject.Areas.Manage.ViewModels;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
@@ -9,6 +10,7 @@ namespace MvcProject.Areas.Manage.Controllers
         {
             return View();
         }
+       
     }
 }
 
