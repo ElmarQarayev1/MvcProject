@@ -1,4 +1,4 @@
-﻿@model AdminLoginViewModel
+﻿@model AdminCreateViewModel
 @{
     Layout = null;
 }
@@ -173,17 +173,17 @@
                                 <span>Please login using account detail bellow.</span>
                             </div>
                             <div class="login-form">
-                                <form method="post">
+                                <form method="post" asp-action="admincreatebys">
                                     <div class="form-group">
-                                        <input asp-for="UserName" class="form-control form-control-user"
+                                        <input  asp-for="UserName" class="form-control form-control-user"
                                                placeholder="Enter UserName..">
                                     </div>
                                     <div class="form-group">
-                                        <input asp-for="Password" class="form-control form-control-user"
+                                        <input  asp-for="Password" class="form-control form-control-user"
                                                placeholder="Password...">
                                     </div>
                                     <div class="button-box">
-                                        <div class="form-group">
+                                        @*<div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input asp-for=RememberMe type="checkbox" class="custom-control-input" id="customCheck">
                                                 <label class="custom-control-label" for="customCheck">
@@ -191,16 +191,16 @@
                                                     Me
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div>*@
                                         <div class="text-danger" asp-validation-summary="ModelOnly"></div>
 
-                                        <button type="submit" class="default-btn">Login</button>
+                                        <button type="submit" class="default-btn">Create Admin</button>
                                     </div>
                                 </form>
                             </div>
-                            <div class="text-center">
+                            @*<div class="text-center">
                                 <a class="small" href="forgot-password.html">Forgot Password?</a>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>

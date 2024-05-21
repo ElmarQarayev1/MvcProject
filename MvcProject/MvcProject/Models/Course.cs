@@ -6,7 +6,7 @@ namespace MvcProject.Models
 {
 	public class Course:AuditEntity
 	{
-		public string Img { get; set; }
+		public string? Img { get; set; }
 
 		public string Name { get; set; }
 

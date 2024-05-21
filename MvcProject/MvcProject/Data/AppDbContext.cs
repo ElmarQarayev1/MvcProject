@@ -37,6 +37,8 @@ namespace MvcProject.Data
 
         public DbSet<Setting> Settings { get; set; }
 
+        public DbSet<Mind> Minds { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

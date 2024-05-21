@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Teacher
+@{
 
     ViewData["Title"] = "Teacher Detail";
 }
@@ -18,27 +19,26 @@
         </div>
     </div>
 </div>
-<!-- Banner Area End -->
-<!-- Teacher Start -->
+
 <div class="teacher-details-area pt-150 pb-60">
     <div class="container">
         <div class="row">
             <div class="col-md-5 col-sm-5 col-xs-12">
                 <div class="teacher-details-img">
-                    <img src="img/teacher/teacher-details.jpg" alt="teacher">
+                    <img src="~/uploads/teacher/@Model.Img" alt="teacher">
                 </div>
             </div>
             <div class="col-md-7 col-sm-7 col-xs-12">
                 <div class="teacher-details-content ml-50">
-                    <h2>STUART KELVIN</h2>
-                    <h5>Associate Professor</h5>
+                    <h2>@Model.FullName</h2>
+                    <h5>@Model.Position</h5>
                     <h4>about me</h4>
-                    <p>I must explain to you how all this a mistaken idea of denouncing great explorer of the rut the is lder of human happiness pcias unde omnis iste natus error sit voluptatem accusantium ue laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quas i architeo beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas </p>
+                    <p>@Model.Desc</p>
                     <ul>
-                        <li><span>degree: </span>PHD in Micro Biology</li>
-                        <li><span>experience: </span>7 years experience</li>
+                        <li><span>degree: </span>@Model.Degree</li>
+                        <li><span>experience: </span>@Model.Experience</li>
                         <li><span>hobbies: </span>music, travelling, catching fish</li>
-                        <li><span>faculty: </span>Din, Department of Micro Biology</li>
+                        <li><span>faculty: </span>@Model.Faculty</li>
                     </ul>
                 </div>
             </div>
@@ -47,14 +47,14 @@
             <div class="col-md-3 col-sm-4">
                 <div class="teacher-contact">
                     <h4>contact information</h4>
-                    <p><span>mail me : </span>stuart@eduhome.com</p>
-                    <p><span>make a call : </span>(+125) 5896 548 9874</p>
-                    <p><span>skype : </span> stuart.k</p>
+                    <p><span>mail me : </span>@Model.Email</p>
+                    <p><span>make a call : </span>@Model.Phone</p>
+                    <p><span>skype : </span>@Model.Skype</p>
                     <ul>
-                        <li><a href="https://www.facebook.com/devitems/?ref=bookmarks"><i class="zmdi zmdi-facebook"></i></a></li>
-                        <li><a href="https://www.pinterest.com/devitemsllc/"><i class="zmdi zmdi-pinterest"></i></a></li>
-                        <li><a href="#"><i class="zmdi zmdi-vimeo"></i></a></li>
-                        <li><a href="https://twitter.com/devitemsllc"><i class="zmdi zmdi-twitter"></i></a></li>
+                        <li><a href="@Model.InstagramUrl"><i class="zmdi zmdi-facebook"></i></a></li>
+                        <li><a href="@Model.LinkEdinUrl"><i class="zmdi zmdi-pinterest"></i></a></li>
+                        <li><a href="@Model.PinterestUrl"><i class="zmdi zmdi-vimeo"></i></a></li>
+                        <li><a href="@Model.VingUrl"><i class="zmdi zmdi-twitter"></i></a></li>
                     </ul>
                 </div>
             </div>
@@ -68,8 +68,8 @@
                             <div class="skill-bar-item">
                                 <span>language</span>
                                 <div class="progress">
-                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: 85%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
-                                        <span class="text-top">85%</span>
+                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: @Model.LanguagePercent%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
+                                        <span class="text-top">@Model.LanguagePercent%</span>
                                     </div>
                                 </div>
                             </div>
@@ -78,8 +78,8 @@
                             <div class="skill-bar-item">
                                 <span>team leader</span>
                                 <div class="progress">
-                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: 90%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
-                                        <span class="text-top">90%</span>
+                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: @Model.TeamLeaderPercent%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
+                                        <span class="text-top">@Model.TeamLeaderPercent%</span>
                                     </div>
                                 </div>
                             </div>
@@ -88,8 +88,8 @@
                             <div class="skill-bar-item">
                                 <span>development</span>
                                 <div class="progress">
-                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: 85%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
-                                        <span class="text-top">85%</span>
+                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: @Model.DevelopmentPercent%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
+                                        <span class="text-top">@Model.DevelopmentPercent%</span>
                                     </div>
                                 </div>
                             </div>
@@ -98,8 +98,8 @@
                             <div class="skill-bar-item">
                                 <span>design</span>
                                 <div class="progress">
-                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: 95%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
-                                        <span class="text-top">95%</span>
+                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: @Model.DesignPercent%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
+                                        <span class="text-top">@Model.DesignPercent%</span>
                                     </div>
                                 </div>
                             </div>
@@ -108,8 +108,8 @@
                             <div class="skill-bar-item">
                                 <span>innovation</span>
                                 <div class="progress">
-                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: 85%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
-                                        <span class="text-top">85%</span>
+                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: @Model.InnovationPercent%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
+                                        <span class="text-top">@Model.InnovationPercent%</span>
                                     </div>
                                 </div>
                             </div>
@@ -118,9 +118,9 @@
                             <div class="skill-bar-item">
                                 <span>communication</span>
                                 <div class="progress">
-                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: 95%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
-                                        <span class="text-top">95%</span>
-                                    </div>
+                                    <div data-wow-delay="1.2s" data-wow-duration="1.5s" style="width: @Model.CommunacationPercent%; visibility: visible; animation-duration: 1.5s; animation-delay: 1.2s; animation-name: fadeInLeft;" data-progress="50%" class="progress-bar wow fadeInLeft">
+                                        <span class="text-top">@Model.CommunacationPercent%</span>
+</div>
                                 </div>
                             </div>
                         </div>

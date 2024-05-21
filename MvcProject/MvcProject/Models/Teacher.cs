@@ -6,7 +6,7 @@ namespace MvcProject.Models
 {
 	public class Teacher:BaseEntity
 	{
-		public string Img { get; set; }
+		public string? Img { get; set; }
 
 		public string FullName { get; set; }
 
@@ -46,7 +46,7 @@ namespace MvcProject.Models
 
         public string Skype { get; set; }
 
-        public List<EventTeacher> EventTeachers { get; set; }
+        public List<EventTeacher>? EventTeachers { get; set; } = new List<EventTeacher>();
         [NotMapped]
         [MaxSize(1024 * 1024 * 2)]
         [AllowedFileTypes("image/png", "image/jpeg")]

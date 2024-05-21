@@ -30,16 +30,16 @@
                     <div class="col-md-3 col-sm-4 col-xs-12">
                         <div class="single-teacher mb-45">
                             <div class="single-teacher-img">
-                                <a href="teacher-details.html"><img src="img/teacher/@item.Img" alt="teacher"></a>
+                                <a asp-action="detail" asp-route-id="@item.Id"><img src="~/uploads/teacher/@item.Img" alt="teacher"></a>
                             </div>
                             <div class="single-teacher-content text-center">
-                                <h2><a href="teacher-details.html">@item.FullName</a></h2>
+                                <h2><a asp-action="detail" asp-route-id="@item.Id">@item.FullName</a></h2>
                                 <h4>@item.Position</h4>
                                 <ul>
-                                    <li><a href="https://www.facebook.com/devitems/?ref=bookmarks"><i class="zmdi zmdi-facebook"></i></a></li>
-                                    <li><a href="https://www.pinterest.com/devitemsllc/"><i class="zmdi zmdi-pinterest"></i></a></li>
-                                    <li><a href="#"><i class="zmdi zmdi-vimeo"></i></a></li>
-                                    <li><a href="https://twitter.com/devitemsllc"><i class="zmdi zmdi-twitter"></i></a></li>
+                                    <li><a href="@item.InstagramUrl"><i class="zmdi zmdi-facebook"></i></a></li>
+                                    <li><a href="@item.LinkEdinUrl"><i class="zmdi zmdi-pinterest"></i></a></li>
+                                    <li><a href="@item.PinterestUrl"><i class="zmdi zmdi-vimeo"></i></a></li>
+                                    <li><a href="@item.VingUrl"><i class="zmdi zmdi-twitter"></i></a></li>
                                 </ul>
                             </div>
                         </div>

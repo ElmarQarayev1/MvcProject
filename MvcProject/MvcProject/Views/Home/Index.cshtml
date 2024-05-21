@@ -1,4 +1,9 @@
 ﻿@model HomeViewModel
+@inject LayoutService layoutService
+@{
+    var settings = layoutService.GetSettings();
+
+}
 @{
     Layout = null;
     ViewData["Title"] = "Home";
@@ -110,7 +115,7 @@
             @foreach (var item in Model.Sliders)
             {
                 <div class="single-slide item" style="background-image: url(uploads/slider/@item.ImageName)">
-                   
+
                     <div class="slider-content-area">
                         <div class="container">
                             <div class="row">
@@ -157,7 +162,7 @@
                                 <h3>@item.Name</h3>
                                 <p>@item.Desc </p>
                             </div>
-                        
+
                         }
                     </div>
                 </div>
@@ -171,10 +176,10 @@
             <div class="row">
                 <div class="col-md-8 col-md-offset-left-4 col-sm-8 col-md-offset-left-4">
                     <div class="choose-content text-left">
-                        <h2>WHY YOU CHOOSE EDUHOME ?</h2>
+                        <h2>@settings["Why"]</h2>
                         <p>I must explain to you how all this mistaken idea of denouncing pleure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings  the master-builder of humanit happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because. </p>
                         <p class="choose-option">I must explain to you how all this mistaken idea of denouncing pleure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings  the master-builder. </p>
-                        <a class="default-btn" href="course-details.html">view courses</a>
+                        <a class="default-btn" href="course-details.html">@settings["ViewCourse"]</a>
                     </div>
                 </div>
             </div>
@@ -193,57 +198,28 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="single-course">
-                        <div class="course-img">
-                            <a href="course-details.html">
-                                <img src="~/img/course/course1.jpg" alt="course">
-                                <div class="course-hover">
-                                    <i class="fa fa-link"></i>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="course-content">
-                            <h3><a href="course-details.html">CSE ENGINEERING</a></h3>
-                            <p>I must explain to you how all this a mistaken idea of denouncing great explorer of the rut the is lder of human happiness</p>
-                            <a class="default-btn" href="course-details.html">read more</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="single-course">
-                        <div class="course-img">
-                            <a href="course-details.html">
-                                <img src="~/img/course/course2.jpg" alt="course">
-                                <div class="course-hover">
-                                    <i class="fa fa-link"></i>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="course-content">
-                            <h3><a href="course-details.html">CSE ENGINEERING</a></h3>
-                            <p>I must explain to you how all this a mistaken idea of denouncing great explorer of the rut the is lder of human happiness</p>
-                            <a class="default-btn" href="course-details.html">read more</a>
+                @foreach (var item in Model.Courses)
+                {
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="single-course">
+                            <div class="course-img">
+                                <a href="course-details.html">
+                                    <img src="~/uploads/course/@item.Img" alt="course">
+                                    <div class="course-hover">
+                                        <i class="fa fa-link"></i>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="course-content">
+                                <h3><a asp-action="detail" asp-controller="course" asp-route-id="@item.Id" >@item.Name</a></h3>
+                                <p>@item.Desc</p>
+                                <a class="default-btn" asp-action="detail" asp-controller="course" asp-route-id="@item.Id" >read more</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4 hidden-sm col-xs-12">
-                    <div class="single-course">
-                        <div class="course-img">
-                            <a href="course-details.html">
-                                <img src="~/img/course/course3.jpg" alt="course">
-                                <div class="course-hover">
-                                    <i class="fa fa-link"></i>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="course-content">
-                            <h3><a href="course-details.html">CSE ENGINEERING</a></h3>
-                            <p>I must explain to you how all this a mistaken idea of denouncing great explorer of the rut the is lder of human happiness</p>
-                            <a class="default-btn" href="course-details.html">read more</a>
-                        </div>
-                    </div>
-                </div>
+
+                }
+
             </div>
         </div>
     </div>
@@ -261,144 +237,52 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-12 col-xs-12">
-                    <div class="single-event mb-35">
-                        <div class="event-date">
-                            <h3><a href="event-details.html">20 <span>June</span></a></h3>
-                        </div>
-                        <div class="event-content text-left">
-                            <div class="event-content-left">
-                                <h4><a href="event-details.html">MICRO BIOLOGICAL WORKSHOP</a></h4>
-                                <ul>
-                                    <li><i class="fa fa-clock-o"></i>9.00 AM - 4.45 PM</li>
-                                    <li><i class="fa fa-map-marker"></i>New Yourk City</li>
-                                </ul>
+
+                    @foreach (var item in Model.Events)
+                    {
+
+                        <div class="single-event mb-35">
+                            <div class="event-date">
+                                <h3><a href="event-details.html"> @item.Date.ToString("dd")<span>@item.Date.ToString("MMM")</span></a></h3>
                             </div>
-                            <div class="event-content-right">
-                                <a class="default-btn" href="event-details.html">join now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-event mb-35">
-                        <div class="event-date">
-                            <h3><a href="event-details.html">18 <span>June</span></a></h3>
-                        </div>
-                        <div class="event-content text-left">
-                            <div class="event-content-left">
-                                <h4><a href="event-details.html">ADVANCE PHP WORKSHOP</a></h4>
-                                <ul>
-                                    <li><i class="fa fa-clock-o"></i>9.00 AM - 4.45 PM</li>
-                                    <li><i class="fa fa-map-marker"></i>New Yourk City</li>
-                                </ul>
-                            </div>
-                            <div class="event-content-right">
-                                <a class="default-btn" href="event-details.html">join now</a>
+                            <div class="event-content text-left">
+                                <div class="event-content-left">
+                                    <h4><a href="event-details.html">@item.Name</a></h4>
+                                    <ul>
+                                        <li><i class="fa fa-clock-o"></i>@item.StartTime.ToString(@"hh\:mm") AM - @item.EndTime.ToString(@"hh\:mm") PM</li>
+                                        <li><i class="fa fa-map-marker"></i>@item.Venue</li>
+                                    </ul>
+                                </div>
+                                <div class="event-content-right">
+                                    <a class="default-btn" href="event-details.html">join now</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="single-event mb-35">
-                        <div class="event-date">
-                            <h3><a href="event-details.html">16 <span>June</span></a></h3>
-                        </div>
-                        <div class="event-content text-left">
-                            <div class="event-content-left">
-                                <h4><a href="event-details.html">LEARN ENGLISH HISTORY</a></h4>
-                                <ul>
-                                    <li><i class="fa fa-clock-o"></i>9.00 AM - 4.45 PM</li>
-                                    <li><i class="fa fa-map-marker"></i>New Yourk City</li>
-                                </ul>
-                            </div>
-                            <div class="event-content-right">
-                                <a class="default-btn" href="event-details.html">join now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-event">
-                        <div class="event-date">
-                            <h3><a href="event-details.html">14 <span>June</span></a></h3>
-                        </div>
-                        <div class="event-content text-left">
-                            <div class="event-content-left">
-                                <h4><a href="event-details.html">GLOBAL ECONOMIC CONFERENCE</a></h4>
-                                <ul>
-                                    <li><i class="fa fa-clock-o"></i>9.00 AM - 4.45 PM</li>
-                                    <li><i class="fa fa-map-marker"></i>New Yourk City</li>
-                                </ul>
-                            </div>
-                            <div class="event-content-right">
-                                <a class="default-btn" href="event-details.html">join now</a>
-                            </div>
-                        </div>
-                    </div>
+                    }
+
                 </div>
                 <div class="col-md-6 hidden-sm hidden-xs">
-                    <div class="single-event mb-35">
-                        <div class="event-date">
-                            <h3><a href="event-details.html">12 <span>June</span></a></h3>
-                        </div>
-                        <div class="event-content text-left">
-                            <div class="event-content-left">
-                                <h4><a href="event-details.html">MATHEMATICAL WORKSHOP</a></h4>
-                                <ul>
-                                    <li><i class="fa fa-clock-o"></i>9.00 AM - 4.45 PM</li>
-                                    <li><i class="fa fa-map-marker"></i>New Yourk City</li>
-                                </ul>
+                   @foreach (var item in Model.Events)
+                    {
+
+                        <div class="single-event mb-35">
+                            <div class="event-date">
+                                <h3><a href="event-details.html">  @item.Date.ToString("dd")<span> @item.Date.ToString("MMM")</span></a></h3>
                             </div>
-                            <div class="event-content-right">
-                                <a class="default-btn" href="event-details.html">join now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-event mb-35">
-                        <div class="event-date">
-                            <h3><a href="event-details.html">10 <span>June</span></a></h3>
-                        </div>
-                        <div class="event-content text-left">
-                            <div class="event-content-left">
-                                <h4><a href="event-details.html">WORDPRESS AUTHOR MEET UP</a></h4>
-                                <ul>
-                                    <li><i class="fa fa-clock-o"></i>9.00 AM - 4.45 PM</li>
-                                    <li><i class="fa fa-map-marker"></i>New Yourk City</li>
-                                </ul>
-                            </div>
-                            <div class="event-content-right">
-                                <a class="default-btn" href="event-details.html">join now</a>
+                            <div class="event-content text-left">
+                                <div class="event-content-left">
+                                    <h4><a href="event-details.html">@item.Name</a></h4>
+                                    <ul>
+                                        <li><i class="fa fa-clock-o"></i> @item.StartTime.ToString(@"hh\:mm") AM -  @item.EndTime.ToString(@"hh\:mm") PM</li>
+                                        <li><i class="fa fa-map-marker"></i>@item.Venue</li>
+                                    </ul>
+                                </div>
+                                <div class="event-content-right">
+                                    <a class="default-btn" href="event-details.html">join now</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="single-event mb-35">
-                        <div class="event-date">
-                            <h3><a href="event-details.html">08 <span>June</span></a></h3>
-                        </div>
-                        <div class="event-content text-left">
-                            <div class="event-content-left">
-                                <h4><a href="event-details.html">DIGITAL MARKETING ANALYSIS</a></h4>
-                                <ul>
-                                    <li><i class="fa fa-clock-o"></i>9.00 AM - 4.45 PM</li>
-                                    <li><i class="fa fa-map-marker"></i>New Yourk City</li>
-                                </ul>
-                            </div>
-                            <div class="event-content-right">
-                                <a class="default-btn" href="event-details.html">join now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="single-event">
-                        <div class="event-date">
-                            <h3><a href="event-details.html">06 <span>June</span></a></h3>
-                        </div>
-                        <div class="event-content text-left">
-                            <div class="event-content-left">
-                                <h4><a href="event-details.html">WROKSHOP ON UI &amp; UX</a></h4>
-                                <ul>
-                                    <li><i class="fa fa-clock-o"></i>9.00 AM - 4.45 PM</li>
-                                    <li><i class="fa fa-map-marker"></i>New Yourk City</li>
-                                </ul>
-                            </div>
-                            <div class="event-content-right">
-                                <a class="default-btn" href="event-details.html">join now</a>
-                            </div>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

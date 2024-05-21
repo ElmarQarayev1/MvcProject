@@ -38,13 +38,13 @@
                                     </div>
                                 </a>
                                 <div class="event-date">
-                                    <h3>@item.StartTime.ToString() <span>@item.StartTime.ToString()</span></h3>
+                                    <h3>@item.Date.ToString("dd") <span>@item.Date.ToString("MMM")</span></h3>
                                 </div>
                             </div>
                              <div class="event-content text-left">
                                 <h4><a href="event-details.html">@item.Name</a></h4>
                                 <ul>
-                                    <li><span>time:</span> @item.StartTime.ToString() - @item.EndTime.ToString() PM</li>
+                                    <li><span>time:</span> @item.StartTime.ToString(@"hh\:mm") AM - @item.EndTime.ToString(@"hh\:mm") PM</li>
                                     <li><span>venue</span> @item.Venue</li>
                                 </ul>
                                 <div class="event-content-right">

@@ -98,6 +98,7 @@ namespace MvcProject.Areas.Manage.Controllers
 
             return RedirectToAction("Index");
         }
+
         public IActionResult Edit(int id)
         {
             Teacher teacher = _context.Teachers.Include(x => x.EventTeachers).ThenInclude(x=>x.Event).FirstOrDefault(x => x.Id == id);

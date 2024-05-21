@@ -84,6 +84,21 @@
                     <span>Courses</span>
                 </a>
             </li>
+            @if (User.Identity.IsAuthenticated && User.IsInRole("superadmin"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="account" asp-action="admincreatebys">
+                        <i class="fas fa-fw fa-table"></i>
+                        <span>Create admin</span>
+                    </a>
+                </li>
+            }
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="setting" asp-action="index">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 

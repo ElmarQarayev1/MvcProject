@@ -39,6 +39,8 @@
     <None Remove="Areas\Manage\Views\Course\" />
     <None Remove="Areas\Manage\Views\Feature\" />
     <None Remove="Views\About\" />
+    <None Remove="Areas\Manage\Views\Setting\" />
+    <None Remove="Models\Enum\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -79,6 +81,8 @@
     <Folder Include="wwwroot\uploads\course\" />
     <Folder Include="Areas\Manage\Views\Feature\" />
     <Folder Include="Views\About\" />
+    <Folder Include="Areas\Manage\Views\Setting\" />
+    <Folder Include="Models\Enum\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.19" />

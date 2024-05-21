@@ -19,7 +19,7 @@ namespace MvcProject.Controllers
 
 		public IActionResult Index()
 		{
-            var courses = _context.Courses.Include(x => x.CourseTags).ToList();
+            var courses = _context.Courses.Include(x => x.CourseTags).Take(3).ToList();
 			
 			return View(courses);
 		}
@@ -92,6 +92,27 @@ namespace MvcProject.Controllers
             }
             return View("Index", courses);
         }
+        public IActionResult LoadMore(int skipCount)
+        {
+            
+                var courses = _context.Courses.Include(x => x.CourseTags).Skip(skipCount).Take(3).ToList();
+
+                if (courses == null || courses.Count == 0)
+                {
+                    return NoContent(); 
+                }
+                var coursesData = courses.Select(c => new {
+                    id = c.Id,
+                    imageUrl = c.Img, 
+                    name = c.Name,
+                    description = c.Desc
+                }).ToList();
+
+                return Json(coursesData); 
+            
+           
+        }
+
     }
 
 }

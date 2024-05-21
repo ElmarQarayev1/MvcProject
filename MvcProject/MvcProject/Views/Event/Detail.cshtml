@@ -25,15 +25,15 @@
                 <div class="col-md-8">
                     <div class="event-details">
                         <div class="event-details-img">
-                            <img src="~/img/event/@Model.Event.Img" alt="event-details">
+                            <img  src="~/img/event/@Model.Event.Img" alt="event-details">
                             <div class="event-date">
-                                <h3>@Model.Event.StartTime.ToString("dd")<span>@Model.Event.StartTime.ToString("MMM")</span></h3>
+                                <h3>@Model.Event.Date.ToString("dd")<span>@Model.Event.Date.ToString("MMM")</span></h3>
                             </div>
                         </div>
                         <div class="event-details-content">
                             <h2>@Model.Event.Name</h2>
                             <ul>
-                                <li><span>time : </span>@Model.Event.StartTime.ToString("dd-MMM") - @Model.Event.EndTime.ToString("dd-MMM")</li>
+                                <li><span>time : </span>@Model.Event.StartTime.ToString(@"hh\:mm")- @Model.Event.EndTime.ToString(@"hh\:mm")</li>
                                 <li><span>venue : </span>@Model.Event.Venue</li>
                             </ul>
                             <p>@Model.Event.Desc </p>
@@ -47,15 +47,14 @@
                                     {
                                         <div class="single-speaker">
                                             <div class="speaker-img">
-                                                <img src="~/img/teacher/@item.Teacher.Img" alt="speaker">
+                                                <img src="~/uploads/teacher/@item.Teacher.Img" alt="speaker">
                                             </div>
                                             <div class="speaker-name">
                                                 <h5>@item.Teacher.FullName</h5>
                                                 <p>@item.Teacher.Position </p>
                                             </div>
                                         </div>
-                                    }
-                                
+                                    }                         
                               
                             </div>
 

@@ -145,7 +145,6 @@ namespace MvcProject.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public IActionResult ResetPassword(ResetPasswordViewModel vm)
         {
