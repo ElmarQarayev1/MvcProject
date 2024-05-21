@@ -1,0 +1,50 @@
+﻿@model List<Mind>
+@{
+    ViewData["Title"] = "Review";
+}
+<div class="container-fluid">
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Reviews</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">FullName</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Mind</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var mind in Model)
+                    {
+                        <tr>
+                            <td>@mind.Id</td>
+                           
+                            <td>@mind.CreatedAt.ToString("dd,MMMM,yyyy")</td>
+                            <td>@mind.Text</td>
+                            <td>
+                                <form method="post" asp-action="reject">
+                                    <input type="hidden" name="id" value="@mind.Id" />
+                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                </form>
+
+                                <form method="post" asp-action="accept">
+                                    <input type="hidden" name="id" value="@mind.Id" />
+                                    <button type="submit" class="btn btn-success">Accept</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</div>

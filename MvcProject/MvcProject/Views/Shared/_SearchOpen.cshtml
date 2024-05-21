@@ -1,0 +1,21 @@
+﻿@model CourseViewModel
+
+<div class="search-results">
+    @if (Model.Courses.Count == 0)
+    {
+        <p>No courses found.</p>
+    }
+    else
+    {
+        <ul>
+            @foreach (var item in Model.Courses)
+            {
+                <li>
+                    <a href="/Course/Detail/@item.Id">
+                        @item.Name
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+</div>

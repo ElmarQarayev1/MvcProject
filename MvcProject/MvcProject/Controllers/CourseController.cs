@@ -16,7 +16,6 @@ namespace MvcProject.Controllers
 		{
             _context = context;
         }
-
 		public IActionResult Index()
 		{
             var courses = _context.Courses.Include(x => x.CourseTags).Take(3).ToList();
@@ -111,7 +110,16 @@ namespace MvcProject.Controllers
                 return Json(coursesData); 
            
         }
-
+      
+        [HttpPost]
+        public IActionResult Searchh(string searchTerm)
+        {      
+            var courses = _context.Courses
+                                .Include(x => x.CourseTags)
+                                .Where(c => c.Name.Contains(searchTerm) || c.Desc.Contains(searchTerm))
+                                .ToList();       
+            return PartialView("_SearchOpen", new CourseViewModel { Courses = courses });
+        }
     }
 
 }

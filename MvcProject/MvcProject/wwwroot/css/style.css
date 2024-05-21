@@ -59,6 +59,7 @@ a{
     -webkit-transition: all 0.3s ease-out 0s;
     transition: all 0.3s ease-out 0s;
 }
+
 a:focus{
     text-decoration: none;
 }
@@ -921,6 +922,24 @@ textarea {
     visibility: visible;
     z-index: 2;
 }
+.search-form input[type="search"] {
+    /* Style the search input field */
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+.search-form button {
+    /* Style the search button */
+    background-color: #007bff; /* Example: Blue button */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
 .header-top{
     background: #EC1C23;
     position: relative;

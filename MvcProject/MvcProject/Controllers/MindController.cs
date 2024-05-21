@@ -13,15 +13,20 @@ namespace MvcProject.Controllers
 		{
             _context = context;
         }
+
         public IActionResult MindForm(Mind mind)
         {
             if (!ModelState.IsValid)
             {
                 return View(mind);
             }
+
             _context.Minds.Add(mind);
             _context.SaveChanges();
             return RedirectToAction("index", "home");
         }
+
+
 	}
 }
+

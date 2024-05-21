@@ -83,7 +83,7 @@
     <div class="single-course mb-70">
         <div class="course-img">
             <a href="/Course/Detail/${course.id}">
-                <img src="/img/course/${course.imageUrl}" alt="${course.name}">
+                <img src="/uploads/course/${course.imageUrl}" alt="${course.name}">
                 <div class="course-hover">
                     <i class="fa fa-link"></i>
                 </div>
@@ -130,5 +130,7 @@
         if (!allCoursesLoaded) { 
             loadMoreCourses();
         }
-    });</script>
+    });
+
+</script>
 }
