@@ -7,6 +7,7 @@ using MvcProject.Data;
 using MvcProject.Models;
 using MvcProject.ViewModels;
 using MvcProject.Services;
+using System.Security.Claims;
 
 namespace MvcProject.Controllers
 {
@@ -140,7 +141,74 @@ namespace MvcProject.Controllers
 
             return RedirectToAction("ResetPassword");
         }
+        [Authorize(Roles = "member")]
+        public async Task<IActionResult> Profile()
+        {
+            AppUser? user = await _userManager.GetUserAsync(User);
 
+            if (user == null)
+                return RedirectToAction("login", "account");
+
+            ProfileEditViewModel profileVM = new ProfileEditViewModel
+            {
+                    
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    UserName = user.UserName            
+            };       
+
+            return View(profileVM);
+        }
+
+        [Authorize(Roles = "member")]
+        [HttpPost]
+        public async Task<IActionResult> Profile(ProfileEditViewModel profileEditViewModel)
+        {
+                
+            if (!ModelState.IsValid) return View(profileEditViewModel);
+
+            AppUser? appUser = await _userManager.GetUserAsync(User);
+
+            if (appUser == null) return RedirectToAction("login", "account");
+
+            appUser.UserName = profileEditViewModel.UserName;
+            appUser.Email = profileEditViewModel.Email;
+            appUser.FullName = profileEditViewModel.FullName;
+
+            if (_userManager.Users.Any(x => x.Id != User.FindFirstValue(ClaimTypes.NameIdentifier) && x.NormalizedEmail == profileEditViewModel.Email.ToUpper()))
+            {
+                ModelState.AddModelError("Email", "Email is already taken");
+                return View(profileEditViewModel);
+            }
+
+            if (profileEditViewModel.NewPassword != null)
+            {
+                var passwordResult = await _userManager.ChangePasswordAsync(appUser, profileEditViewModel.CurrentPassword, profileEditViewModel.NewPassword);
+
+                if (!passwordResult.Succeeded)
+                {
+                    foreach (var error in passwordResult.Errors)
+                        ModelState.AddModelError("", error.Description);
+
+                    return View(profileEditViewModel);
+                }
+            }
+            var result = await _userManager.UpdateAsync(appUser);
+
+            if (!result.Succeeded)
+            {
+                foreach (var err in result.Errors)
+                {
+                    if (err.Code == "DuplicateUserName")
+                        ModelState.AddModelError("UserName", "UserName is already taken");
+                    else ModelState.AddModelError("", err.Description);
+                }
+                return View(profileEditViewModel);
+            }
+            await _signInManager.SignInAsync(appUser, false);
+
+            return View(profileEditViewModel);
+        }
         public IActionResult ResetPassword()
         {
             return View();
@@ -148,7 +216,7 @@ namespace MvcProject.Controllers
         [HttpPost]
         public IActionResult ResetPassword(ResetPasswordViewModel vm)
         {
-            var user = _userManager.FindByEmailAsync(vm.Email.ToLower()).Result;
+            var user = _userManager.FindByEmailAsync(vm.Email).Result;
 
             if (user == null || !_userManager.IsInRoleAsync(user, "member").Result)
             {
@@ -161,7 +229,6 @@ namespace MvcProject.Controllers
                 ModelState.AddModelError("", "Invalid token");
                 return View(vm);
             }
-
             var result = _userManager.ResetPasswordAsync(user, vm.Token, vm.NewPassword).Result;
 
             if (!result.Succeeded)
@@ -175,7 +242,6 @@ namespace MvcProject.Controllers
 
             return RedirectToAction("Login");
         }
-
 
         //[HttpPost]
         //public IActionResult ForgetPassword(ForgetPasswordViewModel viewmodel)

@@ -109,7 +109,6 @@ namespace MvcProject.Controllers
                 }).ToList();
 
                 return Json(coursesData); 
-            
            
         }
 

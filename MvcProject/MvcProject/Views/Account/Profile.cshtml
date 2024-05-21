@@ -1,6 +1,48 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
+﻿@model ProfileEditViewModel
+<form method="post">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td><label for="first-name">Full Name</label></td>
+                <td><input asp-for="FullName" id="first-name" class="form-control" type="text"></td>
+                <td><span class="text-danger" asp-validation-for="FullName"></span></td>
+            </tr>
+            <tr>
+                <td><label for="display-name">User Name</label></td>
+                <td><input asp-for="UserName" id="display-name" class="form-control" type="text"></td>
+                <td><span class="text-danger" asp-validation-for="UserName"></span></td>
+            </tr>
+            <tr>
+                <td><label for="email">Email Address</label></td>
+                <td><input asp-for="Email" id="email" class="form-control" type="email"></td>
+                <td><span class="text-danger" asp-validation-for="Email"></span></td>
+            </tr>
+            <tr>
+                <td colspan="3"><h4>Password change</h4></td>
+            </tr>
+            <tr>
+                <td><label for="current-pwd">Current Password</label></td>
+                <td><input asp-for="CurrentPassword" id="current-pwd" class="form-control" type="password"></td>
+                <td><span class="text-danger" asp-validation-for="CurrentPassword"></span></td>
+            </tr>
+            <tr>
+                <td><label for="new-pwd">New Password</label></td>
+                <td><input asp-for="NewPassword" id="new-pwd" class="form-control" type="password"></td>
+                <td><span class="text-danger" asp-validation-for="NewPassword"></span></td>
+            </tr>
+            <tr>
+                <td><label for="confirm-pwd">Confirm Password</label></td>
+                <td><input asp-for="ConfirmNewPassword" id="confirm-pwd" class="form-control" type="password"></td>
+                <td><span class="text-danger" asp-validation-for="ConfirmNewPassword"></span></td>
+            </tr>
+            <tr>
+                <td colspan="3"><div class="text-danger" asp-validation-summary="ModelOnly"></div></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
