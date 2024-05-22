@@ -9,128 +9,145 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Teachers</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-            Create
-        </a>
+      
     </div>
     <div class="row">
         <div class="col-md-8 mx-auto">
             <form class="user" asp-action="edit" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="Name">FullName</label>
-                    <input asp-for="FullName" class="form-control" id="Name" placeholder=" ">
-                    <span class="text-danger" asp-validation-for="FullName"></span>
-                </div>
-                <div class="form-group">
-                    <label for="position">Position</label>
-                    <input asp-for="Position" class="form-control" id="position">
-                    <span class="text-danger" asp-validation-for="Position"></span>
-                </div>
-                <div class="form-group">
-                    <label for="ins">InstagramUrl</label>
-                    <input asp-for="InstagramUrl" class="form-control" id="ins">
-                    <span class="text-danger" asp-validation-for="InstagramUrl"></span>
-                </div>
-                <div class="form-group">
-                    <label for="link">LinkedinUrl</label>
-                    <input asp-for="LinkEdinUrl" class="form-control" id="link">
-                    <span class="text-danger" asp-validation-for="LinkEdinUrl"></span>
-                </div>
-                <div class="form-group">
-                    <label for="event"> Events </label>
-                    <select asp-for="EventIds" class="form-control" id="event" multiple asp-items="@(new SelectList(ViewBag.Events, nameof(Event.Id), nameof(Event.Name)))">
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="pint">PinterestUrl</label>
-                    <input asp-for="PinterestUrl" class="form-control" id="pint">
-                    <span class="text-danger" asp-validation-for="PinterestUrl"></span>
-                </div>
-                <div class="form-group">
-                    <label for="ving">VingUrl</label>
-                    <input asp-for="VingUrl" class="form-control" id="ving">
-                    <span class="text-danger" asp-validation-for="VingUrl"></span>
-                </div>
-                <div class="form-group">
-                    <label for="ving">Description</label>
-                    <input asp-for="Desc" class="form-control" id="ving">
-                    <span class="text-danger" asp-validation-for="Desc"></span>
-                </div>
-                <div class="form-group">
-                    <label for="deg">Degree</label>
-                    <input asp-for="Degree" class="form-control" id="deg">
-                    <span class="text-danger" asp-validation-for="Degree"></span>
-                </div>
-                <div class="form-group">
-                    <label for="exp">Experience</label>
-                    <input asp-for="Experience" class="form-control" id="exp">
-                    <span class="text-danger" asp-validation-for="Experience"></span>
-                </div>
-                <div class="form-group">
-                    <label for="lang">LanguagePercent</label>
-                    <input asp-for="LanguagePercent" class="form-control" id="lang">
-                    <span class="text-danger" asp-validation-for="LanguagePercent"></span>
-                </div>
-                <div class="form-group">
-                    <label for="tl">TeamLeaderPercent</label>
-                    <input asp-for="TeamLeaderPercent" class="form-control" id="tl">
-                    <span class="text-danger" asp-validation-for="TeamLeaderPercent"></span>
-                </div>
-                <div class="form-group">
-                    <label for="inv">InnovationPercent</label>
-                    <input asp-for="InnovationPercent" class="form-control" id="inv">
-                    <span class="text-danger" asp-validation-for="InnovationPercent"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="dp">DevelopmentPercent</label>
-                    <input asp-for="DevelopmentPercent" class="form-control" id="dp">
-                    <span class="text-danger" asp-validation-for="DevelopmentPercent"></span>
-                </div>
-                <div class="form-group">
-                    <label for="cp">CommunacationPercent</label>
-                    <input asp-for="CommunacationPercent" class="form-control" id="cp">
-                    <span class="text-danger" asp-validation-for="CommunacationPercent"></span>
-                </div>
-                <div class="form-group">
-                    <label for="cp">DesignPercent</label>
-                    <input asp-for="DesignPercent" class="form-control" id="cp">
-                    <span class="text-danger" asp-validation-for="DesignPercent"></span>
-                </div>
-                <div class="form-group">
-                    <label for="fac">Faculty</label>
-                    <input asp-for="Faculty" class="form-control" id="fac">
-                    <span class="text-danger" asp-validation-for="Faculty"></span>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input asp-for="Email" class="form-control" id="email">
-                    <span class="text-danger" asp-validation-for="Email"></span>
-                </div>
-                <div class="form-group">
-                    <label for="ph">Phone</label>
-                    <input asp-for="Phone" class="form-control" id="ph">
-                    <span class="text-danger" asp-validation-for="Phone"></span>
-                </div>
-                <div class="form-group">
-                    <label for="sy">Skype</label>
-                    <input asp-for="Skype" class="form-control" id="sy">
-                    <span class="text-danger" asp-validation-for="Skype"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="imgInput">Image</label>
-                    <input asp-for="ImageFile" class="form-control imgInput" placeholder=" ">
-                    <input type="hidden" name="ImageName" value="@Model.Img" />
-                    <div class="preview-box">
-                        <img width="200" class="previewImg" src="~/uploads/event/@Model.Img" />
+                <div class="form-box">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="Name">Full Name</label>
+                            <input asp-for="FullName" class="form-control" id="Name" placeholder="">
+                            <span class="text-danger" asp-validation-for="FullName"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="position">Position</label>
+                            <input asp-for="Position" class="form-control" id="position">
+                            <span class="text-danger" asp-validation-for="Position"></span>
+                        </div>
                     </div>
-                    <span class="text-danger" asp-validation-for="ImageFile"></span>
-                </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ins">Instagram Url</label>
+                            <input asp-for="InstagramUrl" class="form-control" id="ins">
+                            <span class="text-danger" asp-validation-for="InstagramUrl"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="link">Linkedin Url</label>
+                            <input asp-for="LinkEdinUrl" class="form-control" id="link">
+                            <span class="text-danger" asp-validation-for="LinkEdinUrl"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="event">Events</label>
+                            <select asp-for="EventIds" class="form-control" id="event" multiple asp-items="@(new SelectList(ViewBag.Events, nameof(Event.Id), nameof(Event.Name)))">
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="pint">Pinterest Url</label>
+                            <input asp-for="PinterestUrl" class="form-control" id="pint">
+                            <span class="text-danger" asp-validation-for="PinterestUrl"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ving">Ving Url</label>
+                            <input asp-for="VingUrl" class="form-control" id="ving">
+                            <span class="text-danger" asp-validation-for="VingUrl"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="desc">Description</label>
+                            <input asp-for="Desc" class="form-control" id="desc">
+                            <span class="text-danger" asp-validation-for="Desc"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="deg">Degree</label>
+                            <input asp-for="Degree" class="form-control" id="deg">
+                            <span class="text-danger" asp-validation-for="Degree"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="exp">Experience</label>
+                            <input asp-for="Experience" class="form-control" id="exp">
+                            <span class="text-danger" asp-validation-for="Experience"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="lang">Language Percent</label>
+                            <input asp-for="LanguagePercent" class="form-control" id="lang">
+                            <span class="text-danger" asp-validation-for="LanguagePercent"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="tl">Team Leader Percent</label>
+                            <input asp-for="TeamLeaderPercent" class="form-control" id="tl">
+                            <span class="text-danger" asp-validation-for="TeamLeaderPercent"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inv">Innovation Percent</label>
+                            <input asp-for="InnovationPercent" class="form-control" id="inv">
+                            <span class="text-danger" asp-validation-for="InnovationPercent"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="dp">Development Percent</label>
+                            <input asp-for="DevelopmentPercent" class="form-control" id="dp">
+                            <span class="text-danger" asp-validation-for="DevelopmentPercent"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="cp">Communication Percent</label>
+                            <input asp-for="CommunacationPercent" class="form-control" id="cp">
+                            <span class="text-danger" asp-validation-for="CommunacationPercent"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="design">Design Percent</label>
+                            <input asp-for="DesignPercent" class="form-control" id="design">
+                            <span class="text-danger" asp-validation-for="DesignPercent"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="fac">Faculty</label>
+                            <input asp-for="Faculty" class="form-control" id="fac">
+                            <span class="text-danger" asp-validation-for="Faculty"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="email">Email</label>
+                            <input asp-for="Email" class="form-control" id="email">
+                            <span class="text-danger" asp-validation-for="Email"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ph">Phone</label>
+                            <input asp-for="Phone" class="form-control" id="ph">
+                            <span class="text-danger" asp-validation-for="Phone"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="sy">Skype</label>
+                            <input asp-for="Skype" class="form-control" id="sy">
+                            <span class="text-danger" asp-validation-for="Skype"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="imgInput">Image</label>
+                        <input asp-for="ImageFile" class="form-control imgInput" placeholder=" ">
+                        <input type="hidden" name="ImageName" value="@Model.Img" />
+                        <div class="preview-box">
+                            <img width="200" class="previewImg" src="~/uploads/teacher/@Model.Img" />
+                        </div>
+                        <span class="text-danger" asp-validation-for="ImageFile"></span>
+                    </div>
 
-                <button class="btn btn-primary" type="submit">
-                    Create Teacher
-                </button>
+                    <button class="btn btn-primary" type="submit">
+                        Create Teacher
+                    </button>
             </form>
         </div>
     </div>

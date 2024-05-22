@@ -1,6 +1,7 @@
 ﻿using System;
 using MvcProject.Attributes.ValidationAttributes;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace MvcProject.Models
 {
@@ -40,6 +41,7 @@ namespace MvcProject.Models
 
         public string Faculty { get; set; }
 
+        [EmailAddress]
         public string Email { get; set; }
 
         public string Phone { get; set; }

@@ -5,9 +5,7 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Events</h1>
-        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-            Create
-        </a>
+      
     </div>
     <div class="row">
         <div class="col-md-8 mx-auto">
@@ -17,54 +15,61 @@
                     <input asp-for="Name" class="form-control" id="title1Input" placeholder=" ">
                     <span class="text-danger" asp-validation-for="Name"></span>
                 </div>
-                <div class="form-group">
-                    <label for="startTime">StartTime</label>
-                    <input asp-for="StartTime" class="form-control" id="startTime" placeholder=" ">
-                    <span class="text-danger" asp-validation-for="StartTime"></span>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="startTime">StartTime</label>
+                        <input asp-for="StartTime" class="form-control" id="startTime" placeholder=" ">
+                        <span class="text-danger" asp-validation-for="StartTime"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="endTime">EndTime</label>
+                        <input asp-for="EndTime" class="form-control" id="endTime" placeholder=" ">
+                        <span class="text-danger" asp-validation-for="EndTime"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="startTime">EndTime</label>
-                    <input asp-for="EndTime" class="form-control" id="endTime" placeholder=" ">
-                    <span class="text-danger" asp-validation-for="EndTime"></span>
-                </div>
+
                 <div class="form-group">
                     <label for="descInput">Desc</label>
                     <textarea asp-for="Desc" class="form-control" id="descInput" placeholder=" "></textarea>
                     <span class="text-danger" asp-validation-for="Desc"></span>
                 </div>
+
                 <div class="form-group">
                     <label for="venue">Venue</label>
                     <textarea asp-for="Venue" class="form-control" id="venue" placeholder=" "></textarea>
                     <span class="text-danger" asp-validation-for="Venue"></span>
                 </div>
-                <div class="form-group">
-                    <label for="categoryId"> Categories </label>
-                    <select asp-for="CategoryId" class="form-control" id="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, nameof(Category.Id), nameof(Category.Name)))">
-                    </select>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="categoryId">Categories</label>
+                        <select asp-for="CategoryId" class="form-control" id="CategoryId" asp-items="@(new SelectList(ViewBag.Categories, nameof(Category.Id), nameof(Category.Name)))"></select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="tagId">Tags</label>
+                        <select asp-for="TagIds" class="form-control" id="TagId" multiple asp-items="@(new SelectList(ViewBag.Tags, nameof(Tag.Id), nameof(Tag.Name)))"></select>
+                    </div>
                 </div>
+
                 <div class="form-group">
-                    <label for="tagId"> Tags </label>
-                    <select asp-for="TagIds" class="form-control" id="TagId" multiple asp-items="@(new SelectList(ViewBag.Tags, nameof(Tag.Id), nameof(Tag.Name)))">
-                    </select>
+                    <label for="TeacherId">Teachers</label>
+                    <select asp-for="TeacherIds" class="form-control" id="TeacherId" multiple asp-items="@(new SelectList(ViewBag.Teachers, nameof(Teacher.Id), nameof(Teacher.FullName)))"></select>
                 </div>
-                <div class="form-group">
-                    <label for="TeacherId"> Teachers </label>
-                    <select asp-for="TeacherIds" class="form-control" id="TeacherId" multiple asp-items="@(new SelectList(ViewBag.Teachers, nameof(Teacher.Id), nameof(Teacher.FullName)))">
-                    </select>
-                </div>
+
                 <div class="form-group">
                     <label for="imgInput">Image</label>
                     <input asp-for="ImageFile" class="form-control imgInput" placeholder=" ">
                     <input type="hidden" name="ImageName" value="@Model.Img" />
                     <div class="preview-box">
-                        <img width="200" class="previewImg" src="~/uploads/teacher/@Model.Img" />
+                        <img width="200" class="previewImg" src="~/uploads/event/@Model.Img" />
                     </div>
                     <span class="text-danger" asp-validation-for="ImageFile"></span>
                 </div>
-                <button class="btn btn-primary" type="submit">
-                    Edit Event
-                </button>
+
+                <button class="btn btn-primary" type="submit">Edit Event</button>
             </form>
+
         </div>
     </div>
 </div>
