@@ -1,4 +1,4 @@
-﻿@model PaginatedList<Mind>
+﻿@model PaginatedList<Application>
 @{
     ViewData["Title"] = "Index";
     int order = (Model.PageIndex - 1) * Model.PageSize;
@@ -16,36 +16,52 @@
                         <th scope="col">#</th>
                         <th scope="col">FullName</th>
                         <th scope="col">Date</th>
-                        <th scope="col">Subject</th>
-                        <th scope="col">Text</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">courseName</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var mind in Model.Items)
+                    @foreach (var app in Model.Items)
                     {
                         <tr>
-                            <td>@mind.Id</td>
-                            @if (mind.AppUser == null)
-                            {
-                                <td>User Not Found</td>
-                            }
-                            else
-                            {
-                                <td>@mind.AppUser.FullName</td>
-                            }
-                            <td>@mind.CreatedAt.ToString("dd,MMMM,yyyy")</td>
-                            <td>@mind.Subject</td>
-                            <td>@mind.Text</td>
+                            <td>@app.Id</td>
+                            <td>@(app.AppUser == null ? "User Not Found" : app.AppUser.FullName)</td>
+                            <td>@app.CreatedAt.ToString("dd MMMM yyyy")</td>
+                            <td>@app.Status</td>
+                            <td>@app.Course.Name</td>
                             <td>
-                                <a asp-action="message" asp-route-id="@mind.Id" class="btn btn-primary">
-                                    Message
-                                </a>
+                                @if (app.Status == Models.Enum.ApplicationStatus.Rejected)
+                                {
+                                    <form method="post" asp-action="accept">
+                                        <input type="hidden" name="id" value="@app.Id" />
+                                        <button type="submit" class="btn btn-success">Accept</button>
+                                    </form>
+                                }
+                                else if (app.Status == Models.Enum.ApplicationStatus.Accepted)
+                                {
+                                    <form method="post" asp-action="reject">
+                                        <input type="hidden" name="id" value="@app.Id" />
+                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" asp-action="accept">
+                                        <input type="hidden" name="id" value="@app.Id" />
+                                        <button type="submit" class="btn btn-success">Accept</button>
+                                    </form>
+                                    <form method="post" asp-action="reject">
+                                        <input type="hidden" name="id" value="@app.Id" />
+                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                    </form>
 
+                                }
                             </td>
                         </tr>
                     }
                 </tbody>
+
 
             </table>
             <nav aria-label="..." class="d-flex justify-content-center">

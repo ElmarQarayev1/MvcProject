@@ -171,7 +171,6 @@ namespace MvcProject.Controllers
                 UserName = user.UserName,
                 Applications = applications
             };
-
             return View(profileVM);
         }
 

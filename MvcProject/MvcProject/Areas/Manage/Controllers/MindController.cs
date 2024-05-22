@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MvcProject.Areas.Manage.ViewModels;
 using MvcProject.Data;
+using MvcProject.Models;
 using MvcProject.Models.Enum;
 using MvcProject.Services;
 
@@ -18,11 +20,17 @@ namespace MvcProject.Areas.Manage.Controllers
             _context = context;
             _emailService = emailService;
         }
-
-        public IActionResult Index()
+        public IActionResult Index(int page=1)
         {
-            var minds = _context.Minds.Include(x => x.AppUser).ToList();
-            return View(minds);
+            var query = _context.Minds.Include(x=>x.AppUser);
+            var pageData = PaginatedList<Mind>.Create(query, page, 2);
+            if (pageData.TotalPages < page)
+            {
+                return RedirectToAction("index", new { page = pageData.TotalPages });
+
+            }
+            return View(pageData);
+
         }
 
         public IActionResult Message(int id)
@@ -56,32 +64,6 @@ namespace MvcProject.Areas.Manage.Controllers
             }
             return RedirectToAction("Index");
         }       
-        // [HttpPost]
-        // public async Task<IActionResult> Reject(int id)
-        // {
-        //     var mind = await _context.Minds.FindAsync(id);
-        //     if (mind == null)
-        //     {
-        //         return RedirectToAction("NotFound", "Error");
-        //     }
-        //     mind.Status = MindStatus.Rejected;
-        //     _context.Update(mind);
-        //     await _context.SaveChangesAsync();
-        //     return RedirectToAction("Index");
-        // }
-
-        // [HttpPost]
-        // public async Task<IActionResult> Accept(int id)
-        // {
-        //     var mind = await _context.Minds.FindAsync(id);
-        //     if (mind == null)
-        //     {
-        //         return RedirectToAction("NotFound", "Error");
-        //     }
-        //     mind.Status = MindStatus.Accepted;
-        //     _context.Update(mind);
-        //     await _context.SaveChangesAsync();
-        //     return RedirectToAction("Index");
-        // }
+       
     }
 }

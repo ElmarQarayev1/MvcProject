@@ -45,6 +45,10 @@ namespace MvcProject.Controllers
             }
             else
             {
+                if(app.FullName==null|| app.Email == null)
+                {
+                    return RedirectToAction("detail","course");
+                }
                 Application app2 = new Application()
                 {
                     FullName = app.FullName,
