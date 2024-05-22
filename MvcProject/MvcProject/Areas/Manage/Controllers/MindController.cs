@@ -20,7 +20,6 @@ namespace MvcProject.Areas.Manage.Controllers
             var minds = _context.Minds.Include(x => x.AppUser).ToList();
             return View(minds);
         }
-
         [HttpPost]
         public async Task<IActionResult> Reject(int id)
         {
@@ -38,7 +37,6 @@ namespace MvcProject.Areas.Manage.Controllers
         [HttpPost]
         public async Task<IActionResult> Accept(int id)
         {
-
             var mind = await _context.Minds.FindAsync(id);
 
             if (mind == null)

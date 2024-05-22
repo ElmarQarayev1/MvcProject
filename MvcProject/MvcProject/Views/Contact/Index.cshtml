@@ -74,7 +74,7 @@
                     <div class="reply-area">
                         <h3>LEAVE A message</h3>
                         <p>I must explain to you how all this a mistaken idea of ncing great explorer of the rut the is lder of human happinescias unde omnis iste natus error sit volptatem </p>
-                        <form id="contact-form" method="post">
+                        <form id="contact-form" method="post" asp-action="mindForm" asp-controller="mind">
                             <div class="row">
                                 <div class="col-md-12">
                                     <p>Subject</p>
@@ -85,7 +85,7 @@
                                     <span class="text-danger" asp-validation-for="Text"></span>
                                 </div>
                             </div>
-                            <a class="reply-btn text-danger" href="#"><span>send message</span></a>
+                            <button type="submit" class="default-btn">Send Message</button>
                             <p class="form-messege"></p>
                         </form>
                     </div>
@@ -111,12 +111,12 @@
                                     <p>Subject</p>
                                     <input asp-for="Subject" id="subject">
                                     <span class="text-danger" asp-validation-for="Subject"></span>
-                                    <p>Massage</p>
+                                    <p>Message</p>
                                     <textarea asp-for="Text" id="message" cols="15" rows="10"></textarea>
                                     <span class="text-danger" asp-validation-for="Text"></span>
                                 </div>
                             </div>
-                            <button class="reply-btn text-danger" type="submit" ><span>send message</span></button>
+                            <button type="submit" class="default-btn">Send Message</button>
                             <p class="form-messege"></p>
                         </form>
                     </div>

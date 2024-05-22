@@ -5,9 +5,8 @@
 <div class="container-fluid">
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Reviews</h1>
+        <h1 class="h3 mb-0 text-gray-800">Minds</h1>
     </div>
-
     <div class="row">
         <div class="col-md-12 mx-auto">
             <table class="table">
@@ -16,7 +15,8 @@
                         <th scope="col">#</th>
                         <th scope="col">FullName</th>
                         <th scope="col">Date</th>
-                        <th scope="col">Mind</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Text</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -25,8 +25,17 @@
                     {
                         <tr>
                             <td>@mind.Id</td>
-                           
+                            @if (mind.AppUser == null)
+                            {
+                                <td>User Not Found</td>
+
+                            }
+                            else
+                            {
+                                <td>@mind.AppUser.FullName</td>
+                            }
                             <td>@mind.CreatedAt.ToString("dd,MMMM,yyyy")</td>
+                            <td>@mind.Subject</td>
                             <td>@mind.Text</td>
                             <td>
                                 <form method="post" asp-action="reject">
