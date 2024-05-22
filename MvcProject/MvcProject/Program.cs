@@ -22,7 +22,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(option =>
 }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddScoped<LayoutService>();
-//builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.ConfigureApplicationCookie(opt =>
@@ -43,7 +43,6 @@ builder.Services.ConfigureApplicationCookie(opt =>
         return Task.CompletedTask;
     };
 });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

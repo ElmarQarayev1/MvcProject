@@ -17,7 +17,7 @@ namespace MvcProject.Controllers
 
 		public IActionResult Index()
 		{
-			var Events = _context.Events.ToList();
+            var Events = _context.Events.Take(3).ToList();
 			return View(Events);
 		}
         public IActionResult Detail(int id)
@@ -71,9 +71,22 @@ namespace MvcProject.Controllers
             }
             return View("Index", events);
         }
+       
+        public async Task<IActionResult> LoadMore(int skipCount)
+        {
+            var events = await _context.Events
+                                       .OrderBy(e => e.Date)
+                                       .Skip(skipCount)
+                                       .Take(3)
+                                       .ToListAsync();
 
+            if (events == null || events.Count == 0)
+            {
+                return NoContent();
+            }
 
-
+            return Json(events);
+        }
     }
 }
 
