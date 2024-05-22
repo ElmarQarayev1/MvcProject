@@ -28,7 +28,6 @@
                             @if (mind.AppUser == null)
                             {
                                 <td>User Not Found</td>
-
                             }
                             else
                             {
@@ -38,15 +37,10 @@
                             <td>@mind.Subject</td>
                             <td>@mind.Text</td>
                             <td>
-                                <form method="post" asp-action="reject">
-                                    <input type="hidden" name="id" value="@mind.Id" />
-                                    <button type="submit" class="btn btn-danger">Reject</button>
-                                </form>
-
-                                <form method="post" asp-action="accept">
-                                    <input type="hidden" name="id" value="@mind.Id" />
-                                    <button type="submit" class="btn btn-success">Accept</button>
-                                </form>
+                                <a asp-action="message"  asp-route-id="@mind.Id" class="btn btn-primary" >                                 
+                                   Message
+                                </a>
+                                
                             </td>
                         </tr>
                     }

@@ -12,6 +12,8 @@ using MailKit.Security;
 using MimeKit;
 using MimeKit.Text;
 using MailKit.Net.Smtp;
+using Microsoft.EntityFrameworkCore;
+using MvcProject.Models.Enum;
 
 namespace MvcProject.Controllers
 {
@@ -123,17 +125,6 @@ namespace MvcProject.Controllers
             var url = Url.Action("Verify", "Account", new { email = vm.Email, token = token }, Request.Scheme);
             TempData["EmailSent"] = vm.Email;
 
-            //var email = new MimeMessage();
-            //email.From.Add(MailboxAddress.Parse("elmareg@code.edu.az"));
-            //email.To.Add(MailboxAddress.Parse(user.Email));
-            //email.Subject = "Password Reset Link";
-            //email.Body = new TextPart(TextFormat.Html) { Text = $"<h1><a href=\"{url}\">to reset your password</a></h1>" };
-
-            //using var smtp = new SmtpClient();
-            //smtp.Connect("smtp.gmail.com", 465, true);
-            //smtp.Authenticate("elmareg@code.edu.az", "ouyq qyyt hifg lbis");
-            //smtp.Send(email);
-            //smtp.Disconnect(true);
             var subject = "Reset Password Link";
               var body = $"<h1><a href=\"{url}\">to reset your password</a></h1>";
                _emailService.Send(user.Email, subject, body);
@@ -152,7 +143,6 @@ namespace MvcProject.Controllers
             {
                 return RedirectToAction("NotFound", "Error");
             }
-
             TempData["email"] = email;
             TempData["token"] = token;
 
@@ -164,15 +154,23 @@ namespace MvcProject.Controllers
             AppUser? user = await _userManager.GetUserAsync(User);
 
             if (user == null)
+            {
                 return RedirectToAction("login", "account");
+            }
+
+            var applications = await _context.Applications
+                                             .Include(x => x.Course)
+                                             .Include(x => x.AppUser)
+                                             .Where(x => x.AppUserId == user.Id && x.Status != ApplicationStatus.Canceled)
+                                             .ToListAsync();
 
             ProfileEditViewModel profileVM = new ProfileEditViewModel
             {
-                    
-                    FullName = user.FullName,
-                    Email = user.Email,
-                    UserName = user.UserName            
-            };       
+                FullName = user.FullName,
+                Email = user.Email,
+                UserName = user.UserName,
+                Applications = applications
+            };
 
             return View(profileVM);
         }

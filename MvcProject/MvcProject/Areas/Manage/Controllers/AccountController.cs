@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MvcProject.Areas.Manage.ViewModels;
 using MvcProject.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
@@ -20,7 +21,6 @@ namespace MvcProject.Areas.Manage.Controllers
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
-
         public async Task<IActionResult> CreateRoles()
         {
             await _roleManager.CreateAsync(new IdentityRole("admin"));
@@ -33,8 +33,6 @@ namespace MvcProject.Areas.Manage.Controllers
             AppUser appUser = new AppUser()
             {
                 UserName = "admin",
-                
-
             };
             var result = await _userManager.CreateAsync(appUser, "Admin123");
             await _userManager.AddToRoleAsync(appUser, "admin");
@@ -57,6 +55,7 @@ namespace MvcProject.Areas.Manage.Controllers
         {
             return View();
         }
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Login(AdminLoginViewModel admin, string returnUrl)
         {
@@ -99,14 +98,23 @@ namespace MvcProject.Areas.Manage.Controllers
         {
             AppUser appUser = new AppUser()
             {
-                UserName = av.UserName
+                UserName = av.UserName,
+                Email="admin@gmail.com"
+                
                
             };
             var result = await _userManager.CreateAsync(appUser, av.Password);
+            if (!result.Succeeded)
+            {
+                foreach (var err in result.Errors )
+                {
+                    ModelState.AddModelError("", err.Description);
+                    return View();
+                }
+            }
             await _userManager.AddToRoleAsync(appUser, "admin");
-            //return RedirectToAction("index","dashboard");
-            return Json(result);
-        }
+            return RedirectToAction("index","dashboard");
+         }
     }
 }
 

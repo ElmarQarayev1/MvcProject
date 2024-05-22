@@ -16,7 +16,6 @@ namespace MvcProject.Services
         public void Send(string to, string subject, string body)
         {
             var email = new MimeMessage();
-
             email.From.Add(MailboxAddress.Parse(_configuration.GetSection("EmailSettings:From").Value));
             email.To.Add(MailboxAddress.Parse(to));
             email.Subject = subject;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MvcProject.Models;
 
 namespace MvcProject.ViewModels
 {
@@ -31,6 +32,7 @@ namespace MvcProject.ViewModels
         [DataType(DataType.Password)]
         [Compare(nameof(NewPassword))]
         public string? ConfirmNewPassword { get; set; }
+        public List<Application> Applications { get; set; }
     }
 }
 

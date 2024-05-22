@@ -1,48 +1,107 @@
 ﻿@model ProfileEditViewModel
-<form method="post">
-    <table class="table">
-        <tbody>
-            <tr>
-                <td><label for="first-name">Full Name</label></td>
-                <td><input asp-for="FullName" id="first-name" class="form-control" type="text"></td>
-                <td><span class="text-danger" asp-validation-for="FullName"></span></td>
-            </tr>
-            <tr>
-                <td><label for="display-name">User Name</label></td>
-                <td><input asp-for="UserName" id="display-name" class="form-control" type="text"></td>
-                <td><span class="text-danger" asp-validation-for="UserName"></span></td>
-            </tr>
-            <tr>
-                <td><label for="email">Email Address</label></td>
-                <td><input asp-for="Email" id="email" class="form-control" type="email"></td>
-                <td><span class="text-danger" asp-validation-for="Email"></span></td>
-            </tr>
-            <tr>
-                <td colspan="3"><h4>Password change</h4></td>
-            </tr>
-            <tr>
-                <td><label for="current-pwd">Current Password</label></td>
-                <td><input asp-for="CurrentPassword" id="current-pwd" class="form-control" type="password"></td>
-                <td><span class="text-danger" asp-validation-for="CurrentPassword"></span></td>
-            </tr>
-            <tr>
-                <td><label for="new-pwd">New Password</label></td>
-                <td><input asp-for="NewPassword" id="new-pwd" class="form-control" type="password"></td>
-                <td><span class="text-danger" asp-validation-for="NewPassword"></span></td>
-            </tr>
-            <tr>
-                <td><label for="confirm-pwd">Confirm Password</label></td>
-                <td><input asp-for="ConfirmNewPassword" id="confirm-pwd" class="form-control" type="password"></td>
-                <td><span class="text-danger" asp-validation-for="ConfirmNewPassword"></span></td>
-            </tr>
-            <tr>
-                <td colspan="3"><div class="text-danger" asp-validation-summary="ModelOnly"></div></td>
-            </tr>
-            <tr>
-                <td colspan="3">
+@{
+    ViewData["Title"] = "Profile";
+    int order = 0;
+}
+<div class="container mt-5">
+    <h2 class="text-center">@ViewData["Title"]</h2>
+    <form method="post" class="mt-4">
+        <div class="card shadow-sm p-4">
+            <div class="form-group row">
+                <label for="first-name" class="col-sm-3 col-form-label">Full Name</label>
+                <div class="col-sm-9">
+                    <input asp-for="FullName" id="first-name" class="form-control" type="text">
+                    <span class="text-danger" asp-validation-for="FullName"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="display-name" class="col-sm-3 col-form-label">User Name</label>
+                <div class="col-sm-9">
+                    <input asp-for="UserName" id="display-name" class="form-control" type="text">
+                    <span class="text-danger" asp-validation-for="UserName"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="email" class="col-sm-3 col-form-label">Email Address</label>
+                <div class="col-sm-9">
+                    <input asp-for="Email" id="email" class="form-control" type="email">
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <h4 class="mt-4">Password Change</h4>
+            <div class="form-group row">
+                <label for="current-pwd" class="col-sm-3 col-form-label">Current Password</label>
+                <div class="col-sm-9">
+                    <input asp-for="CurrentPassword" id="current-pwd" class="form-control" type="password">
+                    <span class="text-danger" asp-validation-for="CurrentPassword"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="new-pwd" class="col-sm-3 col-form-label">New Password</label>
+                <div class="col-sm-9">
+                    <input asp-for="NewPassword" id="new-pwd" class="form-control" type="password">
+                    <span class="text-danger" asp-validation-for="NewPassword"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="confirm-pwd" class="col-sm-3 col-form-label">Confirm Password</label>
+                <div class="col-sm-9">
+                    <input asp-for="ConfirmNewPassword" id="confirm-pwd" class="form-control" type="password">
+                    <span class="text-danger" asp-validation-for="ConfirmNewPassword"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-9 offset-sm-3">
+                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-9 offset-sm-3">
                     <button type="submit" class="btn btn-primary">Save Changes</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</form>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="myaccount-content mt-5">
+        <h3>Orders</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th>No</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Price</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Applications)
+                    {
+                        order++;
+                        <tr>
+                            <td>@order</td>
+                            <td>@(item.CreatedAt.ToString("yyyy-MM-dd hh:mm"))</td>
+                            <td>@item.Status</td>
+                            <td>$@item.Course.Price</td>
+                            <td>
+                                @if (item.Status == MvcProject.Models.Enum.ApplicationStatus.Pending)
+                                {
+                                    <a href="@Url.Action("cancel", "application", new { id = item.Id })" class="btn btn-danger btn-sm">Cancel</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                    <tr>
+                        <td colspan="3"></td>
+                        <td>Total Price:</td>
+                        <td>$@Model.Applications.Sum(a => a.Course.Price)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

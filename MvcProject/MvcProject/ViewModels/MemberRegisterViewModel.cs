@@ -10,7 +10,7 @@ namespace MvcProject.ViewModels
         [Required]
         public string UserName { get; set; }
         [EmailAddress]
-        [MaxLength(25)]
+        [MaxLength(40)]
         [MinLength(5)]
         [Required]
         public string Email { get; set; }

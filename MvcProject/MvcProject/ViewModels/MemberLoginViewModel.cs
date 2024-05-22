@@ -6,7 +6,7 @@ namespace MvcProject.ViewModels
 	public class MemberLoginViewModel
 	{
         [EmailAddress]
-        [MaxLength(25)]
+        [MaxLength(60)]
         [MinLength(5)]
         [Required]
         public string Email { get; set; }

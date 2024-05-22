@@ -37,34 +37,6 @@ namespace MvcProject.Controllers
             _context.SaveChanges();
             return RedirectToAction("index", "home");
         }
-        //[HttpPost]
-        //public async Task<IActionResult> Review(BookReview review)
-        //{
-        //    AppUser? user = await _userManager.GetUserAsync(User);
-        //    if (user == null || !await _userManager.IsInRoleAsync(user, "member"))
-        //        return RedirectToAction("login", "account", new { returnUrl = Url.Action("detail", "book", new { id = review.BookId }) });
-
-        //    if (!_context.Books.Any(x => x.Id == review.BookId && !x.IsDeleted))
-        //        return RedirectToAction("notfound", "error");
-
-        //    if (_context.BookReviews.Any(x => x.Id == review.BookId && x.AppUserId == user.Id))
-        //        return RedirectToAction("notfound", "error");
-
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        var vm = await getBookDetail(review.BookId);
-        //        vm.Review = review;
-        //        return View("detail", vm);
-        //    }
-
-        //    review.AppUserId = user.Id;
-        //    review.CreatedAt = DateTime.Now;
-
-        //    _context.BookReviews.Add(review);
-        //    _context.SaveChanges();
-
-        //    return RedirectToAction("detail", new { id = review.BookId });
-        //}
+       
     }
 }

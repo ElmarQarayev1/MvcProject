@@ -38,7 +38,8 @@ namespace MvcProject.Controllers
             {
                 Course = course,
                 Tags = _context.Tags.ToList(),
-                Categories = _context.Categories.ToList()
+                Categories = _context.Categories.ToList(),
+                Application = new Application()
             };
             return View(cdv);
         }
@@ -108,9 +109,7 @@ namespace MvcProject.Controllers
                 }).ToList();
 
                 return Json(coursesData); 
-           
         }
-      
         [HttpPost]
         public IActionResult Searchh(string searchTerm)
         {      
