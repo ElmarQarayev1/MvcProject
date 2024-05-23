@@ -10,7 +10,6 @@ namespace MvcProject.Models
         public string? Name { get; set; }
         public string? AppUserId { get; set; }       
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public MindStatus Status { get; set; } = MindStatus.Pending;
         [EmailAddress]
         public string? Email { get; set; }
         [Required]

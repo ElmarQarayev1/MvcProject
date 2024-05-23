@@ -52,7 +52,7 @@
                                 <nav>
                                     <ul>
                                         <li>
-                                            <a href="index.html">Home</a>
+                                            <a asp-action="index" asp-controller="home">Home</a>
                                             <ul>
                                                 <li><a href="index.html">Home One</a></li>
                                                 <li><a href="index-2.html">Home Two</a></li>
@@ -431,9 +431,9 @@
                     <div class="col-md-4 col-sm-6 col-xs-12">
                         <div class="single-widget pr-60">
                             <div class="footer-logo pb-25">
-                                <a href="index.html"><img src="~/img/logo/footer-logo.png" alt="eduhome"></a>
+                                <a href="index.html"><img src="~/img/logo/@settings["FooterLogo"]" alt="eduhome"></a>
                             </div>
-                            <p>I must explain to you how all this mistaken idea of denoung pleure and praising pain was born and give you a coete account of the system. </p>
+                            <p>@settings["Desc"] </p>
                             <div class="footer-social">
                                 <ul>
                                     <li><a href="#"><i class="zmdi zmdi-facebook"></i></a></li>
@@ -450,7 +450,7 @@
                             <ul>
                                 <li><a href="#">addmission</a></li>
                                 <li><a href="#">Academic Calender</a></li>
-                                <li><a href="event.html">Event List</a></li>
+                                <li><a  asp-action="index" asp-controller="event">Event List</a></li>
                                 <li><a href="#">Hostel &amp; Dinning</a></li>
                                 <li><a href="#">TimeTable</a></li>
                             </ul>
@@ -460,19 +460,19 @@
                         <div class="single-widget">
                             <h3>useful links</h3>
                             <ul>
-                                <li><a href="course.html">our courses</a></li>
+                                <li><a asp-action="index" asp-controller="course">our courses</a></li>
                                 <li><a href="about.html">about us</a></li>
-                                <li><a href="teacher.html">teachers &amp; faculty</a></li>
+                                <li><a asp-action="index" asp-controller="teacher">teachers &amp; faculty</a></li>
                                 <li><a href="#">teams &amp; conditions</a></li>
-                                <li><a href="event.html">our events</a></li>
+                                <li><a asp-action="index" asp-controller="event">our events</a></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <div class="single-widget">
                             <h3>get in touch</h3>
-                            <p>Your address goes here, Street<br>City, Roadno 785 New York</p>
-                            <p>+880  548  986  898  87<br>+880  659  785  658  98</p>
+                            <p>Your address goes here, Street<br>@settings["Address"]</p>
+                            <p>@settings["SupportPhone"]<br>@settings["Phone"]</p>
                             <p>info@eduhome.com<br>www.eduhome.com</p>
                         </div>
                     </div>

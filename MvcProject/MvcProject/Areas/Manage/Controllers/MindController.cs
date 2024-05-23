@@ -54,14 +54,14 @@ namespace MvcProject.Areas.Manage.Controllers
                 return RedirectToAction("NotFound", "Error");
             }
 
-            if (mind.AppUser.Email != null)
+            string recipientEmail = mind.AppUser?.Email ?? mind.Email;
+            if (recipientEmail == null)
             {
-                _emailService.Send(mind.AppUser.Email, subject, body);
+                return RedirectToAction("ntofound", "error");
             }
-            else
-            {
-                _emailService.Send(mind.Email, subject, body);
-            }
+                  
+               _emailService.Send(recipientEmail, subject, body);
+            
             return RedirectToAction("Index");
         }       
        

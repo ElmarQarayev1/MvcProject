@@ -88,6 +88,7 @@ namespace MvcProject.Areas.Manage.Controllers
                 }
             }
             course.Img = FileManager.Save(course.ImageFile, _env.WebRootPath, "uploads/course");
+            course.CreatedAt = DateTime.UtcNow;
 
             _context.Courses.Add(course);
 
@@ -148,7 +149,6 @@ namespace MvcProject.Areas.Manage.Controllers
                     ViewBag.Tags = _context.Tags.ToList();
                     return View(course);
                 }
-
                 deletedFile = existcourse.Img;
                 existcourse.Img = FileManager.Save(course.ImageFile, _env.WebRootPath, "uploads/course");
             }     

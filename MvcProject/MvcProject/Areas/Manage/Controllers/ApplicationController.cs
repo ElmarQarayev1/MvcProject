@@ -17,7 +17,6 @@ namespace MvcProject.Areas.Manage.Controllers
 		{
             _context = context;
         }
-
         public IActionResult Index(int page = 1)
         {
             var query = _context.Applications.Include(x => x.AppUser).Include(x=>x.Course).Where(x=>x.Status!=ApplicationStatus.Canceled);

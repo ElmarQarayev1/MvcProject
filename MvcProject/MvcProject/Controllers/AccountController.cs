@@ -238,7 +238,6 @@ namespace MvcProject.Controllers
                 }
             }
             var result = await _userManager.UpdateAsync(appUser);
-
             if (!result.Succeeded)
             {
                 foreach (var err in result.Errors)
@@ -253,7 +252,6 @@ namespace MvcProject.Controllers
 
             return View(profileEditViewModel);
         }
-
         public IActionResult ResetPassword()
         {
             return View();
@@ -273,13 +271,11 @@ namespace MvcProject.Controllers
                 ModelState.AddModelError("", "Account is not exist");
                 return View();
             }
-
             if (!_userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", vm.Token).Result)
             {
                 ModelState.AddModelError("", "Account is not exist");
                 return View();
             }
-
             var result = _userManager.ResetPasswordAsync(user, vm.Token, vm.NewPassword).Result;
 
             if (!result.Succeeded)

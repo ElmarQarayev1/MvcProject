@@ -138,15 +138,15 @@
                                 <div class="search">
                                     <div class="search-form">
                                         <form id="search-form" action="#">
-                                            <input type="search" placeholder="Search here..." name="search" />
-                                            <button type="submit">
+                                            <input type="search" id="search-input" placeholder="Search here..." name="search" />
+                                            <button type="button" id="search-button">
                                                 <span><i class="fa fa-search"></i></span>
                                             </button>
                                         </form>
                                     </div>
                                 </div>
-                            </div>
-                           
+
+                            </div>  
                         </div>
                     </div>
                     <div class="col-xs-12">
@@ -168,7 +168,7 @@
                             <div class="footer-logo pb-25">
                                 <a href="index.html"><img src="~/img/logo/@settings["FooterLogo"]" alt="eduhome"></a>
                             </div>
-                            <p>I must explain to you how all this mistaken idea of denoung pleure and praising pain was born and give you a coete account of the system. </p>
+                            <p>@settings["Desc"] </p>
                             <div class="footer-social">
                                 <ul>
                                     <li><a href="https://www.facebook.com/devitems/?ref=bookmarks"><i class="zmdi zmdi-facebook"></i></a></li>
@@ -185,7 +185,7 @@
                             <ul>
                                 <li><a href="#">addmission</a></li>
                                 <li><a href="#">Academic Calender</a></li>
-                                <li><a href="event.html">Event List</a></li>
+                                <li><a asp-action="index" asp-controller="event">Event List</a></li>
                                 <li><a href="#">Hostel &amp; Dinning</a></li>
                                 <li><a href="#">TimeTable</a></li>
                             </ul>
@@ -195,11 +195,11 @@
                         <div class="single-widget">
                             <h3>useful links</h3>
                             <ul>
-                                <li><a href="course.html">our courses</a></li>
+                                <li><a asp-action="index" asp-controller="course">our courses</a></li>
                                 <li><a href="about.html">about us</a></li>
-                                <li><a href="teacher.html">teachers &amp; faculty</a></li>
+                                <li><a asp-action="index" asp-controller="teacher">teachers &amp; faculty</a></li>
                                 <li><a href="#">teams &amp; conditions</a></li>
-                                <li><a href="event.html">our events</a></li>
+                                <li><a asp-action="index" asp-controller="event">our events</a></li>
                             </ul>
                         </div>
                     </div>
@@ -239,3 +239,4 @@
 </body>
 <!-- Mirrored from demo.devitems.com/eduhome/signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 21 Jun 2020 19:44:02 GMT -->
 </html>
+

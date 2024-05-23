@@ -16,7 +16,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(option =>
     option.Password.RequireNonAlphanumeric = false;
     option.Password.RequireUppercase = false;
     option.Password.RequiredLength = 8;
-    option.User.RequireUniqueEmail = true;
+   // option.User.RequireUniqueEmail = true;
     option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(10);
     option.Lockout.MaxFailedAccessAttempts = 5;
 }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();

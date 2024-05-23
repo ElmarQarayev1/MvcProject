@@ -113,10 +113,8 @@ namespace MvcProject.Areas.Manage.Controllers
             existMony.FullName = testiMony.FullName;
             existMony.Desc = testiMony.Desc;
             existMony.Position = testiMony.Position;
-            existMony.Order = testiMony.Order;
-           
+            existMony.Order = testiMony.Order;  
             _context.SaveChanges();
-
             if (deletedFile != null)
             {
                 FileManager.Delete(_env.WebRootPath, "uploads/testimonial", deletedFile);

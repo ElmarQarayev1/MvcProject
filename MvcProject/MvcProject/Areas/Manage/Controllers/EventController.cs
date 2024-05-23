@@ -88,6 +88,7 @@ namespace MvcProject.Areas.Manage.Controllers
                 }
             }
             Event.Img = FileManager.Save(Event.ImageFile, _env.WebRootPath, "uploads/event");
+            Event.CreatedAt = DateTime.UtcNow;
 
             _context.Events.Add(Event);
 
@@ -168,12 +169,13 @@ namespace MvcProject.Areas.Manage.Controllers
                     existsEvent.Img = FileManager.Save(Event.ImageFile, _env.WebRootPath, "uploads/event");
                 }
 
-            existsEvent.Name = Event.Name;
+           existsEvent.Name = Event.Name;
            existsEvent.Desc = Event.Desc;
            existsEvent.StartTime = Event.StartTime;
            existsEvent.EndTime = Event.EndTime;
            existsEvent.CategoryId = Event.CategoryId;
            existsEvent.Venue = Event.Venue;
+           existsEvent.ModifiedAt = DateTime.UtcNow;
 
         _context.SaveChanges();
 
