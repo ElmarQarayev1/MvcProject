@@ -211,9 +211,9 @@
                                 </a>
                             </div>
                             <div class="course-content">
-                                <h3><a asp-action="detail" asp-controller="course" asp-route-id="@item.Id" >@item.Name</a></h3>
+                                <h3><a asp-action="detail" asp-controller="course" asp-route-id="@item.Id">@item.Name</a></h3>
                                 <p>@item.Desc</p>
-                                <a class="default-btn" asp-action="detail" asp-controller="course" asp-route-id="@item.Id" >read more</a>
+                                <a class="default-btn" asp-action="detail" asp-controller="course" asp-route-id="@item.Id">read more</a>
                             </div>
                         </div>
                     </div>
@@ -262,7 +262,7 @@
 
                 </div>
                 <div class="col-md-6 hidden-sm hidden-xs">
-                   @foreach (var item in Model.Events)
+                    @foreach (var item in Model.Events)
                     {
 
                         <div class="single-event mb-35">
@@ -289,28 +289,35 @@
     </div>
     <!-- Event Area End -->
     <!-- Testimonial Area Start -->
-    <div class="testimonial-area pt-110 pb-105 text-center">
-        <div class="container">
-            <div class="row">
-                <div class="testimonial-owl owl-theme owl-carousel">
-                    <div class="col-md-8 col-md-offset-2 col-sm-12">
-                        <div class="single-testimonial">
-                            <div class="testimonial-info">
-                                <div class="testimonial-img">
-                                    <img src="~/img/testimonial/testimonial.jpg" alt="testimonial">
-                                </div>
-                                <div class="testimonial-content">
-                                    <p>I must explain to you how all this mistaken idea of denoung pleure and praising pain was born and I will give you a coete account of the system, and expound the actual</p>
-                                    <h4>David Morgan</h4>
-                                    <h5>Student, CSE</h5>
+    @foreach (var item in Model.TestiMonies)
+    {
+        <div class="testimonial-area pt-110 pb-105 text-center">
+            <div class="container">
+                <div class="row">
+
+                    <div class="testimonial-owl owl-theme owl-carousel">
+                        <div class="col-md-8 col-md-offset-2 col-sm-12">
+                            <div class="single-testimonial">
+                                <div class="testimonial-info">
+                                    <div class="testimonial-img">
+                                        <img src="~/uploads/testimonial/@item.ImgName" alt="testimonial">
+                                    </div>
+                                    <div class="testimonial-content">
+                                        <p>@item.Desc</p>
+                                        <h4>@item.FullName</h4>
+                                        <h5>@item.Position</h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
-    </div>
+    }
+
+
     <!-- Testimonial Area End -->
     <!-- Blog Area Start -->
     <div class="blog-area pt-150 pb-150">

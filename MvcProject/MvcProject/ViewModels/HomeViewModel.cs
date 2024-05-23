@@ -10,6 +10,7 @@ namespace MvcProject.ViewModels
 		public List<Course> Courses { get; set; }
 		public List<Feature> Features { get; set; }
 		public List<Info> Infos { get; set; }
+		public List<TestiMony> TestiMonies { get; set; }
 
     }
 }

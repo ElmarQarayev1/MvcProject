@@ -24,7 +24,9 @@ public class HomeController : Controller
             Sliders = _context.Sliders.OrderBy(x => x.Order).ToList(),
             Features = _context.Features.ToList(),
             Infos = _context.Infos.OrderBy(x => x.Date).ToList(),
-            Events = _context.Events.Include(x => x.EventTags).ThenInclude(x => x.Tag).Include(x => x.EventTeachers).ThenInclude(x => x.Teacher).Take(6).ToList()
+            Events = _context.Events.Include(x => x.EventTags).ThenInclude(x => x.Tag).Include(x => x.EventTeachers).ThenInclude(x => x.Teacher).Take(6).ToList(),
+            TestiMonies = _context.TestiMonies.OrderBy(x=>x.Order).ToList()
+
         };
         return View(homeViewModel);
     }   

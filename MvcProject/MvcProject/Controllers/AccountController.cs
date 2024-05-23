@@ -61,14 +61,44 @@ namespace MvcProject.Controllers
                 foreach (var item in result.Errors)
                 {
                     if (item.Code == "DuplicateUserName")
-                        ModelState.AddModelError("UserName", "UserName is already taken");
+                        ModelState.AddModelError("UserName", "UserName is already registired");
                     else
                         ModelState.AddModelError("", item.Description);
                 }
                 return View();
             }
             await _userManager.AddToRoleAsync(appUser, "member");
+
+            var token = _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+
+            var url = Url.Action("VerifyEmail", "Account", new { userId=appUser.Id, token = token }, Request.Scheme);
+            TempData["Confirm"] = member.Email;
+            var subject = "Confirm your email address";
+            var body = $"<h1><a href=\"{url}\">to confirm your email</a></h1>";
+            _emailService.Send(appUser.Email, subject, body);
             return RedirectToAction("login", "account");
+        }
+        public async Task<IActionResult> VerifyEmail(string userId, string token)
+        {
+            var appUser = await _userManager.FindByIdAsync(userId);
+
+            if (userId==null || token == null)
+            {
+                return RedirectToAction("notfound", "error");
+            }
+
+            if (appUser == null)
+            {
+                return RedirectToAction("notfound", "Error");
+            }
+
+            var r = await _userManager.ConfirmEmailAsync(appUser, token);
+
+            if (!r.Succeeded)
+            {
+                return RedirectToAction("notfound", "Error");
+            }
+            return RedirectToAction("login");
         }
         public IActionResult Login()
         {

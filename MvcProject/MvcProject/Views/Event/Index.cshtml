@@ -1,7 +1,7 @@
-﻿@model List<Event>
-
+﻿@model PaginatedList<Event>
 @{
-    ViewData["Title"] = "Event";
+    ViewData["Title"] = "Index";
+    int order = (Model.PageIndex - 1) * Model.PageSize;
 }
 <!-- Banner Area Start -->
 <div class="banner-area-wrapper">
@@ -24,13 +24,113 @@
 <div class="event-area three text-center pt-150 pb-150">
     <div class="container">
         <div class="row" id="eventList">
-            @await Html.PartialAsync("_EventListPartial", Model)
+            @foreach (var item in Model.Items)
+            {
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="single-event mb-60">
+                        <div class="event-img">
+                            <a asp-action="detail" asp-route-id="@item.Id">
+                                <img src="~/uploads/event/@item.Img" alt="event">
+                                <div class="course-hover">
+                                    <i class="fa fa-link"></i>
+                                </div>
+                            </a>
+                            <div class="event-date">
+                                <h3>@item.Date.ToString("dd") <span>@item.Date.ToString("MMM")</span></h3>
+                            </div>
+                        </div>
+                        <div class="event-content text-left">
+                            <h4><a href="event-details.html">@item.Name</a></h4>
+                            <ul>
+                                <li><span>time:</span> @item.StartTime.ToString(@"hh\:mm") AM - @item.EndTime.ToString(@"hh\:mm") PM</li>
+                                <li><span>venue</span> @item.Venue</li>
+                            </ul>
+                            <div class="event-content-right">
+                                <a class="default-btn" asp-action="detail" asp-route-id="@item.Id">join now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+
         </div>
-        <div class="row">
+        <nav aria-label="..." class="d-flex justify-content-center">
+            <ul class="pagination">
+
+                @if (Model.PageIndex > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-page="@(Model.PageIndex-1)">Previous</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                }
+
+                @if (Model.TotalPages <= 5)
+                {
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                            <a class="page-link" asp-route-page="@i">@i</a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    @if (Model.PageIndex <= 3)
+                    {
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                                <a class="page-link" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                    }
+                    else if (Model.PageIndex >= Model.TotalPages - 2)
+                    {
+                        @for (int i = Model.TotalPages - 4; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                                <a class="page-link" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        @for (int i = Model.PageIndex - 2; i <= Model.PageIndex + 2; i++)
+                        {
+                            <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                                <a class="page-link" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                    }
+                }
+
+                @if (Model.PageIndex < Model.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-page="@(Model.PageIndex+1)">Next</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                }
+            </ul>
+        </nav>
+
+        @*<div class="row">
             <div class="col-xs-12 text-center">
                 <button id="loadMoreBtn" class="default-btn">Load More</button>
             </div>
-        </div>
+        </div>*@
     </div>
 </div>
 <!-- Event End -->
@@ -64,8 +164,7 @@
 <!-- Subscribe End -->
 
 @section elmm {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
+    <script>document.addEventListener("DOMContentLoaded", function () {
             let eventsContainer = document.getElementById("eventList");
             let loadMoreButton = document.getElementById("loadMoreBtn");
             let visibleEvents = 3;
@@ -73,32 +172,32 @@
 
             function createEventElement(event) {
                 return `
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="single-event mb-60">
-                    <div class="event-img">
-                        <a href="/Event/Detail/${event.id}">
-                            <img src="/uploads/event/${event.img}" alt="event">
-                            <div class="course-hover">
-                                <i class="fa fa-link"></i>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="single-event mb-60">
+                        <div class="event-img">
+                            <a href="/Event/Detail/${event.id}">
+                                <img src="/uploads/event/${event.img}" alt="event">
+                                <div class="course-hover">
+                                    <i class="fa fa-link"></i>
+                                </div>
+                            </a>
+                            <div class="event-date">
+                                <h3>${new Date(event.date).getDate()} <span>${new Date(event.date).toLocaleString('tr-TR', { month: 'short' })}</span></h3>
                             </div>
-                        </a>
-                        <div class="event-date">
-                            <h3>${new Date(event.date).getDate()} <span>${new Date(event.date).toLocaleString('tr-TR', { month: 'short' })}</span></h3>
                         </div>
-                    </div>
-                    <div class="event-content text-left">
-                        <h4><a href="/Event/Detail/${event.id}">${event.name}</a></h4>
-                        <ul>
-                            <li><span>time:</span> ${new Date(event.startTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} - ${new Date(event.endTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</li>
-                            <li><span>venue:</span> ${event.venue}</li>
-                        </ul>
-                        <div class="event-content-right">
-                            <a class="default-btn" href="/Event/Detail/${event.id}">join now</a>
+                        <div class="event-content text-left">
+                            <h4><a href="/Event/Detail/${event.id}">${event.name}</a></h4>
+                            <ul>
+                                <li><span>time:</span> ${new Date(event.startTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} - ${new Date(event.endTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</li>
+                                <li><span>venue:</span> ${event.venue}</li>
+                            </ul>
+                            <div class="event-content-right">
+                                <a class="default-btn" href="/Event/Detail/${event.id}">join now</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        `;
+            `;
             }
             function loadMoreEvents() {
                 fetch("/Event/LoadMore?skipCount=" + visibleEvents)
@@ -145,7 +244,5 @@
                     loadMoreEvents();
                 }
             });
-        });
-
-    </script>
+        });</script>
 }

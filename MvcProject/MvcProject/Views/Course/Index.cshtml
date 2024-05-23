@@ -1,7 +1,7 @@
-﻿@model List<Course>
-
+﻿@model PaginatedList<Course>
 @{
-    ViewData["Title"] = "Course";
+    ViewData["Title"] = "Index";
+    int order = (Model.PageIndex - 1) * Model.PageSize;
 }
 <div class="banner-area-wrapper">
     <div class="banner-area text-center">
@@ -33,14 +33,105 @@
                 </div>
             </div>
         </div>
+
         <div class="row" id="courseList">
-            @await Html.PartialAsync("_CourseListPartial", Model)
+            @foreach (var item in Model.Items)
+            {
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="single-course mb-70">
+                        <div class="course-img">
+                            <a asp-action="detail" asp-route-id="@item.Id">
+                                <img src="~/uploads/course/@item.Img" alt="course">
+                                <div class="course-hover">
+                                    <i class="fa fa-link"></i>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="course-content">
+                            <h3><a href="course-details.html">@item.Name</a></h3>
+                            <p>@item.Desc</p>
+                            <a class="default-btn" asp-action="detail" asp-route-id="@item.Id">read more</a>
+                        </div>
+                    </div>
+                </div>
+            }
+
         </div>
-        <div class="row">
+        <nav aria-label="..." class="d-flex justify-content-center text-center">
+            <ul class="pagination">
+
+                @if (Model.PageIndex > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-page="@(Model.PageIndex-1)">Previous</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                }
+
+                @if (Model.TotalPages <= 5)
+                {
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                            <a class="page-link" asp-route-page="@i">@i</a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    @if (Model.PageIndex <= 3)
+                    {
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                                <a class="page-link" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                    }
+                    else if (Model.PageIndex >= Model.TotalPages - 2)
+                    {
+                        @for (int i = Model.TotalPages - 4; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                                <a class="page-link" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        @for (int i = Model.PageIndex - 2; i <= Model.PageIndex + 2; i++)
+                        {
+                            <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                                <a class="page-link" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                    }
+                }
+
+                @if (Model.PageIndex < Model.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-page="@(Model.PageIndex+1)">Next</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">Next</span>
+                    </li>
+                }
+            </ul>
+        </nav>
+        @*<div class="row">
             <div class="col-xs-12 text-center">
                 <button id="loadMoreBtn" class="default-btn">Load More</button>
             </div>
-        </div>
+        </div>*@
     </div>
 </div>
 
@@ -70,67 +161,64 @@
         </div>
     </div>
 </div>
-@section elmm{ 
-<script>
-    let coursesContainer = document.getElementById("courseList");
-    let loadMoreButton = document.getElementById("loadMoreBtn");
-    let visibleCourses = 3;
-    let allCoursesLoaded = false; 
+@section elmm{
+    <script>let coursesContainer = document.getElementById("courseList");
+        let loadMoreButton = document.getElementById("loadMoreBtn");
+        let visibleCourses = 3;
+        let allCoursesLoaded = false;
 
-    function createCourseElement(course) {
-        return `
+        function createCourseElement(course) {
+            return `
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <div class="single-course mb-70">
-        <div class="course-img">
-            <a href="/Course/Detail/${course.id}">
-                <img src="/uploads/course/${course.imageUrl}" alt="${course.name}">
-                <div class="course-hover">
-                    <i class="fa fa-link"></i>
-                </div>
-            </a>
+        <div class="single-course mb-70">
+            <div class="course-img">
+                <a href="/Course/Detail/${course.id}">
+                    <img src="/uploads/course/${course.imageUrl}" alt="${course.name}">
+                    <div class="course-hover">
+                        <i class="fa fa-link"></i>
+                    </div>
+                </a>
+            </div>
+            <div class="course-content">
+                <h3><a href="/Course/Detail/${course.id}">${course.name}</a></h3>
+                <p>${course.description}</p>
+                <a class="default-btn" href="/Course/Detail/${course.id}">Read More</a>
+            </div>
         </div>
-        <div class="course-content">
-            <h3><a href="/Course/Detail/${course.id}">${course.name}</a></h3>
-            <p>${course.description}</p>
-            <a class="default-btn" href="/Course/Detail/${course.id}">Read More</a>
-        </div>
-    </div>
 </div>
-    `;
-    }
-    function loadMoreCourses() {
-        fetch("/Course/LoadMore?skipCount=" + visibleCourses)
-            .then(response => {
-                if (response.status === 204) {
-                    loadMoreButton.style.display = "none";
-                    allCoursesLoaded = true; 
-                    return Promise.reject('No more courses');
-                } else if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                data.forEach(course => {
-                    let courseElement = createCourseElement(course);
-                    coursesContainer.insertAdjacentHTML('beforeend', courseElement);
-                });
-                visibleCourses += data.length;
-            })
-            .catch(error => {
-                if (error === 'No more courses') {
-                    console.log('All courses loaded.');
-                } else {
-                    console.error('Error:', error);
-                }
-            });
-    }
-    loadMoreButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        if (!allCoursesLoaded) { 
-            loadMoreCourses();
+        `;
         }
-    });
-
-</script>
+        function loadMoreCourses() {
+            fetch("/Course/LoadMore?skipCount=" + visibleCourses)
+                .then(response => {
+                    if (response.status === 204) {
+                        loadMoreButton.style.display = "none";
+                        allCoursesLoaded = true;
+                        return Promise.reject('No more courses');
+                    } else if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    data.forEach(course => {
+                        let courseElement = createCourseElement(course);
+                        coursesContainer.insertAdjacentHTML('beforeend', courseElement);
+                    });
+                    visibleCourses += data.length;
+                })
+                .catch(error => {
+                    if (error === 'No more courses') {
+                        console.log('All courses loaded.');
+                    } else {
+                        console.error('Error:', error);
+                    }
+                });
+        }
+        loadMoreButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            if (!allCoursesLoaded) {
+                loadMoreCourses();
+            }
+        });</script>
 }

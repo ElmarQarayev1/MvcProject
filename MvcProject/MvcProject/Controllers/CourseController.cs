@@ -16,11 +16,18 @@ namespace MvcProject.Controllers
 		{
             _context = context;
         }
-		public IActionResult Index()
+		public IActionResult Index(int page=1)
 		{
-            var courses = _context.Courses.Include(x => x.CourseTags).Take(3).ToList();
-			
-			return View(courses);
+            
+            var query = _context.Courses.Include(x => x.CourseTags);
+
+            var pageData = PaginatedList<Course>.Create(query, page, 2);
+            if (pageData.TotalPages < page)
+            {
+                return RedirectToAction("index", new { page = pageData.TotalPages });
+            }
+            return View(pageData);
+
 		}
         public IActionResult Detail(int id)
         {

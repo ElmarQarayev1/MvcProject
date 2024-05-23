@@ -66,7 +66,11 @@ namespace MvcProject.Areas.Manage.Controllers
             }
 
             AppUser appUser = await _userManager.FindByNameAsync(admin.UserName);
-
+            if (appUser == null)
+            {
+                ModelState.AddModelError("", "UserName or Password incorrect");
+                return View();
+            }
             if (admin == null || (!await _userManager.IsInRoleAsync(appUser, "admin") && !await _userManager.IsInRoleAsync(appUser, "superadmin")))
             {
                 ModelState.AddModelError("", "UserName or Password incorrect");

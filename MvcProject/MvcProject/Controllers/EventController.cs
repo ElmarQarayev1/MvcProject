@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcProject.Data;
+using MvcProject.Models;
 using MvcProject.ViewModels;
 
 namespace MvcProject.Controllers
@@ -15,11 +16,17 @@ namespace MvcProject.Controllers
             _context = context;
         }
 
-		public IActionResult Index()
+		public IActionResult Index(int page=1)
 		{
-            var Events = _context.Events.Take(3).ToList();
-			return View(Events);
-		}
+            var query = _context.Events;
+
+            var pageData = PaginatedList<Event>.Create(query, page, 3);
+            if (pageData.TotalPages < page)
+            {
+                return RedirectToAction("index", new { page = pageData.TotalPages });
+            }
+            return View(pageData);
+        }
         public IActionResult Detail(int id)
         {
             var Event = _context.Events.Include(x => x.EventTeachers).ThenInclude(x=>x.Teacher).Include(x => x.EventTags).Include(x => x.Category).FirstOrDefault(x => x.Id == id);

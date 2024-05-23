@@ -39,6 +39,7 @@ namespace MvcProject.Data
 
         public DbSet<Mind> Minds { get; set; }
         public DbSet<Application> Applications { get; set; }
+        public DbSet<TestiMony> TestiMonies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
