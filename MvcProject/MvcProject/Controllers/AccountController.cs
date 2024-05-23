@@ -24,6 +24,8 @@ namespace MvcProject.Controllers
         private readonly SignInManager<AppUser> _signInManager;
        private readonly EmailService _emailService;
 
+
+
         public AccountController(AppDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, EmailService emailService)
         {
             _emailService = emailService;
@@ -32,10 +34,15 @@ namespace MvcProject.Controllers
             _signInManager = signInManager;
         }
 
+
+
         public IActionResult Register()
         {
             return View();
         }
+
+
+
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Register(MemberRegisterViewModel member)
@@ -67,17 +74,24 @@ namespace MvcProject.Controllers
                 }
                 return View();
             }
+
             await _userManager.AddToRoleAsync(appUser, "member");
 
-            var token = _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+            var token =   _userManager.GenerateEmailConfirmationTokenAsync(appUser).Result;
 
             var url = Url.Action("VerifyEmail", "Account", new { userId=appUser.Id, token = token }, Request.Scheme);
+
             TempData["Confirm"] = member.Email;
+
             var subject = "Confirm your email address";
-            var body = $"<h1><a href=\"{url}\">to confirm your email</a></h1>";
+
+            var body = $"<h1><a href=\"{url}\"> confirm your email</a></h1>";
+
             _emailService.Send(appUser.Email, subject, body);
-            return RedirectToAction("login", "account");
+
+            return RedirectToAction("index", "home");
         }
+
         public async Task<IActionResult> VerifyEmail(string userId, string token)
         {
             var appUser = await _userManager.FindByIdAsync(userId);
@@ -100,10 +114,14 @@ namespace MvcProject.Controllers
             }
             return RedirectToAction("login");
         }
+
         public IActionResult Login()
         {
             return View();
         }
+
+
+       
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Login(MemberLoginViewModel member, string returnUrl)
@@ -113,6 +131,7 @@ namespace MvcProject.Controllers
                 ModelState.AddModelError("Password", "Password mustn't be null");
                 return View(member);
             }
+
             AppUser appUser = await _userManager.FindByEmailAsync(member.Email);
 
             if (appUser == null || !await _userManager.IsInRoleAsync(appUser, "member"))
@@ -120,14 +139,24 @@ namespace MvcProject.Controllers
                 ModelState.AddModelError("", "Email or Password is incorrect");
                 return View(member);
             }
+
+            if (!await _userManager.IsEmailConfirmedAsync(appUser))
+            {
+                ModelState.AddModelError("", "Confirm your email address");
+                return View(member);
+
+            }
             var result = await _signInManager.PasswordSignInAsync(appUser, member.Password, false, true);
             if (!result.Succeeded)
             {
                 ModelState.AddModelError("", "Email or Password is incorrect");
                 return View(member);
             }
+
             return returnUrl != null ? Redirect(returnUrl) : RedirectToAction("index", "home");
         }
+
+
         [Authorize(Roles = "member")]
         public async Task<IActionResult> Logout()
         {

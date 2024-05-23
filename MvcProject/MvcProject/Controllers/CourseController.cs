@@ -27,7 +27,6 @@ namespace MvcProject.Controllers
                 return RedirectToAction("index", new { page = pageData.TotalPages });
             }
             return View(pageData);
-
 		}
         public IActionResult Detail(int id)
         {

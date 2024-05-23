@@ -57,7 +57,7 @@ namespace MvcProject.Areas.Manage.Controllers
             string recipientEmail = mind.AppUser?.Email ?? mind.Email;
             if (recipientEmail == null)
             {
-                return RedirectToAction("ntofound", "error");
+                return RedirectToAction("notfound", "error");
             }
                   
                _emailService.Send(recipientEmail, subject, body);

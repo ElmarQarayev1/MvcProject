@@ -15,25 +15,34 @@
                             <span>Please login using account detail bellow.</span>
                         </div>
                         <div class="login-form">
-                            <form  method="post">
-                                <div class="col-lg-6 mb--20">
-                                   
-                                    <input asp-for="Email" class="mb-0 form-control" type="email" id="email" placeholder="Enter your email">
-                                    <span class="text-danger" asp-validation-for="Email"></span>
-                                </div>
-                                <div class="col-lg-6 mb--20">
-                                  
-                                    <input asp-for="Password" class="mb-0 form-control" type="password" id="password" placeholder="Enter your password">
-                                    <span class="text-danger" asp-validation-for="Password"></span>
-                                </div>
-                                <div class="button-box">
-                                    <div class="login-toggle-btn">
-                                        <a asp-action="forgetpassword">Forget Password??</a>
+                            @if (TempData["Confirm"] == null)
+                            {
+                                <form method="post">
+                                    <div class="col-lg-6 mb--20">
+
+                                        <input asp-for="Email" class="mb-0 form-control" type="email" id="email" placeholder="Enter your email">
+                                        <span class="text-danger" asp-validation-for="Email"></span>
                                     </div>
-                                    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
-                                    <button type="submit" class="default-btn">Login</button>
-                                </div>
-                            </form>
+                                    <div class="col-lg-6 mb--20">
+
+                                        <input asp-for="Password" class="mb-0 form-control" type="password" id="password" placeholder="Enter your password">
+                                        <span class="text-danger" asp-validation-for="Password"></span>
+                                    </div>
+                                    <div class="button-box">
+                                        <div class="login-toggle-btn">
+                                            <a asp-action="forgetpassword">Forget Password??</a>
+                                        </div>
+                                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+                                        <button type="submit" class="default-btn">Login</button>
+                                    </div>
+                                </form>
+
+                            }
+                            else
+                             {
+                                    <h1 class="text-success">check your email address</h1>
+                             }
+
                         </div>
                     </div>
                 </div>

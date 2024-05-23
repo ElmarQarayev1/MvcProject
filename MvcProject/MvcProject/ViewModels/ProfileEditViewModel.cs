@@ -32,7 +32,7 @@ namespace MvcProject.ViewModels
         [DataType(DataType.Password)]
         [Compare(nameof(NewPassword))]
         public string? ConfirmNewPassword { get; set; }
-        public List<Application> Applications { get; set; }
+        public List<Application> Applications { get; set; } = new List<Application>();
     }
 }
 
