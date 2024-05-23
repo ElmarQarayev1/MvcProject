@@ -98,33 +98,13 @@ namespace MvcProject.Controllers
             }
             return View("Index", courses);
         }
-        public IActionResult LoadMore(int skipCount)
+        public List<Course> SearchLayout(string s)
         {
-            
-                var courses = _context.Courses.Include(x => x.CourseTags).Skip(skipCount).Take(3).ToList();
+            var course = _context.Courses.Where(x => x.Name.Contains(s)).Take(2).ToList();
 
-                if (courses == null || courses.Count == 0)
-                {
-                    return NoContent(); 
-                }
-                var coursesData = courses.Select(c => new {
-                    id = c.Id,
-                    imageUrl = c.Img, 
-                    name = c.Name,
-                    description = c.Desc
-                }).ToList();
+            return course;
+        }
 
-                return Json(coursesData); 
-        }
-        [HttpPost]
-        public IActionResult Searchh(string searchTerm)
-        {      
-            var courses = _context.Courses
-                                .Include(x => x.CourseTags)
-                                .Where(c => c.Name.Contains(searchTerm) || c.Desc.Contains(searchTerm))
-                                .ToList();       
-            return PartialView("_SearchOpen", new CourseViewModel { Courses = courses });
-        }
     }
 
 }

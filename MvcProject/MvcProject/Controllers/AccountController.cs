@@ -24,8 +24,6 @@ namespace MvcProject.Controllers
         private readonly SignInManager<AppUser> _signInManager;
        private readonly EmailService _emailService;
 
-
-
         public AccountController(AppDbContext context, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, EmailService emailService)
         {
             _emailService = emailService;

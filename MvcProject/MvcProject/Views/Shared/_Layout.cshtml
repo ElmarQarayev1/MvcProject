@@ -30,6 +30,36 @@
     <link rel="stylesheet" href="~/css/responsive.css">
     <script src="~js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
+<style>
+    .search-result {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+        .search-result:hover {
+            background-color: white;
+        }
+
+        .search-result img {
+            width: 60px;
+            height: 60px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+
+        .search-result a {
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+        }
+
+            
+</style>
 <body>
     <!--[if lt IE 8]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -137,16 +167,15 @@
                                 </ul>
                                 <div class="search">
                                     <div class="search-form">
-                                        <form id="search-form" action="#">
-                                            <input type="search" id="search-input" placeholder="Search here..." name="search" />
-                                            <button type="button" id="search-button">
-                                                <span><i class="fa fa-search"></i></span>
-                                            </button>
+                                        <form id="searchItem">
+                                            <input style="" id="searched" type="search" placeholder="search..." name="search" />
                                         </form>
+                                        <div id="searchD">
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
 
-                            </div>  
                         </div>
                     </div>
                     <div class="col-xs-12">
@@ -235,8 +264,8 @@
     <script src="~js/jquery.nicescroll.min.js"></script>
     <script src="~js/plugins.js"></script>
     <script src="~js/main.js"></script>
+    <script src="~/js/user.js"></script>
     @RenderSection("elmm", required: false)
 </body>
 <!-- Mirrored from demo.devitems.com/eduhome/signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 21 Jun 2020 19:44:02 GMT -->
 </html>
-
