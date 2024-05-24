@@ -27,7 +27,6 @@ namespace MvcProject.ViewModels
 
         }
 
-
     }
 }
 

@@ -50,21 +50,24 @@ namespace MvcProject.Controllers
             return View(cdv);
         }
         [HttpPost]
-        public IActionResult Search(string searchTerm)
+        public IActionResult Search(string searchTerm, int pageIndex = 1, int pageSize = 10)
         {
-
             if (string.IsNullOrEmpty(searchTerm))
             {
                 return RedirectToAction("Index");
             }
-            var courses = _context.Courses
+
+            var query = _context.Courses
                 .Include(x => x.CourseTags)
-                .Where(c => c.Name.Contains(searchTerm) || c.Desc.Contains(searchTerm))
-                .ToList();
-            return View("Index", courses);
+                .Where(c => c.Name.Contains(searchTerm) || c.Desc.Contains(searchTerm));
+
+            var paginatedList = PaginatedList<Course>.Create(query, pageIndex, pageSize);
+
+            return View("Index", paginatedList);
         }
-    
-    public IActionResult FilterByCategory(int Id)
+
+
+        public IActionResult FilterByCategory(int Id)
         {
             var courseQuery = _context.Courses.Include(e => e.Category).AsQueryable();
 

@@ -20,50 +20,39 @@ namespace MvcProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Apply(Application app)
+        public IActionResult Apply(Application app)
         {
+           
             Course course = _context.Courses.FirstOrDefault(x => x.Id == app.CourseId);
             if (course == null)
             {
                 return RedirectToAction("notfound", "error");
-
             }
-            if (User.Identity.IsAuthenticated)
+
+           
+            if(User.Identity.IsAuthenticated && User.IsInRole("member"))
             {
-                AppUser? user = await _userManager.GetUserAsync(User);
-                
-                if (user == null || !await _userManager.IsInRoleAsync(user, "member"))
+                AppUser user = _userManager.GetUserAsync(User).Result;
+                if (user == null || !_userManager.IsInRoleAsync(user, "member").Result)
                     return RedirectToAction("detail", "Course", app);
 
-                if (_context.Applications.Any(x => x.Id == app.Id && x.AppUserId == user.Id))
-                    return RedirectToAction("notfound", "error");  
+                
                 app.AppUser = user;
                 app.CreatedAt = DateTime.Now;
-                _context.Applications.Add(app);
-                _context.SaveChanges();
-                return RedirectToAction("index", "home");
             }
             else
             {
-                if(app.FullName==null|| app.Email == null)
-                {
-                    return RedirectToAction("detail","course");
-                }
-                Application app2 = new Application()
-                {
-                    FullName = app.FullName,
-                    Email = app.Email,
-                    CourseId = app.CourseId,
-                    CreatedAt=DateTime.UtcNow,
-
-                };
                
-                _context.Applications.Add(app2);
-                _context.SaveChanges();
-                return RedirectToAction("index", "home");
-
+                app.CreatedAt = DateTime.UtcNow;
             }
+
+           
+            _context.Applications.Add(app);
+            _context.SaveChanges();
+
+            return RedirectToAction("index", "home");
         }
+
         [Authorize(Roles = "member")]
         public IActionResult Cancel(int id)
         {

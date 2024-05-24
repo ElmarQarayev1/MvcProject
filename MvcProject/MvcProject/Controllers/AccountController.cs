@@ -161,10 +161,18 @@ namespace MvcProject.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
         }
+
+
+
+
         public IActionResult ForgetPassword()
         {
             return View();
         }
+
+
+
+
         [HttpPost]
         public IActionResult ForgetPassword(ForgetPasswordViewModel vm)
         {
@@ -187,6 +195,9 @@ namespace MvcProject.Controllers
                _emailService.Send(user.Email, subject, body);
             return View();
         }
+
+
+
         public IActionResult Verify(string email, string token)
         {
             var user = _userManager.FindByEmailAsync(email.ToLower()).Result;
@@ -205,6 +216,9 @@ namespace MvcProject.Controllers
 
             return RedirectToAction("ResetPassword");
         }
+
+
+
         [Authorize(Roles = "member")]
         public async Task<IActionResult> Profile()
         {

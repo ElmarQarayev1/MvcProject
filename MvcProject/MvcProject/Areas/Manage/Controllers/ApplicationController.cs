@@ -43,7 +43,14 @@ namespace MvcProject.Areas.Manage.Controllers
             await _context.SaveChangesAsync();
             var subject = "Course Apply";
             var body = "sizin apply iniz rejected olundu";
-            _emailService.Send(app.AppUser.Email,subject ,body );
+            string recipientEmail = app.AppUser?.Email ?? app.Email;
+            if (recipientEmail == null)
+            {
+                return RedirectToAction("notfound", "error");
+            }
+
+            _emailService.Send(recipientEmail, subject, body);
+
             return RedirectToAction("Index");
         }
         [HttpPost]
@@ -59,7 +66,14 @@ namespace MvcProject.Areas.Manage.Controllers
             await _context.SaveChangesAsync();
             var subject = "Course Apply";
             var body = "sizin apply iniz accept olundu";
-            _emailService.Send(app.AppUser.Email, subject, body);
+
+            string recipientEmail = app.AppUser?.Email ?? app.Email;
+            if (recipientEmail == null)
+            {
+                return RedirectToAction("notfound", "error");
+            }
+
+            _emailService.Send(recipientEmail, subject, body);
             return RedirectToAction("Index");
         }
     }

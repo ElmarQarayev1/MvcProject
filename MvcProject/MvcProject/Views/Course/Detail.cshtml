@@ -63,43 +63,27 @@
                                 <h3 class="red">course fee $@Model.Course.Price</h3>
                             </div>
                         </div>
-                        @if (!User.Identity.IsAuthenticated || !User.IsInRole("member"))
-                        {
-                            <div class="reply-area">
-                                <h3>LEAVE A message</h3>
-                                <p>I must explain to you how all this a mistaken idea of ncing great explorer of the rut the is lder of human happinescias unde omnis iste natus error sit volptatem </p>
-                                <form id="contact-form" asp-action="Apply" asp-controller="Application" method="post">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <p>FullName</p>
-                                            <input name="FullName" value="@Model.Application.FullName">
-                                            
-                                        </div>
-                                        <div class="col-md-12">
-                                            <p>Email</p>
-                                            <input type="hidden" name="CourseId" value="@Model.Course.Id" />
-                                            <input name="Email" value="@Model.Application.Email">
-                                            <span class="text-danger" asp-validation-for="Application.Email"></span>
-                                        </div>
-                                    </div>
-                                    <button type="submit" class="default-btn">Apply </button>
-                                    <p class="form-messege"></p>
-                                </form>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="reply-area">
-                                <h3>LEAVE A message</h3>
-                                <p>I must explain to you how all this a mistaken idea of ncing great explorer of the rut the is lder of human happinescias unde omnis iste natus error sit volptatem </p>
-                                <form id="contact-form" asp-action="Apply" asp-controller="Application" method="post">
+                        <form id="contact-form" asp-action="Apply" asp-controller="Application" method="post">
+                            <input type="hidden" name="CourseId" value="@Model.Course.Id" />
 
-                                    <input type="hidden" name="CourseId" value="@Model.Course.Id" />
-                                    <button type="submit" class="default-btn">Apply </button>
-                                    <p class="form-messege"></p>
-                                </form>
-                            </div>
-                        }
+                            @if (!User.Identity.IsAuthenticated || !User.IsInRole("member"))
+                            {
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>FullName</p>
+                                        <input name="FullName">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <p>Email</p>
+                                        <input name="Email">
+                                    </div>
+                                </div>
+                            }
+
+                            <button type="submit" class="default-btn">Apply</button>
+                            <p class="form-messege"></p>
+                        </form>
+
 
                     </div>
                 </div>
