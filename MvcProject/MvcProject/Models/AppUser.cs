@@ -6,7 +6,9 @@ namespace MvcProject.Models
 	public class AppUser:IdentityUser
 	{
 		public string FullName { get; set; }
-	}
+
+        public bool IsPasswordResetRequired { get; set; } = true;
+    }
 }
 
 

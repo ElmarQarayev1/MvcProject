@@ -231,6 +231,7 @@ namespace MvcProject.Controllers
             return View(profileVM);
         }
 
+
         [Authorize(Roles = "member")]
         [HttpPost]
         public async Task<IActionResult> Profile(ProfileEditViewModel profileEditViewModel)
@@ -279,10 +280,12 @@ namespace MvcProject.Controllers
 
             return View(profileEditViewModel);
         }
+
         public IActionResult ResetPassword()
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult ResetPassword(ResetPasswordViewModel vm)
         {

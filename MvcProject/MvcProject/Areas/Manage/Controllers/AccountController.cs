@@ -6,10 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using MvcProject.Areas.Manage.ViewModels;
 using MvcProject.Data;
 using MvcProject.Models;
+using MvcProject.ViewModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using ResetPasswordViewModel = MvcProject.Areas.Manage.ViewModels.ResetPasswordViewModel;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
+
+
+
     [Area("manage")]
     public class AccountController:Controller
 	{
@@ -25,6 +30,10 @@ namespace MvcProject.Areas.Manage.Controllers
             _roleManager = roleManager;
             _context = context;
         }
+
+
+
+
         public async Task<IActionResult> CreateRoles()
         {
             await _roleManager.CreateAsync(new IdentityRole("admin"));
@@ -32,6 +41,10 @@ namespace MvcProject.Areas.Manage.Controllers
             await _roleManager.CreateAsync(new IdentityRole("superadmin"));
             return Ok();
         }
+
+
+
+
         public async Task<IActionResult> CreateAdmin()
         {
             AppUser appUser = new AppUser()
@@ -42,6 +55,10 @@ namespace MvcProject.Areas.Manage.Controllers
             await _userManager.AddToRoleAsync(appUser, "admin");
             return Json(result);
         }
+
+
+
+
         public async Task<IActionResult> CreateSuperAdmin()
         {
             AppUser appUser = new AppUser()
@@ -58,6 +75,8 @@ namespace MvcProject.Areas.Manage.Controllers
         {
             return View();
         }
+
+
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Login(AdminLoginViewModel admin, string returnUrl)
@@ -69,16 +88,27 @@ namespace MvcProject.Areas.Manage.Controllers
             }
 
             AppUser appUser = await _userManager.FindByNameAsync(admin.UserName);
+
             if (appUser == null)
             {
                 ModelState.AddModelError("", "UserName or Password incorrect");
                 return View();
             }
+
             if (admin == null || (!await _userManager.IsInRoleAsync(appUser, "admin") && !await _userManager.IsInRoleAsync(appUser, "superadmin")))
             {
                 ModelState.AddModelError("", "UserName or Password incorrect");
                 return View();
             }
+
+            if (appUser.IsPasswordResetRequired)
+            {
+               
+                var token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+               
+                return RedirectToAction("ResetPassword", new { token, username = appUser.UserName });
+            }
+
             var result = await _signInManager.PasswordSignInAsync(appUser, admin.Password, admin.RememberMe, false);
 
             if (!result.Succeeded)
@@ -89,11 +119,55 @@ namespace MvcProject.Areas.Manage.Controllers
 
             return returnUrl != null ? Redirect(returnUrl) : RedirectToAction("index", "dashboard");
         }
+
+
+        public IActionResult ResetPassword(string token, string username)
+        {
+            var model = new ResetPasswordViewModel { Token = token, UserName = username };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel vm)
+        {
+            if (!ModelState.IsValid) return View(vm);
+
+            var user = await _userManager.FindByNameAsync(vm.UserName);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Account does not exist");
+                return View();
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, vm.Token, vm.NewPassword);
+            if (!result.Succeeded)
+            {
+                foreach (var item in result.Errors)
+                {
+                    ModelState.AddModelError("", item.Description);
+                }
+                return View();
+            }
+
+           
+            user.IsPasswordResetRequired = false;
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction("Login");
+        }
+
+
+
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("login", "account");
         }
+
+
+
+
+
         public IActionResult AdminCreateByS()
         {
             return View();
@@ -110,7 +184,8 @@ namespace MvcProject.Areas.Manage.Controllers
             AppUser appUser = new AppUser()
             {
                 UserName = av.UserName,
-                                  
+                IsPasswordResetRequired = true
+
             };
             var result = await _userManager.CreateAsync(appUser, av.Password);
             if (!result.Succeeded)
@@ -124,6 +199,10 @@ namespace MvcProject.Areas.Manage.Controllers
             await _userManager.AddToRoleAsync(appUser, "admin");
             return RedirectToAction("index","dashboard");
          }
+
+
+
+
         [Authorize(Roles = "superadmin")]
         public async Task<IActionResult> ShowAdmin()
         {
@@ -140,6 +219,8 @@ namespace MvcProject.Areas.Manage.Controllers
             }).ToList();
             return View(adminViewModels);
         }
+
+
         [Authorize(Roles = "admin, superadmin")]
         public async Task<IActionResult> Profile()
         {
@@ -158,6 +239,9 @@ namespace MvcProject.Areas.Manage.Controllers
 
             return View(profileVM);
         }
+
+
+
 
         [Authorize(Roles = "admin, superadmin")]
         [HttpPost]
