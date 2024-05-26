@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcProject.Areas.Manage.ViewModels;
@@ -8,6 +9,7 @@ using MvcProject.Models;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
+    [Authorize(Roles ="admin,superadmin")]
     [Area("manage")]
 	public class CourseController:Controller
 	{
@@ -19,6 +21,7 @@ namespace MvcProject.Areas.Manage.Controllers
             _context = context;
             _env = env;
         }
+
         public IActionResult Index(int page=1)
         {
             var query = _context.Courses.Include(x => x.Category).Include(x => x.CourseTags).ThenInclude(x => x.Tag);
@@ -30,6 +33,8 @@ namespace MvcProject.Areas.Manage.Controllers
             }
             return View(pageData);
         }
+
+
         public IActionResult Delete(int id)
         {
             Course course = _context.Courses.FirstOrDefault(m => m.Id == id);
@@ -44,12 +49,15 @@ namespace MvcProject.Areas.Manage.Controllers
 
             return RedirectToAction("Index");
         }
+
+
         public IActionResult Create()
         {
             ViewBag.Categories = _context.Categories.ToList();
             ViewBag.Tags = _context.Tags.ToList();
             return View();
         }
+
         [HttpPost]
         public IActionResult Create(Course course)
         {
@@ -96,6 +104,9 @@ namespace MvcProject.Areas.Manage.Controllers
 
             return RedirectToAction("index");
         }
+
+
+
         public IActionResult Edit(int id)
         {
             Course course = _context.Courses.Include(x => x.CourseTags).FirstOrDefault(x => x.Id == id);

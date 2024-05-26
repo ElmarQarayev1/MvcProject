@@ -5,9 +5,9 @@ namespace MvcProject.Models
 	{
 		public string Name { get; set; }
 
-		public List<EventTag> EventTags { get; set; }
+		public List<EventTag>? EventTags { get; set; }
 
-		public List<CourseTag> CourseTags { get; set; }
+		public List<CourseTag>? CourseTags { get; set; }
 
 	}
 }

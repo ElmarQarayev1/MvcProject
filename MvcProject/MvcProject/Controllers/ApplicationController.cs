@@ -18,11 +18,16 @@ namespace MvcProject.Controllers
             _context = context;
             _userManager = userManager;
         }
-
+        
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult Apply(Application app)
         {
-           
+            if (!ModelState.IsValid)
+            {
+                return View(app);
+            }
+                    
             Course course = _context.Courses.FirstOrDefault(x => x.Id == app.CourseId);
             if (course == null)
             {
@@ -42,11 +47,14 @@ namespace MvcProject.Controllers
             }
             else
             {
+                if(app.Email==null || app.FullName == null)
+                {
+                    return RedirectToAction("notfound", "error");
+                }
                
                 app.CreatedAt = DateTime.UtcNow;
             }
-
-           
+     
             _context.Applications.Add(app);
             _context.SaveChanges();
 

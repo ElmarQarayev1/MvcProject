@@ -13,8 +13,6 @@ using ResetPasswordViewModel = MvcProject.Areas.Manage.ViewModels.ResetPasswordV
 namespace MvcProject.Areas.Manage.Controllers
 {
 
-
-
     [Area("manage")]
     public class AccountController:Controller
 	{
@@ -31,9 +29,7 @@ namespace MvcProject.Areas.Manage.Controllers
             _context = context;
         }
 
-
-
-
+        
         public async Task<IActionResult> CreateRoles()
         {
             await _roleManager.CreateAsync(new IdentityRole("admin"));
@@ -57,8 +53,6 @@ namespace MvcProject.Areas.Manage.Controllers
         }
 
 
-
-
         public async Task<IActionResult> CreateSuperAdmin()
         {
             AppUser appUser = new AppUser()
@@ -71,10 +65,12 @@ namespace MvcProject.Areas.Manage.Controllers
             await _userManager.AddToRoleAsync(appUser, "superadmin");
             return Json(result);
         }
+
         public IActionResult Login()
         {
             return View();
         }
+
 
 
         [ValidateAntiForgeryToken]
@@ -127,6 +123,7 @@ namespace MvcProject.Areas.Manage.Controllers
             return View(model);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel vm)
         {
@@ -143,20 +140,17 @@ namespace MvcProject.Areas.Manage.Controllers
             if (!result.Succeeded)
             {
                 foreach (var item in result.Errors)
-                {
+               {
                     ModelState.AddModelError("", item.Description);
                 }
                 return View();
             }
-
            
             user.IsPasswordResetRequired = false;
             await _userManager.UpdateAsync(user);
 
             return RedirectToAction("Login");
         }
-
-
 
         public async Task<IActionResult> Logout()
         {
@@ -166,12 +160,12 @@ namespace MvcProject.Areas.Manage.Controllers
 
 
 
-
-
+        [Authorize(Roles ="superadmin")]
         public IActionResult AdminCreateByS()
         {
             return View();
         }
+        
         [Authorize(Roles ="superadmin")]
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -199,8 +193,6 @@ namespace MvcProject.Areas.Manage.Controllers
             await _userManager.AddToRoleAsync(appUser, "admin");
             return RedirectToAction("index","dashboard");
          }
-
-
 
 
         [Authorize(Roles = "superadmin")]
@@ -243,6 +235,7 @@ namespace MvcProject.Areas.Manage.Controllers
 
 
 
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin, superadmin")]
         [HttpPost]
         public async Task<IActionResult> Profile(AdminProfileEditViewModel profileVM)

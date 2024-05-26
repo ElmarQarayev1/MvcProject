@@ -53,47 +53,22 @@
                                     <ul>
                                         <li>
                                             <a asp-action="index" asp-controller="home">Home</a>
-                                            <ul>
-                                                <li><a href="index.html">Home One</a></li>
-                                                <li><a href="index-2.html">Home Two</a></li>
-                                                <li><a href="index-3.html">Home Three</a></li>
-                                                <li><a href="index-4.html">Home Four</a></li>
-                                                <li><a href="index-5.html">Home Five</a></li>
-                                            </ul>
+                                            
                                         </li>
                                         <li><a asp-action="index" asp-controller="about">About</a></li>
                                         <li>
                                             <a asp-action="index" asp-controller="course">courses</a>
-                                            <ul>
-                                                <li><a href="course.html">courses</a></li>
-                                                <li><a href="course-details.html">courses details</a></li>
-                                            </ul>
+                                           
                                         </li>
                                         <li>
                                             <a asp-action="index" asp-controller="event">event</a>
-                                            <ul>
-                                                <li><a asp-action="index" asp-controller="event">event</a></li>
-                                                <li><a href="event-left-side-bar.html">event left sidebar</a></li>
-                                                <li><a href="event-right-side-bar.html">event right sidebar</a></li>
-                                                <li><a href="event-details.html">event details</a></li>
-                                            </ul>
+                                           
                                         </li>
                                         <li class="hidden-sm">
                                             <a asp-action="index" asp-controller="teacher">teacher</a>
-                                            <ul>
-                                                <li><a href="teacher.html">teacher</a></li>
-                                                <li><a href="teacher-details.html">teacher details</a></li>
-                                            </ul>
+                                           
                                         </li>
-                                        <li>
-                                            <a href="blog.html">blog</a>
-                                            <ul>
-                                                <li><a href="blog.html">blog</a></li>
-                                                <li><a href="blog-left-side-bar.html">blog left sidebar</a></li>
-                                                <li><a href="blog-right-side-bar.html">blog righ sidebar</a></li>
-                                                <li><a href="blog-details.html">blog details</a></li>
-                                            </ul>
-                                        </li>
+                                       
                                         <li><a asp-action="index" asp-controller="contact">Contact</a></li>
                                         <li><a href="#">Buy Now</a>
                                     </ul>
@@ -238,19 +213,19 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12 col-xs-12">
 
-                    @foreach (var item in Model.Events)
+                    @for (int i = 0; i < Model.Events.Count; i+=2)
                     {
-
                         <div class="single-event mb-35">
                             <div class="event-date">
-                                <h3><a href="event-details.html"> @item.Date.ToString("dd")<span>@item.Date.ToString("MMM")</span></a></h3>
+                               
+                                <h3><a href="event-details.html"> @Model.Events[i].Date.ToString("dd")<span>@Model.Events[i].Date.ToString("MMM")</span></a></h3>
                             </div>
                             <div class="event-content text-left">
                                 <div class="event-content-left">
-                                    <h4><a href="event-details.html">@item.Name</a></h4>
+                                    <h4><a href="event-details.html">@Model.Events[i].Name</a></h4>
                                     <ul>
-                                        <li><i class="fa fa-clock-o"></i>@item.StartTime.ToString(@"hh\:mm") AM - @item.EndTime.ToString(@"hh\:mm") PM</li>
-                                        <li><i class="fa fa-map-marker"></i>@item.Venue</li>
+                                        <li><i class="fa fa-clock-o"></i>@Model.Events[i].StartTime.ToString(@"hh\:mm") AM -@Model.Events[i].EndTime.ToString(@"hh\:mm") PM</li>
+                                        <li><i class="fa fa-map-marker"></i>@Model.Events[i].Venue</li>
                                     </ul>
                                 </div>
                                 <div class="event-content-right">
@@ -258,23 +233,24 @@
                                 </div>
                             </div>
                         </div>
+
                     }
 
                 </div>
                 <div class="col-md-6 hidden-sm hidden-xs">
-                    @foreach (var item in Model.Events)
+                    @for (int i = 1; i < Model.Events.Count; i += 2)
                     {
-
                         <div class="single-event mb-35">
                             <div class="event-date">
-                                <h3><a href="event-details.html">  @item.Date.ToString("dd")<span> @item.Date.ToString("MMM")</span></a></h3>
+
+                                <h3><a href="event-details.html"> @Model.Events[i].Date.ToString("dd")<span>@Model.Events[i].Date.ToString("MMM")</span></a></h3>
                             </div>
                             <div class="event-content text-left">
                                 <div class="event-content-left">
-                                    <h4><a href="event-details.html">@item.Name</a></h4>
+                                    <h4><a href="event-details.html">@Model.Events[i].Name</a></h4>
                                     <ul>
-                                        <li><i class="fa fa-clock-o"></i> @item.StartTime.ToString(@"hh\:mm") AM -  @item.EndTime.ToString(@"hh\:mm") PM</li>
-                                        <li><i class="fa fa-map-marker"></i>@item.Venue</li>
+                                        <li><i class="fa fa-clock-o"></i>@Model.Events[i].StartTime.ToString(@"hh\:mm") AM -@Model.Events[i].EndTime.ToString(@"hh\:mm") PM</li>
+                                        <li><i class="fa fa-map-marker"></i>@Model.Events[i].Venue</li>
                                     </ul>
                                 </div>
                                 <div class="event-content-right">
@@ -282,42 +258,42 @@
                                 </div>
                             </div>
                         </div>
+
                     }
+
                 </div>
             </div>
         </div>
     </div>
+ 
     <!-- Event Area End -->
     <!-- Testimonial Area Start -->
-    @foreach (var item in Model.TestiMonies)
-    {
         <div class="testimonial-area pt-110 pb-105 text-center">
             <div class="container">
                 <div class="row">
-
                     <div class="testimonial-owl owl-theme owl-carousel">
-                        <div class="col-md-8 col-md-offset-2 col-sm-12">
-                            <div class="single-testimonial">
-                                <div class="testimonial-info">
-                                    <div class="testimonial-img">
-                                        <img src="~/uploads/testimonial/@item.ImgName" alt="testimonial">
-                                    </div>
-                                    <div class="testimonial-content">
-                                        <p>@item.Desc</p>
-                                        <h4>@item.FullName</h4>
-                                        <h5>@item.Position</h5>
+                        @foreach (var item in Model.TestiMonies)
+                        {
+                            <div class="col-md-8 col-md-offset-2 col-sm-12">
+
+                                <div class="single-testimonial">
+                                    <div class="testimonial-info">
+                                        <div class="testimonial-img">
+                                            <img src="~/uploads/testimonial/@item.ImgName" alt="testimonial">
+                                        </div>
+                                        <div class="testimonial-content">
+                                            <p>@item.Desc</p>
+                                            <h4>@item.FullName</h4>
+                                            <h5>@item.Position</h5>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     </div>
-
                 </div>
             </div>
         </div>
-    }
-
-
     <!-- Testimonial Area End -->
     <!-- Blog Area Start -->
     <div class="blog-area pt-150 pb-150">
@@ -450,7 +426,7 @@
                             <ul>
                                 <li><a href="#">addmission</a></li>
                                 <li><a href="#">Academic Calender</a></li>
-                                <li><a  asp-action="index" asp-controller="event">Event List</a></li>
+                                <li><a asp-action="index" asp-controller="event">Event List</a></li>
                                 <li><a href="#">Hostel &amp; Dinning</a></li>
                                 <li><a href="#">TimeTable</a></li>
                             </ul>

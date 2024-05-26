@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcProject.Areas.Manage.ViewModels;
@@ -7,6 +8,8 @@ using MvcProject.Helpers;
 using MvcProject.Models;
 namespace MvcProject.Areas.Manage.Controllers
 {
+
+   [Authorize(Roles = "admin,superadmin")]
     [Area("manage")]
 	public class EventController:Controller
 	{
@@ -52,6 +55,8 @@ namespace MvcProject.Areas.Manage.Controllers
                 ViewBag.Teachers = _context.Teachers.ToList();
                 return View(Event);
             }
+         
+
             if (!_context.Categories.Any(x => x.Id == Event.CategoryId))
                 return RedirectToAction("notfound", "error");
             foreach (var tagId in Event.TagIds)

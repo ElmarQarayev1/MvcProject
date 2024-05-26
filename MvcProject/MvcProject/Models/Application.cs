@@ -10,7 +10,7 @@ namespace MvcProject.Models
         public int CourseId { get; set; }
 
         [MaxLength(50)]
-
+        [MinLength(3)]
         public string? FullName { get; set; }
         [MaxLength(100)]
 

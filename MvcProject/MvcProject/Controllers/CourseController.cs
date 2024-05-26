@@ -44,11 +44,12 @@ namespace MvcProject.Controllers
             {
                 Course = course,
                 Tags = _context.Tags.ToList(),
-                Categories = _context.Categories.ToList(),
+                Categories = _context.Categories.Include(x => x.Courses).ToList(),
                 Application = new Application()
             };
             return View(cdv);
         }
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult Search(string searchTerm, int pageIndex = 1, int pageSize = 10)
         {
@@ -67,7 +68,7 @@ namespace MvcProject.Controllers
         }
 
 
-        public IActionResult FilterByCategory(int Id)
+        public IActionResult FilterByCategory(int Id, int pageIndex = 1, int pageSize = 10)
         {
             var courseQuery = _context.Courses.Include(e => e.Category).AsQueryable();
 
@@ -76,34 +77,37 @@ namespace MvcProject.Controllers
                 courseQuery = courseQuery.Where(e => e.CategoryId == Id);
             }
 
-            var courses = courseQuery.ToList();
+            var paginatedCourses = PaginatedList<Course>.Create(courseQuery, pageIndex, pageSize);
 
-            if (courses.Count == 0)
+            if (paginatedCourses.Items.Count == 0)
             {
-                courses = _context.Courses.ToList();
+                paginatedCourses = PaginatedList<Course>.Create(_context.Courses.AsQueryable(), pageIndex, pageSize);
             }
-            return View("Index", courses);
+
+            return View("Index", paginatedCourses);
         }
-        public IActionResult FilterByTag(int Id)
+
+        public IActionResult FilterByTag(int Id, int pageIndex = 1, int pageSize = 10)
         {
             var courseQuery = _context.Courses.Include(e => e.CourseTags).ThenInclude(x => x.Tag).AsQueryable();
 
             if (Id != 0)
             {
-                courseQuery = courseQuery.Where(x=>x.CourseTags.Any(w=>w.TagId==Id));
+                courseQuery = courseQuery.Where(x => x.CourseTags.Any(w => w.TagId == Id));
             }
 
-            var courses = courseQuery.ToList();
+            var paginatedCourses = PaginatedList<Course>.Create(courseQuery, pageIndex, pageSize);
 
-            if (courses.Count == 0)
+            if (paginatedCourses.Items.Count == 0)
             {
-                courses = _context.Courses.ToList();
+                paginatedCourses = PaginatedList<Course>.Create(_context.Courses.AsQueryable(), pageIndex, pageSize);
             }
-            return View("Index", courses);
+            return View("Index", paginatedCourses);
         }
+
         public List<Course> SearchLayout(string s)
         {
-            var course = _context.Courses.Where(x => x.Name.Contains(s)).Take(2).ToList();
+            var course = _context.Courses.Where(x => x.Name.Contains(s)).Take(3).ToList();
 
             return course;
         }

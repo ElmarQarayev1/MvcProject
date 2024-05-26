@@ -56,6 +56,18 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" asp-controller="category" asp-action="index">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="tag" asp-action="index">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" asp-controller="feature" asp-action="index">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Features</span>
@@ -133,7 +145,7 @@
             </div>
 
         </ul>
-      
+
         <div id="content-wrapper" class="d-flex flex-column">
 
             <div id="content">
@@ -326,7 +338,7 @@
                                 {
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">Not Found</span>
                                 }
-                                
+
                                 <img class="img-profile rounded-circle"
                                      src="~/manage/assets/img/undraw_profile.svg">
                             </a>
@@ -413,8 +425,8 @@
     <script src="~/manage/assets/js/admin.js"></script>
 
     <!-- Page level plugins -->
-  @RenderSection("scripts",required:false)
+    @RenderSection("scripts", required: false)
 
 </body>
-s
+
 </html>

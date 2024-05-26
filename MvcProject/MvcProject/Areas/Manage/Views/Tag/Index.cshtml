@@ -1,12 +1,17 @@
-﻿@model PaginatedList<Mind>
+﻿
+@model PaginatedList<Tag>
 @{
     ViewData["Title"] = "Index";
     int order = (Model.PageIndex - 1) * Model.PageSize;
 }
+
 <div class="container-fluid">
 
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Minds</h1>
+        <h1 class="h3 mb-0 text-gray-800">Tag</h1>
+        <a asp-action="create" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            Create
+        </a>
     </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
@@ -14,46 +19,25 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">FullName</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Subject</th>
-                        <th scope="col">Text</th>
-                        <th scope="col">Actions</th>
+                        <th scope="col">Name</th>
+
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var mind in Model.Items)
+                    @foreach (var item in Model.Items)
                     {
                         <tr>
-                            <td>@(++order)</td>
-                            @if (mind.AppUser == null)
-                            {
-                                <td>@mind.Name</td>
-                            }
-                            else
-                            {
-                                <td>@mind.AppUser.FullName</td>
-                            }
-                            <td>@mind.Email</td>
-                            <td>@mind.CreatedAt.ToString("dd,MMMM,yyyy")</td>
-                            <td>@mind.Subject</td>
-                            <td>
-                                <a asp-action="MindDetail" asp-route-id="@mind.Id" class="btn btn-warning">
-                                    Detail
-                                </a>
+                            <th scope="row">@(++order)</th>
+                            <th scope="row">@item.Name</th>
 
-                            </td>
-                            <td>
-                                <a asp-action="message" asp-route-id="@mind.Id" class="btn btn-primary">
-                                    Message
-                                </a>
 
+                            <td>
+                                <a class="btn btn-warning" asp-action="edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="btn btn-danger delete-btn" asp-action="delete" asp-route-id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
                 </tbody>
-
             </table>
             <nav aria-label="..." class="d-flex justify-content-center">
                 <ul class="pagination">
@@ -129,3 +113,7 @@
     </div>
 
 </div>
+
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+}

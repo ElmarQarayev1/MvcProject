@@ -19,6 +19,10 @@ namespace MvcProject.Controllers
 
         public  async Task<IActionResult> MindForm(Mind mind)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("index", "contact", mind);
+            }
             if (User.Identity.IsAuthenticated)
             {
                 AppUser? user = await _userManager.GetUserAsync(User);
@@ -29,16 +33,16 @@ namespace MvcProject.Controllers
                 if (_context.Minds.Any(x => x.Id == mind.Id && x.AppUserId == user.Id))
                     return RedirectToAction("notfound", "error");
                 mind.AppUserId = user.Id;
-            }         
-            if (!ModelState.IsValid)
+            }              
+            else
             {
-                return RedirectToAction("index","contact",mind);
+                if (mind.Name == null || mind.Email == null || mind.Subject == null || mind.Text == null)
+                {
+                    return RedirectToAction("index", "contact");
+                }
+                mind.CreatedAt = DateTime.Now;
             }
-            if (mind.Name == null || mind.Email == null||mind.Subject==null|| mind.Text == null)
-            {
-                return RedirectToAction("index", "contact");
-            }
-            mind.CreatedAt = DateTime.Now;
+           
             _context.Minds.Add(mind);
             _context.SaveChanges();
             return RedirectToAction("index", "home");

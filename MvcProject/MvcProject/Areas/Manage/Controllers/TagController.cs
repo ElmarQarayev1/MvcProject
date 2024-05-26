@@ -1,6 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using MvcProject.Areas.Manage.ViewModels;
 using MvcProject.Data;
@@ -8,74 +6,69 @@ using MvcProject.Models;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
-    [Authorize(Roles = "admin,superadmin")]
     [Area("manage")]
-	public class InfoController:Controller
+	public class TagController:Controller
 	{
         private readonly AppDbContext _context;
 
-        public InfoController(AppDbContext context)
+        public TagController(AppDbContext context)
 		{
             _context = context;
         }
-
-        public IActionResult Index(int page=1)
+        public IActionResult Index(int page = 1)
         {
-            var query = _context.Infos;
-            var pageData = PaginatedList<Info>.Create(query, page, 2);
+            var query = _context.Tags;
+            var pageData = PaginatedList<Tag>.Create(query, page, 2);
             if (pageData.TotalPages < page)
             {
                 return RedirectToAction("index", new { page = pageData.TotalPages });
 
             }
             return View(pageData);
-           
         }
-
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Info info)
+        public IActionResult Create(Tag tag)
         {
 
             if (!ModelState.IsValid)
             {
-                return View(info);
+                return View(tag);
             }
-
-            _context.Infos.Add(info);
+            _context.Tags.Add(tag);
             _context.SaveChanges();
             return RedirectToAction("index");
         }
+
         public IActionResult Edit(int id)
         {
-            Info info = _context.Infos.Find(id);
-            if (info == null)
+            Tag tag = _context.Tags.Find(id);
+            if (tag == null)
             {
                 return RedirectToAction("notfound", "error");
             }
-            return View(info);
+            return View(tag);
         }
         [HttpPost]
-        public IActionResult Edit(Info info)
+        public IActionResult Edit(Tag tag)
         {
             if (!ModelState.IsValid)
             {
-                return View(info);
+                return View(tag);
             }
 
-            Info existInfo = _context.Infos.Find(info.Id);
+            Tag existTag = _context.Tags.Find(tag.Id);
 
-            if (existInfo == null)
+            if (existTag == null)
             {
                 return RedirectToAction("notfound", "error");
             }
 
-            existInfo.Date = info.Date;
-            existInfo.Desc = info.Desc;
+            existTag.Name = tag.Name;
 
             _context.SaveChanges();
 
@@ -84,18 +77,17 @@ namespace MvcProject.Areas.Manage.Controllers
 
         public IActionResult Delete(int id)
         {
-            Info info = _context.Infos.Find(id);
-            if (info == null)
+            Tag tag = _context.Tags.Find(id);
+            if (tag == null)
             {
                 return RedirectToAction("notfound", "error");
             }
-            _context.Infos.Remove(info);
+            _context.Tags.Remove(tag);
             _context.SaveChanges();
-
             return RedirectToAction("index");
 
-
         }
-	}
+
+    }
 }
 

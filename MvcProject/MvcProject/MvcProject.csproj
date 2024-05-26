@@ -44,6 +44,9 @@
     <None Remove="Areas\Manage\Views\Mind\" />
     <None Remove="Areas\Manage\Views\Application\" />
     <None Remove="Areas\Manage\Views\Testimony\" />
+    <None Remove="Areas\Manage\Views\Category\" />
+    <None Remove="Areas\Manage\Views\Tag\" />
+    <None Remove="Excel\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -90,6 +93,9 @@
     <Folder Include="Areas\Manage\Views\Application\" />
     <Folder Include="wwwroot\uploads\testimonial\" />
     <Folder Include="Areas\Manage\Views\Testimony\" />
+    <Folder Include="Areas\Manage\Views\Category\" />
+    <Folder Include="Areas\Manage\Views\Tag\" />
+    <Folder Include="Excel\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.19" />
@@ -100,6 +106,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.19" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.19" />
     <PackageReference Include="MailKit" Version="4.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.16" />
+    <PackageReference Include="EPPlus" Version="7.1.2" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\manage\" />

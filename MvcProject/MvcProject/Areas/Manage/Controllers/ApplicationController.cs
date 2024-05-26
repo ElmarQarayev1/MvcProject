@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using MvcProject.Areas.Manage.ViewModels;
 using MvcProject.Data;
@@ -14,12 +15,15 @@ namespace MvcProject.Areas.Manage.Controllers
 	{
         private readonly AppDbContext _context;
         private readonly EmailService _emailService;
+        private readonly IHubContext<EduHomeHub> _eduhomeHub;
 
-        public ApplicationController(AppDbContext context,EmailService emailService)
+        public ApplicationController(AppDbContext context,EmailService emailService,IHubContext<EduHomeHub> eduhomeHub)
 		{
             _context = context;
             _emailService = emailService;
+            _eduhomeHub = eduhomeHub;
         }
+
         public IActionResult Index(int page = 1)
         {
             var query = _context.Applications.Include(x => x.AppUser).Include(x=>x.Course).Where(x=>x.Status!=ApplicationStatus.Canceled);
@@ -30,6 +34,9 @@ namespace MvcProject.Areas.Manage.Controllers
             }
             return View(pageData);
         }
+
+
+
         [HttpPost]
         public async Task<IActionResult> Reject(int id)
         {
@@ -48,6 +55,8 @@ namespace MvcProject.Areas.Manage.Controllers
             {
                 return RedirectToAction("notfound", "error");
             }
+
+            await _eduhomeHub.Clients.User(app.AppUser.Id).SendAsync("ShowNotification", "Rejected");
 
             _emailService.Send(recipientEmail, subject, body);
 
@@ -73,6 +82,7 @@ namespace MvcProject.Areas.Manage.Controllers
                 return RedirectToAction("notfound", "error");
             }
 
+            await _eduhomeHub.Clients.User(app.AppUser.Id).SendAsync("ShowNotification", "Accepted");
             _emailService.Send(recipientEmail, subject, body);
             return RedirectToAction("Index");
         }

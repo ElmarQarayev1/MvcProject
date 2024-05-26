@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcProject.Areas.Manage.ViewModels;
@@ -7,7 +9,8 @@ using MvcProject.Models;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
-	[Area("manage")]
+    [Authorize(Roles = "admin,superadmin")]
+    [Area("manage")]
 	public class SettingController:Controller
 	{
         private readonly AppDbContext _context;

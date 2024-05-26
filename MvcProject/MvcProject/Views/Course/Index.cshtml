@@ -3,6 +3,9 @@
     ViewData["Title"] = "Index";
     int order = (Model.PageIndex - 1) * Model.PageSize;
 }
+<style>
+   
+</style>
 <div class="banner-area-wrapper">
     <div class="banner-area text-center">
         <div class="container">
@@ -127,11 +130,7 @@
                 }
             </ul>
         </nav>
-        @*<div class="row">
-            <div class="col-xs-12 text-center">
-                <button id="loadMoreBtn" class="default-btn">Load More</button>
-            </div>
-        </div>*@
+       
     </div>
 </div>
 
@@ -161,8 +160,9 @@
         </div>
     </div>
 </div>
-@*@section elmm{
-    <script>let coursesContainer = document.getElementById("courseList");
+@section elmm{
+    <script>
+        let coursesContainer = document.getElementById("courseList");
         let loadMoreButton = document.getElementById("loadMoreBtn");
         let visibleCourses = 3;
         let allCoursesLoaded = false;
@@ -222,6 +222,8 @@
             }
         });
 
+
+
        
     </script>
-}*@
+}

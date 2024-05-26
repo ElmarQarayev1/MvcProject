@@ -38,12 +38,12 @@ namespace MvcProject.Controllers
             EventDetailViewModel edv = new EventDetailViewModel()
             {
                 Event = Event,
-                Categories = _context.Categories.ToList()
+                Categories = _context.Categories.Include(x=>x.Events).ToList()
             };
             return View(edv);
          }
 
-        public IActionResult FilterByCategory(int Id)
+        public IActionResult FilterByCategory(int Id, int pageIndex = 1, int pageSize = 10)
         {
             var eventsQuery = _context.Events.Include(e => e.Category).AsQueryable();
 
@@ -52,16 +52,16 @@ namespace MvcProject.Controllers
                 eventsQuery = eventsQuery.Where(e => e.CategoryId == Id);
             }
 
-            var events = eventsQuery.ToList();
+            var paginatedEvents = PaginatedList<Event>.Create(eventsQuery, pageIndex, pageSize);
 
-            if (events.Count == 0) 
+            if (paginatedEvents.Items.Count == 0)
             {
-                events = _context.Events.ToList(); 
+                paginatedEvents = PaginatedList<Event>.Create(_context.Events.AsQueryable(), pageIndex, pageSize);
             }
 
-            return View("Index", events);
+            return View("Index", paginatedEvents);
         }
-        public IActionResult FilterByTag(int Id)
+        public IActionResult FilterByTag(int Id, int pageIndex = 1, int pageSize = 10)
         {
             var eventQuery = _context.Events.Include(e => e.EventTags).ThenInclude(x => x.Tag).AsQueryable();
 
@@ -70,30 +70,16 @@ namespace MvcProject.Controllers
                 eventQuery = eventQuery.Where(x => x.EventTags.Any(w => w.TagId == Id));
             }
 
-            var events = eventQuery.ToList();
+            var paginatedEvents = PaginatedList<Event>.Create(eventQuery, pageIndex, pageSize);
 
-            if (events.Count == 0)
+            if (paginatedEvents.Items.Count == 0)
             {
-                events = _context.Events.ToList();
-            }
-            return View("Index", events);
-        }
-       
-        public async Task<IActionResult> LoadMore(int skipCount)
-        {
-            var events = await _context.Events
-                                       .OrderBy(e => e.Date)
-                                       .Skip(skipCount)
-                                       .Take(3)
-                                       .ToListAsync();
-
-            if (events == null || events.Count == 0)
-            {
-                return NoContent();
+                paginatedEvents = PaginatedList<Event>.Create(_context.Events.AsQueryable(), pageIndex, pageSize);
             }
 
-            return Json(events);
+            return View("Index", paginatedEvents);
         }
+        
     }
 }
 

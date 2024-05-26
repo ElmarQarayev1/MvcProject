@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using MvcProject.Areas.Manage.ViewModels;
 using MvcProject.Data;
@@ -7,6 +9,7 @@ using MvcProject.Models;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
+    [Authorize(Roles = "admin,superadmin")]
     [Area("manage")]
 	public class TestiMonyController:Controller
 	{
@@ -74,7 +77,6 @@ namespace MvcProject.Areas.Manage.Controllers
 
             return RedirectToAction("Index");
         }
-
         public IActionResult Edit(int id)
         {
             TestiMony testiMony = _context.TestiMonies.FirstOrDefault(x => x.Id == id);

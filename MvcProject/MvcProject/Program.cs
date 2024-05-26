@@ -3,7 +3,32 @@ using Microsoft.EntityFrameworkCore;
 using MvcProject.Data;
 using MvcProject.Models;
 using MvcProject.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using MvcProject;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSignalR();
+var serviceProvider = new ServiceCollection()
+    .AddDbContext<AppDbContext>(options => options.UseSqlServer("Server=localhost;Database=MvcProject;User ID=sa; Password=reallyStrongPwd123;TrustServerCertificate=true"))
+    .AddTransient<ExcelExportService>()
+    .BuildServiceProvider();
+
+using (var scope = serviceProvider.CreateScope())
+{
+    var excelExportService = scope.ServiceProvider.GetRequiredService<ExcelExportService>();
+    excelExportService.ExportAllTablesToExcel("/Users/elmar/Desktop/CodeAcademy/MVC/MvcProject/MvcProject/MvcProject/Excel/file.xlsx");
+}
+var services = builder.Services;
+var configuration = builder.Configuration;
+
+services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = configuration["GoogleKeys:ClientId"];
+    googleOptions.ClientSecret = configuration["GoogleKeys:ClientSecret"];
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -16,7 +41,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(option =>
     option.Password.RequireNonAlphanumeric = false;
     option.Password.RequireUppercase = false;
     option.Password.RequiredLength = 8;
-   // option.User.RequireUniqueEmail = true;
+   /// option.User.RequireUniqueEmail = true;
     option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(10);
     option.Lockout.MaxFailedAccessAttempts = 5;
 }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
@@ -69,5 +94,7 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapHub<EduHomeHub>("/hub");
 app.Run();
 

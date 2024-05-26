@@ -7,6 +7,10 @@ namespace MvcProject.Models
 	{
 		public string FullName { get; set; }
 
+        public string? ConnectionId { get; set; }
+
+        public DateTime? LastConnectedAt { get; set; }
+
         public bool IsPasswordResetRequired { get; set; } = true;
     }
 }

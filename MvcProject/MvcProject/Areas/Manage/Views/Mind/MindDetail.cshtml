@@ -1,0 +1,38 @@
+﻿@model Mind
+@{
+    ViewData["Title"] = "Send Message";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Mind Detail</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="Subject">Subject</label>
+                        </td>
+                        <td>
+                            <input name="subject" id="Subject" class="form-control" value="@Model.Subject" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="Message">Text</label>
+                        </td>
+                        <td>
+                            <textarea name="body" id="Message" class="form-control">@Model.Text</textarea>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <a class="btn btn-primary" asp-action="index">Go To Back</a>
+        </div>
+    </div>
+</div>
+@section scripts {
+    @Html.Partial("_ValidationScriptPartials")
+}

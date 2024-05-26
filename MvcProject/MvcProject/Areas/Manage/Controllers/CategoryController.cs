@@ -1,6 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Authorization;
-using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using MvcProject.Areas.Manage.ViewModels;
 using MvcProject.Data;
@@ -8,75 +6,70 @@ using MvcProject.Models;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
-    [Authorize(Roles = "admin,superadmin")]
     [Area("manage")]
-	public class InfoController:Controller
+	public class CategoryController:Controller
 	{
         private readonly AppDbContext _context;
 
-        public InfoController(AppDbContext context)
+        public CategoryController(AppDbContext context)
 		{
-            _context = context;
+           _context = context;
         }
 
-        public IActionResult Index(int page=1)
+        public IActionResult Index(int page = 1)
         {
-            var query = _context.Infos;
-            var pageData = PaginatedList<Info>.Create(query, page, 2);
+            var query = _context.Categories;
+            var pageData = PaginatedList<Category>.Create(query, page, 2);
             if (pageData.TotalPages < page)
             {
                 return RedirectToAction("index", new { page = pageData.TotalPages });
 
             }
             return View(pageData);
-           
         }
-
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Info info)
+        public IActionResult Create(Category category)
         {
 
             if (!ModelState.IsValid)
             {
-                return View(info);
+                return View(category);
             }
-
-            _context.Infos.Add(info);
+            _context.Categories.Add(category);
             _context.SaveChanges();
             return RedirectToAction("index");
         }
         public IActionResult Edit(int id)
         {
-            Info info = _context.Infos.Find(id);
-            if (info == null)
+            Category category = _context.Categories.Find(id);
+            if (category == null)
             {
                 return RedirectToAction("notfound", "error");
             }
-            return View(info);
+            return View(category);
         }
         [HttpPost]
-        public IActionResult Edit(Info info)
+        public IActionResult Edit(Category category)
         {
             if (!ModelState.IsValid)
             {
-                return View(info);
+                return View(category);
             }
 
-            Info existInfo = _context.Infos.Find(info.Id);
+            Category existcate = _context.Categories.Find(category.Id);
 
-            if (existInfo == null)
+            if (existcate == null)
             {
                 return RedirectToAction("notfound", "error");
             }
 
-            existInfo.Date = info.Date;
-            existInfo.Desc = info.Desc;
-
+            existcate.Name = category.Name;
+         
             _context.SaveChanges();
 
             return RedirectToAction("index");
@@ -84,18 +77,18 @@ namespace MvcProject.Areas.Manage.Controllers
 
         public IActionResult Delete(int id)
         {
-            Info info = _context.Infos.Find(id);
-            if (info == null)
+            Category category = _context.Categories.Find(id);
+            if (category == null)
             {
                 return RedirectToAction("notfound", "error");
             }
-            _context.Infos.Remove(info);
+            _context.Categories.Remove(category);
             _context.SaveChanges();
-
             return RedirectToAction("index");
 
 
         }
-	}
+
+    }
 }
 

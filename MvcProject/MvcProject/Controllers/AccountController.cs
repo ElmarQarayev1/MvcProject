@@ -14,6 +14,9 @@ using MimeKit.Text;
 using MailKit.Net.Smtp;
 using Microsoft.EntityFrameworkCore;
 using MvcProject.Models.Enum;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace MvcProject.Controllers
 {
@@ -41,6 +44,7 @@ namespace MvcProject.Controllers
 
 
 
+
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Register(MemberRegisterViewModel member)
@@ -49,7 +53,7 @@ namespace MvcProject.Controllers
             {
                 return View();
             }
-            if (_userManager.Users.Any(x => x.NormalizedEmail == member.Email.ToUpper()))
+            if (_userManager.Users.Any(x => x.Email == member.Email.ToLower()))
             {
                 ModelState.AddModelError("Email", "Email is already taken");
                 return View();
@@ -72,7 +76,6 @@ namespace MvcProject.Controllers
                 }
                 return View();
             }
-
             await _userManager.AddToRoleAsync(appUser, "member");
 
             var token =   _userManager.GenerateEmailConfirmationTokenAsync(appUser).Result;
@@ -89,6 +92,7 @@ namespace MvcProject.Controllers
 
             return RedirectToAction("index", "home");
         }
+
 
         public async Task<IActionResult> VerifyEmail(string userId, string token)
         {
@@ -113,6 +117,8 @@ namespace MvcProject.Controllers
             return RedirectToAction("login");
         }
 
+
+   
         public IActionResult Login()
         {
             return View();
@@ -142,7 +148,6 @@ namespace MvcProject.Controllers
             {
                 ModelState.AddModelError("", "Confirm your email address");
                 return View(member);
-
             }
             var result = await _signInManager.PasswordSignInAsync(appUser, member.Password, false, true);
             if (!result.Succeeded)
@@ -155,7 +160,7 @@ namespace MvcProject.Controllers
         }
 
 
-        [Authorize(Roles = "member")]
+
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -170,15 +175,14 @@ namespace MvcProject.Controllers
             return View();
         }
 
-
-
-
+     
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult ForgetPassword(ForgetPasswordViewModel vm)
         {
             if (!ModelState.IsValid) return View(vm);
 
-            var user = _userManager.FindByEmailAsync(vm.Email.ToLower()).Result;
+            var user = _userManager.FindByEmailAsync(vm.Email).Result;
 
             if (user == null || !_userManager.IsInRoleAsync(user, "member").Result)
             {
@@ -186,12 +190,11 @@ namespace MvcProject.Controllers
                 return View(vm);
             }
             var token = _userManager.GeneratePasswordResetTokenAsync(user).Result;
-
             var url = Url.Action("Verify", "Account", new { email = vm.Email, token = token }, Request.Scheme);
             TempData["EmailSent"] = vm.Email;
 
             var subject = "Reset Password Link";
-              var body = $"<h1><a href=\"{url}\">to reset your password</a></h1>";
+              var body = $"<h1><a href=\"{url}\"> reset your password</a></h1>";
                _emailService.Send(user.Email, subject, body);
             return View();
         }
@@ -219,7 +222,7 @@ namespace MvcProject.Controllers
 
 
 
-        [Authorize(Roles = "member")]
+       
         public async Task<IActionResult> Profile()
         {
             AppUser? user = await _userManager.GetUserAsync(User);
@@ -246,7 +249,9 @@ namespace MvcProject.Controllers
         }
 
 
-        [Authorize(Roles = "member")]
+
+
+        [ValidateAntiForgeryToken]       
         [HttpPost]
         public async Task<IActionResult> Profile(ProfileEditViewModel profileEditViewModel)
         {
@@ -258,12 +263,15 @@ namespace MvcProject.Controllers
             if (appUser == null) return RedirectToAction("login", "account");
 
             appUser.UserName = profileEditViewModel.UserName;
+
             appUser.Email = profileEditViewModel.Email;
+
             appUser.FullName = profileEditViewModel.FullName;
 
             if (_userManager.Users.Any(x => x.Id != User.FindFirstValue(ClaimTypes.NameIdentifier) && x.NormalizedEmail == profileEditViewModel.Email.ToUpper()))
             {
                 ModelState.AddModelError("Email", "Email is already taken");
+
                 return View(profileEditViewModel);
             }
 
@@ -274,6 +282,7 @@ namespace MvcProject.Controllers
                 if (!passwordResult.Succeeded)
                 {
                     foreach (var error in passwordResult.Errors)
+
                         ModelState.AddModelError("", error.Description);
 
                     return View(profileEditViewModel);
@@ -286,6 +295,7 @@ namespace MvcProject.Controllers
                 {
                     if (err.Code == "DuplicateUserName")
                         ModelState.AddModelError("UserName", "UserName is already taken");
+
                     else ModelState.AddModelError("", err.Description);
                 }
                 return View(profileEditViewModel);
@@ -295,11 +305,18 @@ namespace MvcProject.Controllers
             return View(profileEditViewModel);
         }
 
+
+
+
         public IActionResult ResetPassword()
         {
             return View();
         }
 
+
+
+
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult ResetPassword(ResetPasswordViewModel vm)
         {
@@ -333,6 +350,87 @@ namespace MvcProject.Controllers
 
             return RedirectToAction("login");
         }
+
+
+
+        public IActionResult Users()
+        {
+            var users = _userManager.Users.ToList();
+
+            return View(users);
+        }
+
+
+
+
+        public IActionResult GoogleLogin(string returnUrl = null)
+        {
+            returnUrl = returnUrl ?? Url.Content("~/");
+
+            var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse", "Account", new { returnUrl }) };
+
+            return Challenge(properties, "Google");
+        }
+
+
+
+        public async Task<IActionResult> GoogleResponse(string returnUrl = null)
+        {
+            var result = await HttpContext.AuthenticateAsync("Google");
+
+            if (result?.Principal == null)
+            {
+                Console.WriteLine("Authentication failed. Principal is null.");
+                return RedirectToAction("Login", "Account", new { message = "Authentication failed. Please try again." });
+            }
+
+            var emailClaim = result.Principal.FindFirst(claim => claim.Type == ClaimTypes.Email);
+            var email = emailClaim?.Value;
+
+            if (email == null)
+            {
+                Console.WriteLine("Email claim not found.");
+                return RedirectToAction("Login", "Account", new { message = "Email claim not found. Please try again." });
+            }
+
+            var appUser = await _userManager.FindByEmailAsync(email);
+
+            if (appUser == null)
+            {
+               
+                var username = email.Substring(0, email.IndexOf('@'));
+                
+                var fullNameClaim = result.Principal.FindFirst(claim => claim.Type == "name");
+                var fullName = fullNameClaim?.Value ?? username;
+
+                appUser = new AppUser
+                {
+                    UserName = username,
+                    Email = email,
+                    FullName = fullName
+                };
+
+                var createResult = await _userManager.CreateAsync(appUser);
+                if (!createResult.Succeeded)
+                {
+                    foreach (var error in createResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                    return View("Login", new { message = "User creation failed. Please try again." });
+                }
+
+                await _userManager.AddToRoleAsync(appUser, "member");
+            }
+
+            await _signInManager.SignInAsync(appUser, isPersistent: false);
+
+            return returnUrl != null ? Redirect(returnUrl) : RedirectToAction("Index", "Home");
+        }
+
+
+
+
 
     }
 }

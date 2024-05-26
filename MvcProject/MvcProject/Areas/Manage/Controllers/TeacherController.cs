@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcProject.Areas.Manage.ViewModels;
@@ -8,6 +10,7 @@ using MvcProject.Models;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
+    [Authorize(Roles = "admin,superadmin")]
     [Area("manage")]
 	public class TeacherController:Controller
 	{

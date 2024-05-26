@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MvcProject.Areas.Manage.ViewModels;
@@ -9,6 +11,7 @@ using MvcProject.Services;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
+    [Authorize(Roles = "admin,superadmin")]
     [Area("manage")]
     public class MindController : Controller
     {
@@ -55,6 +58,9 @@ namespace MvcProject.Areas.Manage.Controllers
             }
 
             string recipientEmail = mind.AppUser?.Email ?? mind.Email;
+
+
+
             if (recipientEmail == null)
             {
                 return RedirectToAction("notfound", "error");
@@ -63,7 +69,14 @@ namespace MvcProject.Areas.Manage.Controllers
                _emailService.Send(recipientEmail, subject, body);
             
             return RedirectToAction("Index");
-        }       
+        }
+
+        public IActionResult MindDetail(int id)
+        {
+            var mind = _context.Minds.FirstOrDefault(x => x.Id == id);
+            return View(mind);
+
+        }
        
     }
 }

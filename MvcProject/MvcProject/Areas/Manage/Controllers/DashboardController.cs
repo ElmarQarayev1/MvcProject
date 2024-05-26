@@ -11,14 +11,13 @@ using MvcProject.Models.Enum;
 namespace MvcProject.Areas.Manage.Controllers
 {
 	[Area("manage")]
-	[Authorize]
+	[Authorize(Roles ="admin,superadmin")]
 	public class DashboardController:Controller
 	{
         public readonly AppDbContext _context;
         public DashboardController(AppDbContext context)
         {
             _context = context;
-
         }
         public IActionResult Index()
         {
@@ -28,7 +27,6 @@ namespace MvcProject.Areas.Manage.Controllers
                 .Where(a => a.Status == ApplicationStatus.Accepted && a.CreatedAt >= firstDayOfMonth)
                 .Sum(a => a.Course.Price);
 
-        
             DateTime firstDayOfYear = new DateTime(DateTime.Now.Year, 1, 1);
 
             double yearlyEarnings = _context.Applications
@@ -46,8 +44,6 @@ namespace MvcProject.Areas.Manage.Controllers
             int acceptedCount = _context.Applications.Count(a => a.Status == ApplicationStatus.Accepted);
             int rejectedCount = _context.Applications.Count(a => a.Status == ApplicationStatus.Rejected);
 
-            
-
             ViewBag.PendingCount = pendingCount;
             ViewBag.AcceptedCount = acceptedCount;
             ViewBag.RejectedCount = rejectedCount;
@@ -57,14 +53,11 @@ namespace MvcProject.Areas.Manage.Controllers
                 MonthlyBenefit = monthlyEarning,
                 YearlyBenefit = yearlyEarnings,
                 AcceptanceRate = acceptanceRate,
-                PendingApplications=pendingApplications,
-               
-
-            };
-
-          
+                PendingApplications=pendingApplications,               
+            };        
             return View(dashboardViewModel);
         }
+
         [HttpGet]
         public IActionResult GetMonthlyEarnings()
         {
@@ -76,14 +69,12 @@ namespace MvcProject.Areas.Manage.Controllers
             {
                 DateTime firstDayOfMonth = new DateTime(DateTime.Now.Year, i, 1);
                 DateTime lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-
                 double monthlyEarning = _context.Applications
                     .Where(a => a.Status == ApplicationStatus.Accepted
                             && a.CreatedAt >= firstDayOfMonth
                             && a.CreatedAt <= lastDayOfMonth)
                     .Select(a => a.Course.Price)
                     .Sum();
-
                 monthlyEarnings.Add(monthlyEarning);
                 months.Add(firstDayOfMonth.ToString("MMM"));
             }
