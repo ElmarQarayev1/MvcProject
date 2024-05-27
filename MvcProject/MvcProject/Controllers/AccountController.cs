@@ -373,7 +373,6 @@ namespace MvcProject.Controllers
         }
 
 
-
         public async Task<IActionResult> GoogleResponse(string returnUrl = null)
         {
             var result = await HttpContext.AuthenticateAsync("Google");
@@ -397,19 +396,14 @@ namespace MvcProject.Controllers
 
             if (appUser == null)
             {
-               
-                var username = email.Substring(0, email.IndexOf('@'));
-                
-                var fullNameClaim = result.Principal.FindFirst(claim => claim.Type == "name");
-                var fullName = fullNameClaim?.Value ?? username;
+                var username = GenerateUserNameFromEmail(email);
 
                 appUser = new AppUser
                 {
                     UserName = username,
                     Email = email,
-                    FullName = fullName
+                    FullName = username
                 };
-
                 var createResult = await _userManager.CreateAsync(appUser);
                 if (!createResult.Succeeded)
                 {
@@ -428,9 +422,11 @@ namespace MvcProject.Controllers
             return returnUrl != null ? Redirect(returnUrl) : RedirectToAction("Index", "Home");
         }
 
-
-
-
+        private string GenerateUserNameFromEmail(string email)
+        {
+            var atIndex = email.IndexOf('@');
+            return atIndex > 0 ? email.Substring(0, atIndex) : email;
+        }
 
     }
 }

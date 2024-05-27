@@ -1,7 +1,7 @@
 ﻿@model MemberLoginViewModel
 @{
 
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Login";
 }
 <!-- Login start -->
 <div class="login-area pt-150 pb-150">
@@ -28,17 +28,23 @@
                                         <input asp-for="Password" class="mb-0 form-control" type="password" id="password" placeholder="Enter your password">
                                         <span class="text-danger" asp-validation-for="Password"></span>
                                     </div>
+                                    <div class="col-lg-12 mb--20 pb-5 mb-5">
+
+                                        <div class="login-toggle-btn">
+                                            <a asp-action="googlelogin">Google Login</a>
+                                        </div>
+                                    </div>
+
+                                 
                                     <div class="button-box">
                                         <div class="login-toggle-btn">
                                             <a asp-action="forgetpassword">Forget Password??</a>
-                                        </div>
-                                        <div class="login-toggle-btn">
-                                            <a asp-action="googlelogin">Google Login</a>
                                         </div>
 
                                         <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                                         <button type="submit" class="default-btn">Login</button>
                                     </div>
+
                                 </form>
 
                             }
