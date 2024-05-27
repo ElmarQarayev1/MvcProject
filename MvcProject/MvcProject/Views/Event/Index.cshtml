@@ -124,11 +124,7 @@
             </ul>
         </nav>
 
-        @*<div class="row">
-            <div class="col-xs-12 text-center">
-                <button id="loadMoreBtn" class="default-btn">Load More</button>
-            </div>
-        </div>*@
+       
     </div>
 </div>
 <!-- Event End -->
@@ -159,88 +155,5 @@
         </div>
     </div>
 </div>
-<!-- Subscribe End -->
 
-@*@section elmm {
-    <script>document.addEventListener("DOMContentLoaded", function () {
-            let eventsContainer = document.getElementById("eventList");
-            let loadMoreButton = document.getElementById("loadMoreBtn");
-            let visibleEvents = 3;
-            let allEventsLoaded = false;
 
-            function createEventElement(event) {
-                return `
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="single-event mb-60">
-                        <div class="event-img">
-                            <a href="/Event/Detail/${event.id}">
-                                <img src="/uploads/event/${event.img}" alt="event">
-                                <div class="course-hover">
-                                    <i class="fa fa-link"></i>
-                                </div>
-                            </a>
-                            <div class="event-date">
-                                <h3>${new Date(event.date).getDate()} <span>${new Date(event.date).toLocaleString('tr-TR', { month: 'short' })}</span></h3>
-                            </div>
-                        </div>
-                        <div class="event-content text-left">
-                            <h4><a href="/Event/Detail/${event.id}">${event.name}</a></h4>
-                            <ul>
-                                <li><span>time:</span> ${new Date(event.startTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })} - ${new Date(event.endTime).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</li>
-                                <li><span>venue:</span> ${event.venue}</li>
-                            </ul>
-                            <div class="event-content-right">
-                                <a class="default-btn" href="/Event/Detail/${event.id}">join now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            }
-            function loadMoreEvents() {
-                fetch("/Event/LoadMore?skipCount=" + visibleEvents)
-                    .then(response => {
-                        if (response.status === 204) {
-                            loadMoreButton.style.display = "none";
-                            allEventsLoaded = true;
-                            console.log('No more events to load.');
-                            return Promise.reject('No more events');
-                        } else if (!response.ok) {
-                            throw new Error(`Network response was not ok: ${response.statusText}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.length === 0) {
-                            loadMoreButton.style.display = "none";
-                            allEventsLoaded = true;
-                            console.log('All events loaded.');
-                        } else {
-                            data.forEach(event => {
-                                let eventElement = createEventElement(event);
-                                eventsContainer.insertAdjacentHTML('beforeend', eventElement);
-                            });
-                            visibleEvents += data.length;
-                            if (data.length < 3) {
-                                loadMoreButton.style.display = "none";
-                                allEventsLoaded = true;
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        if (error === 'No more events') {
-                            console.log('All events loaded.');
-                        } else {
-                            console.error('Error fetching events:', error);
-                        }
-                    });
-            }
-
-            loadMoreButton.addEventListener("click", (event) => {
-                event.preventDefault();
-                if (!allEventsLoaded) {
-                    loadMoreEvents();
-                }
-            });
-        });</script>
-}*@
