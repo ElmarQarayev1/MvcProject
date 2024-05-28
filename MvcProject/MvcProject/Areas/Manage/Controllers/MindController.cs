@@ -73,6 +73,10 @@ namespace MvcProject.Areas.Manage.Controllers
         public IActionResult MindDetail(int id)
         {
             var mind = _context.Minds.FirstOrDefault(x => x.Id == id);
+            if (mind == null)
+            {
+                return RedirectToAction("notfound", "error");
+            }
             return View(mind);
 
         }

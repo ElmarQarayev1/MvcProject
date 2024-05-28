@@ -12,8 +12,8 @@ using ResetPasswordViewModel = MvcProject.Areas.Manage.ViewModels.ResetPasswordV
 
 namespace MvcProject.Areas.Manage.Controllers
 {
-
     [Area("manage")]
+    [Authorize]
     public class AccountController:Controller
 	{
         private readonly UserManager<AppUser> _userManager;
@@ -29,7 +29,6 @@ namespace MvcProject.Areas.Manage.Controllers
             _context = context;
         }
 
-        
         public async Task<IActionResult> CreateRoles()
         {
             await _roleManager.CreateAsync(new IdentityRole("admin"));
@@ -70,7 +69,6 @@ namespace MvcProject.Areas.Manage.Controllers
         {
             return View();
         }
-
 
 
         [ValidateAntiForgeryToken]

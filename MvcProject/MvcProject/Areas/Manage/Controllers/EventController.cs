@@ -36,7 +36,6 @@ namespace MvcProject.Areas.Manage.Controllers
            
         }
 
-
         public IActionResult Create()
         {
             ViewBag.Categories = _context.Categories.ToList();

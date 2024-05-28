@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 using Microsoft.AspNetCore.Mvc;
 using MvcProject.Areas.Manage.ViewModels;
 using MvcProject.Data;
@@ -7,7 +9,8 @@ using MvcProject.Models;
 namespace MvcProject.Areas.Manage.Controllers
 {
     [Area("manage")]
-	public class CategoryController:Controller
+    [Authorize(Roles = "admin,superadmin")]
+    public class CategoryController:Controller
 	{
         private readonly AppDbContext _context;
 

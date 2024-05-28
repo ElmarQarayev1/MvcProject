@@ -28,7 +28,6 @@ namespace MvcProject.Areas.Manage.Controllers
             if (pageData.TotalPages < page) return RedirectToAction("index", new { page = pageData.TotalPages });
 
             return View(pageData);
-
         }
         public IActionResult Create()
         {

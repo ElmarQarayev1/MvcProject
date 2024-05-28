@@ -1,0 +1,64 @@
+﻿
+@model Course
+@{
+    ViewData["Title"] = "Send Message";
+}
+
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Course Detail</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="name">CourseName</label>
+                        </td>
+                        <td>
+                            <input name="name" id="name" class="form-control" value="@Model.Name" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="desc">Description</label>
+                        </td>
+                        <td>
+                            <textarea name="desc" id="desc" class="form-control"> @Model.Desc</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="price">Price</label>
+                        </td>
+                        <td>
+                            <input name="price" id="price" class="form-control"value="@Model.Price"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="duration">Duration</label>
+                        </td>
+                        <td>
+                            <input name="duration" id="duration" class="form-control"value="@Model.Duration"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="language">Language</label>
+                        </td>
+                        <td>
+                            <input name="language" id="language" class="form-control" value="@Model.Language"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <a class="btn btn-primary" asp-action="index">Go To Back</a>
+        </div>
+    </div>
+</div>
+@section scripts {
+    @Html.Partial("_ValidationScriptPartials")
+}
+

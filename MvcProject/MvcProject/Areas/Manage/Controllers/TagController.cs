@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MvcProject.Areas.Manage.ViewModels;
 using MvcProject.Data;
@@ -6,6 +7,7 @@ using MvcProject.Models;
 
 namespace MvcProject.Areas.Manage.Controllers
 {
+    [Authorize(Roles ="admin,superadmin")]
     [Area("manage")]
 	public class TagController:Controller
 	{

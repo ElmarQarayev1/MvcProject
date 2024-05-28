@@ -16,6 +16,7 @@ namespace MvcProject.Models
         public string Text { get; set; }
         [Required]
         public string Subject { get; set; }
+
         public AppUser? AppUser { get; set; }      
     }
 }

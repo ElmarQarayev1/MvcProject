@@ -1,11 +1,13 @@
 ﻿// ExcelController.cs
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MvcProject.Services;
 
 namespace MvcProject.Controllers
 {
     [Area("manage")]
+    [Authorize(Roles ="admin,superadmin")]
     public class ExcelController : Controller
     {
         private readonly ExcelExportService _excelExportService;

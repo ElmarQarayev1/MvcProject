@@ -82,6 +82,17 @@ namespace MvcProject.Areas.Manage.Controllers
             _emailService.Send(recipientEmail, subject, body);
             return RedirectToAction("Index");
         }
+
+        public IActionResult CourseDetail(int id)
+        {
+            var course = _context.Courses.FirstOrDefault(x => x.Id == id);
+            if (course == null)
+            {
+                return RedirectToAction("notfound", "error");
+            }
+
+            return View(course);
+        }
     }
 }
 

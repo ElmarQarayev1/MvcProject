@@ -29,7 +29,7 @@
                             <td>@(app.AppUser == null ? $"{app.FullName}" : app.AppUser.FullName)</td>
                             <td>@app.CreatedAt.ToString("dd MMMM yyyy")</td>
                             <td>@app.Status</td>
-                            <td>@app.Course.Name</td>
+                            <td><a asp-action="coursedetail" asp-route-id="@app.Course.Id">@app.Course.Name</a></td>
                             <td>
                                 @if (app.Status == Models.Enum.ApplicationStatus.Rejected)
                                 {

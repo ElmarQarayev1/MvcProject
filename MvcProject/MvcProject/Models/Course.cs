@@ -40,6 +40,8 @@ namespace MvcProject.Models
         [AllowedFileTypes("image/png", "image/jpeg")]
         public IFormFile? ImageFile { get; set; }
 
+		
+
     }
 }
 
