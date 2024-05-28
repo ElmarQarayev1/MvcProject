@@ -21,6 +21,8 @@ namespace MvcProject.Areas.Manage.Controllers
             _env = env;
             _context = context;
         }
+
+
         public IActionResult Index(int page = 1)
         {
             var query = _context.Events.Include(x => x.EventTeachers).ThenInclude(x=>x.Teacher).Include(x => x.Category).Include(x=>x.EventTags).ThenInclude(x=>x.Tag);
@@ -33,6 +35,8 @@ namespace MvcProject.Areas.Manage.Controllers
             return View(pageData);
            
         }
+
+
         public IActionResult Create()
         {
             ViewBag.Categories = _context.Categories.ToList();
@@ -40,9 +44,10 @@ namespace MvcProject.Areas.Manage.Controllers
             ViewBag.Teachers = _context.Teachers.ToList();
             return View();
         }
+
         [HttpPost]
         public IActionResult Create(Event Event)
-        {
+       {
             if (Event.ImageFile == null)
             {
                 ModelState.AddModelError("ImageFile", "ImageFile is required!!");
@@ -55,7 +60,29 @@ namespace MvcProject.Areas.Manage.Controllers
                 ViewBag.Teachers = _context.Teachers.ToList();
                 return View(Event);
             }
-         
+
+            var diff = DateTime.Now - Event.Date;
+            if (diff.TotalDays >= 1)
+            {
+                ModelState.AddModelError("Date", "Date must be in the future");
+                ViewBag.Categories = _context.Categories.ToList();
+                ViewBag.Tags = _context.Tags.ToList();
+                ViewBag.Teachers = _context.Teachers.ToList();
+                return View(Event);
+            }
+
+
+            if (Event.StartTime >= Event.EndTime)
+            {
+                ModelState.AddModelError("StartTime", "Start time must be before end time");
+                ModelState.AddModelError("EndTime", "End time must be after start time");
+                ViewBag.Categories = _context.Categories.ToList();
+                ViewBag.Tags = _context.Tags.ToList();
+                ViewBag.Teachers = _context.Teachers.ToList();
+                return View(Event);
+            }
+
+
 
             if (!_context.Categories.Any(x => x.Id == Event.CategoryId))
                 return RedirectToAction("notfound", "error");
@@ -101,6 +128,9 @@ namespace MvcProject.Areas.Manage.Controllers
 
            return RedirectToAction("index");
         }
+
+
+
         public IActionResult Delete(int id)
         {
             Event Event = _context.Events.FirstOrDefault(m => m.Id == id);
@@ -118,6 +148,10 @@ namespace MvcProject.Areas.Manage.Controllers
      
             return RedirectToAction("Index");
         }
+
+
+
+
         public IActionResult Edit(int id)
         {
             Event eevent = _context.Events.Include(x=>x.EventTags).Include(x=>x.EventTeachers).FirstOrDefault(x => x.Id == id);
@@ -131,6 +165,10 @@ namespace MvcProject.Areas.Manage.Controllers
             eevent.TeacherIds = eevent.EventTeachers.Select(x => x.TeacherId).ToList();
             return View(eevent);
         }
+
+
+
+
         [HttpPost]
         public IActionResult Edit(Event Event)
         {
@@ -174,8 +212,30 @@ namespace MvcProject.Areas.Manage.Controllers
                     existsEvent.Img = FileManager.Save(Event.ImageFile, _env.WebRootPath, "uploads/event");
                 }
 
-           existsEvent.Name = Event.Name;
+            var diff = DateTime.Now - Event.Date;
+            if (diff.TotalDays >= 1)
+            {
+                ModelState.AddModelError("Date", "Date must be in the future");
+                ViewBag.Categories = _context.Categories.ToList();
+                ViewBag.Tags = _context.Tags.ToList();
+                ViewBag.Teachers = _context.Teachers.ToList();
+                return View(Event);
+            }
+
+
+            if (Event.StartTime >= Event.EndTime)
+            {
+                ModelState.AddModelError("StartTime", "Start time must be before end time");
+                ModelState.AddModelError("EndTime", "End time must be after start time");
+                ViewBag.Categories = _context.Categories.ToList();
+                ViewBag.Tags = _context.Tags.ToList();
+                ViewBag.Teachers = _context.Teachers.ToList();
+                return View(Event);
+            }
+
+            existsEvent.Name = Event.Name;
            existsEvent.Desc = Event.Desc;
+            existsEvent.Date = Event.Date;
            existsEvent.StartTime = Event.StartTime;
            existsEvent.EndTime = Event.EndTime;
            existsEvent.CategoryId = Event.CategoryId;
@@ -192,6 +252,7 @@ namespace MvcProject.Areas.Manage.Controllers
                     return RedirectToAction("index");
                 
             }
+
         }
     }
 

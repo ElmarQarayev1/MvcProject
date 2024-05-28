@@ -3,6 +3,9 @@
     ViewData["Title"] = "Profile";
     int order = 0;
 }
+<head>
+    <link href="bootstrap.min.css" rel="stylesheet">
+</head>
 <div class="container mt-5">
     <h2 class="text-center">@ViewData["Title"]</h2>
     <form method="post" class="mt-4">
@@ -29,13 +32,18 @@
                 </div>
             </div>
             <h4 class="mt-4">Password Change</h4>
-            <div class="form-group row">
-                <label for="current-pwd" class="col-sm-3 col-form-label">Current Password</label>
-                <div class="col-sm-9">
-                    <input asp-for="CurrentPassword" id="current-pwd" class="form-control" type="password">
-                    <span class="text-danger" asp-validation-for="CurrentPassword"></span>
+            @if (Model.HasPassword && !Model.IsGoogleUser)
+            {
+                <input type="hidden" asp-for="HasPassword" />
+                <input type="hidden" asp-for="IsGoogleUser" />
+                <div class="form-group row">
+                    <label for="current-pwd" class="col-sm-3 col-form-label">Current Password</label>
+                    <div class="col-sm-9">
+                        <input asp-for="CurrentPassword" id="current-pwd" class="form-control" type="password">
+                        <span class="text-danger" asp-validation-for="CurrentPassword"></span>
+                    </div>
                 </div>
-            </div>
+            }
             <div class="form-group row">
                 <label for="new-pwd" class="col-sm-3 col-form-label">New Password</label>
                 <div class="col-sm-9">
@@ -63,18 +71,17 @@
         </div>
     </form>
 
-    <div id="statusDiv" style=" margin-left:700px;  margin-bottom:70px; padding-top:70px; width: 400px; background-color: orange; padding: 10px; text-align: center; display:none;"></div>
+    <div id="statusDiv" style="margin-left:700px; margin-bottom:70px; padding-top:70px; width: 400px; background-color: orange; padding: 10px; text-align: center; display:none;"></div>
 
     <div class="myaccount-content mt-5">
         <h3>Orders</h3>
         <div class="table-responsive">
             <table class="table table-bordered table-striped text-center">
-
                 <thead class="thead-light">
                     <tr>
                         <th>No</th>
                         <th>Date</th>
-                        <th>CourseName</th> 
+                        <th>CourseName</th>
                         <th>Status</th>
                         <th>Price</th>
                         <th>Action</th>
@@ -88,7 +95,7 @@
                             <td>@order</td>
                             <td>@(item.CreatedAt.ToString("yyyy-MM-dd hh:mm"))</td>
                             <td>@item.Course.Name</td>
-                            <td>@item.Status</td>
+                            <td><span class="badge badge-pill badge-success">@item.Status</span></td>
                             <td>$@item.Course.Price</td>
                             <td>
                                 @if (item.Status == MvcProject.Models.Enum.ApplicationStatus.Pending)
@@ -98,7 +105,6 @@
                             </td>
                         </tr>
                     }
-
                     <tr>
                         <td colspan="4"></td>
                         <td>Total Price:</td>
@@ -109,25 +115,39 @@
         </div>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-KyZXEAg3QhqLMpG8r+Knujsl5/1hb/4XDsl1pY4KKllEQO5Fh5YLP+X86p98/UqIbYLLiE2Npbb3PUlV4F1w3A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.js" integrity="sha512-pn4yorWMbHHvdsldBpkTNjJaoadsoYs/ZgOYHSHUtivn1j/Ddgdnlgt1egjQcP8j4atM3TR+tgIqgjhi5Z11KQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js" integrity="sha512-7rhBJh1om/W5Ztx7WiYOR9h2wlSaTmPyQMoHFtbT/FVNIA12y6S6I8HY9mrBS1uJ3dSU/R3qaSAXsGYuRjMDxg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    var connection = new signalR.HubConnectionBuilder()
-        .withUrl("/hub")
-        .build();
+    $(document).ready(function () {
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
 
-    connection.on("ShowNotification", function (status) {
-       
-        document.getElementById("statusDiv").innerText = "Your apply status: " + status;
-        
-        document.getElementById("statusDiv").style.display = "block";
-       
-        setTimeout(function () {
-            document.getElementById("statusDiv").style.display = "none";
-        }, 8000); 
+        @if (TempData["ProfileUpdateSuccess"] != null)
+        {
+            <text>
+                toastr["success"]("@TempData["ProfileUpdateSuccess"]");
+            </text>
+        }
+
+        @if (TempData["ProfileUpdateError"] != null)
+        {
+            <text>
+                toastr["error"]("@TempData["ProfileUpdateError"]");
+            </text>
+        }
     });
-    connection.start().catch(function (err) {
-        console.error(err.toString());
-    });
-    </script>
+</script>

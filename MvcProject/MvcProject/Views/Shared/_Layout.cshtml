@@ -1,12 +1,11 @@
 ﻿@inject LayoutService layoutService
 @{
     var settings = layoutService.GetSettings();
-   
+
 }
 <!doctype html>
 <html class="no-js" lang="en">
 
-<!-- Mirrored from demo.devitems.com/eduhome/signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 21 Jun 2020 19:44:02 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -14,7 +13,6 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <!-- Place favicon.ico in the root directory -->
     <link rel="stylesheet" href="~/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/css/animate.css">
     <link rel="stylesheet" href="~/css/meanmenu.css">
@@ -24,6 +22,7 @@
     <link rel="stylesheet" href="~/css/et-line-icon.css">
     <link rel="stylesheet" href="~/css/reset.css">
     <link rel="stylesheet" href="~/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" href="~/css/style.css">
     <link rel="stylesheet" href="~/css/responsive.css">
@@ -56,10 +55,7 @@
             color: #000;
             font-weight: bold;
         }
-   
-
-            
-</style
+</style>
 <body>
     <!--[if lt IE 8]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -238,12 +234,50 @@
     <script src="~js/jquery.mb.YTPlayer.js"></script>
     <script src="~js/jquery.nicescroll.min.js"></script>
     <script src="~js/plugins.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.12/signalr.min.js"></script>
+
     <script src="~js/main.js"></script>
     <script src="~/js/user.js"></script>
     @RenderSection("elmm", required: false)
-
-   
-
 </body>
 
 </html>
+
+<script>
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("/hub")
+        .build();
+
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    connection.on("CourseAccepted", (date) => {
+        
+        toastr["success"](`${date} bu tarixli course accept olundu`);
+    });
+
+    connection.on("CourseRejected", (date) => {
+        toastr["error"](`${date} bu tarixli course reject olundu`);
+    });
+
+    connection.start().catch(function (err) {
+        console.error(err.toString());
+    });
+</script>

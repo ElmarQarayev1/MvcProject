@@ -35,14 +35,10 @@ namespace MvcProject.Controllers
             _signInManager = signInManager;
         }
 
-
-
         public IActionResult Register()
         {
             return View();
         }
-
-
 
 
         [ValidateAntiForgeryToken]
@@ -82,7 +78,7 @@ namespace MvcProject.Controllers
 
             var url = Url.Action("VerifyEmail", "Account", new { userId=appUser.Id, token = token }, Request.Scheme);
 
-            TempData["Confirm"] = member.Email;
+           // TempData["Confirm"] = member.Email;
 
             var subject = "Confirm your email address";
 
@@ -92,7 +88,6 @@ namespace MvcProject.Controllers
 
             return RedirectToAction("index", "home");
         }
-
 
         public async Task<IActionResult> VerifyEmail(string userId, string token)
         {
@@ -123,7 +118,6 @@ namespace MvcProject.Controllers
         {
             return View();
         }
-
 
        
         [ValidateAntiForgeryToken]
@@ -169,7 +163,6 @@ namespace MvcProject.Controllers
 
 
 
-
         public IActionResult ForgetPassword()
         {
             return View();
@@ -200,7 +193,6 @@ namespace MvcProject.Controllers
         }
 
 
-
         public IActionResult Verify(string email, string token)
         {
             var user = _userManager.FindByEmailAsync(email.ToLower()).Result;
@@ -222,7 +214,7 @@ namespace MvcProject.Controllers
 
 
 
-       
+
         public async Task<IActionResult> Profile()
         {
             AppUser? user = await _userManager.GetUserAsync(User);
@@ -238,73 +230,111 @@ namespace MvcProject.Controllers
                                              .Where(x => x.AppUserId == user.Id && x.Status != ApplicationStatus.Canceled)
                                              .ToListAsync();
 
+            bool hasPassword = await _userManager.HasPasswordAsync(user);
+            bool isGoogleUser = (await _userManager.GetLoginsAsync(user)).Any(login => login.LoginProvider == "Google");
+
             ProfileEditViewModel profileVM = new ProfileEditViewModel
             {
                 FullName = user.FullName,
                 Email = user.Email,
                 UserName = user.UserName,
-                Applications = applications
+                Applications = applications,
+                HasPassword = hasPassword,
+                IsGoogleUser = isGoogleUser
             };
+
             return View(profileVM);
         }
 
-
-
-
-        [ValidateAntiForgeryToken]       
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Profile(ProfileEditViewModel profileEditViewModel)
         {
-                
-            if (!ModelState.IsValid) return View(profileEditViewModel);
-
             AppUser? appUser = await _userManager.GetUserAsync(User);
+            if (appUser == null)
+            {
+                TempData["ProfileUpdateError"] = "User not found. Please log in again.";
+                return RedirectToAction("login", "account");
+            }
 
-            if (appUser == null) return RedirectToAction("login", "account");
+            bool hasPassword = await _userManager.HasPasswordAsync(appUser);
+            bool isGoogleUser = (await _userManager.GetLoginsAsync(appUser)).Any(login => login.LoginProvider == "Google");
+
+            profileEditViewModel.HasPassword = hasPassword;
+            profileEditViewModel.IsGoogleUser = isGoogleUser;
+
+            if (!ModelState.IsValid)
+            {
+                TempData["ProfileUpdateError"] = "Please correct the errors and try again.";
+                return View(profileEditViewModel);
+            }
 
             appUser.UserName = profileEditViewModel.UserName;
-
             appUser.Email = profileEditViewModel.Email;
-
             appUser.FullName = profileEditViewModel.FullName;
 
-            if (_userManager.Users.Any(x => x.Id != User.FindFirstValue(ClaimTypes.NameIdentifier) && x.NormalizedEmail == profileEditViewModel.Email.ToUpper()))
+            if (_userManager.Users.Any(x => x.Id != appUser.Id && x.NormalizedEmail == profileEditViewModel.Email.ToUpper()))
             {
                 ModelState.AddModelError("Email", "Email is already taken");
-
+                TempData["ProfileUpdateError"] = "Email is already taken.";
                 return View(profileEditViewModel);
             }
 
-            if (profileEditViewModel.NewPassword != null)
+            if (!string.IsNullOrEmpty(profileEditViewModel.NewPassword))
             {
-                var passwordResult = await _userManager.ChangePasswordAsync(appUser, profileEditViewModel.CurrentPassword, profileEditViewModel.NewPassword);
-
-                if (!passwordResult.Succeeded)
+                if (isGoogleUser || !hasPassword)
                 {
-                    foreach (var error in passwordResult.Errors)
+                    var addPasswordResult = await _userManager.AddPasswordAsync(appUser, profileEditViewModel.NewPassword);
 
-                        ModelState.AddModelError("", error.Description);
+                    if (!addPasswordResult.Succeeded)
+                    {
+                        foreach (var error in addPasswordResult.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        TempData["ProfileUpdateError"] = "Failed to add new password.";
+                        return View(profileEditViewModel);
+                    }
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(profileEditViewModel.CurrentPassword))
+                    {
+                        ModelState.AddModelError("CurrentPassword", "Current password is required.");
+                        TempData["ProfileUpdateError"] = "Please correct the errors and try again.";
+                        return View(profileEditViewModel);
+                    }
 
-                    return View(profileEditViewModel);
+                    var changePasswordResult = await _userManager.ChangePasswordAsync(appUser, profileEditViewModel.CurrentPassword, profileEditViewModel.NewPassword);
+
+                    if (!changePasswordResult.Succeeded)
+                    {
+                        foreach (var error in changePasswordResult.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        TempData["ProfileUpdateError"] = "Failed to change password.";
+                        return View(profileEditViewModel);
+                    }
                 }
             }
-            var result = await _userManager.UpdateAsync(appUser);
-            if (!result.Succeeded)
-            {
-                foreach (var err in result.Errors)
-                {
-                    if (err.Code == "DuplicateUserName")
-                        ModelState.AddModelError("UserName", "UserName is already taken");
 
-                    else ModelState.AddModelError("", err.Description);
+            var updateResult = await _userManager.UpdateAsync(appUser);
+
+            if (!updateResult.Succeeded)
+            {
+                foreach (var error in updateResult.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
                 }
+                TempData["ProfileUpdateError"] = "Failed to update profile.";
                 return View(profileEditViewModel);
             }
-            await _signInManager.SignInAsync(appUser, false);
 
-            return View(profileEditViewModel);
+            await _signInManager.SignInAsync(appUser, isPersistent: false);
+            TempData["ProfileUpdateSuccess"] = "Profile updated successfully!";
+            return RedirectToAction("profile");
         }
-
 
 
 
@@ -314,30 +344,36 @@ namespace MvcProject.Controllers
         }
 
 
-
-
         [ValidateAntiForgeryToken]
         [HttpPost]
         public IActionResult ResetPassword(ResetPasswordViewModel vm)
         {
             TempData["email"] = vm.Email;
+
             TempData["token"] = vm.Token;
 
             if (!ModelState.IsValid) return View(vm);
 
             AppUser? user = _userManager.FindByEmailAsync(vm.Email).Result;
 
+
             if (user == null || !_userManager.IsInRoleAsync(user, "member").Result)
             {
                 ModelState.AddModelError("", "Account is not exist");
+
                 return View();
             }
+
+
             if (!_userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", vm.Token).Result)
             {
                 ModelState.AddModelError("", "Account is not exist");
                 return View();
             }
+
+
             var result = _userManager.ResetPasswordAsync(user, vm.Token, vm.NewPassword).Result;
+
 
             if (!result.Succeeded)
             {
@@ -348,26 +384,19 @@ namespace MvcProject.Controllers
                 return View();
             }
 
+
             return RedirectToAction("login");
         }
 
-
-
-        public IActionResult Users()
-        {
-            var users = _userManager.Users.ToList();
-
-            return View(users);
-        }
-
-
-
-
+     
         public IActionResult GoogleLogin(string returnUrl = null)
         {
+
             returnUrl = returnUrl ?? Url.Content("~/");
 
+
             var properties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse", "Account", new { returnUrl }) };
+
 
             return Challenge(properties, "Google");
         }
@@ -380,15 +409,20 @@ namespace MvcProject.Controllers
             if (result?.Principal == null)
             {
                 Console.WriteLine("Authentication failed. Principal is null.");
+
                 return RedirectToAction("Login", "Account", new { message = "Authentication failed. Please try again." });
             }
 
             var emailClaim = result.Principal.FindFirst(claim => claim.Type == ClaimTypes.Email);
+
+
             var email = emailClaim?.Value;
 
             if (email == null)
             {
                 Console.WriteLine("Email claim not found.");
+
+
                 return RedirectToAction("Login", "Account", new { message = "Email claim not found. Please try again." });
             }
 
@@ -404,7 +438,11 @@ namespace MvcProject.Controllers
                     Email = email,
                     FullName = username
                 };
+
+
                 var createResult = await _userManager.CreateAsync(appUser);
+
+
                 if (!createResult.Succeeded)
                 {
                     foreach (var error in createResult.Errors)

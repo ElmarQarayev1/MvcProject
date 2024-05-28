@@ -60,7 +60,6 @@ namespace MvcProject.Areas.Manage.Controllers
             string recipientEmail = mind.AppUser?.Email ?? mind.Email;
 
 
-
             if (recipientEmail == null)
             {
                 return RedirectToAction("notfound", "error");

@@ -18,16 +18,19 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Date</th>
+
                         <th scope="col">StartTime</th>
+
                         <th scope="col">EndTime</th>
+
                         <th scope="col">Name</th>
-                       
-                       
-                        <th scope="col">Desc</th>
+                      
                        
                         <th scope="col">EventTags</th>
 
                         <th scope="col">Image</th>
+
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -37,14 +40,14 @@
                     {
                         <tr>
                             <th scope="row">@(++order)</th>
+                            <td>@item.Date.ToString("dd-MMM-yy")</td>
                             <td>@item.StartTime.ToString(@"hh\:mm")</td>
                             <td>@item.EndTime.ToString(@"hh\:mm")</td>
                             <td>@item.Name</td>
                             
                            
-                            <td>@item.Desc</td>
                            
-
+                          
                             <td>
                                 <ul>
                                     @foreach (var v in item.EventTags)

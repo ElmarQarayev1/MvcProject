@@ -12,7 +12,6 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<!-- Mirrored from demo.devitems.com/eduhome/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 21 Jun 2020 19:44:02 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -20,7 +19,6 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <!-- Place favicon.ico in the root directory -->
     <link rel="stylesheet" href="~/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/css/animate.css">
     <link rel="stylesheet" href="~/css/meanmenu.css">
@@ -47,35 +45,35 @@
                     </div>
                     <div class="col-md-9 col-sm-9 col-xs-12">
                         <div class="content-wrapper one">
-                            <!-- Main Menu Start -->
+                          
                             <div class="main-menu one text-right">
                                 <nav>
                                     <ul>
                                         <li>
                                             <a asp-action="index" asp-controller="home">Home</a>
-                                            
+
                                         </li>
                                         <li><a asp-action="index" asp-controller="about">About</a></li>
                                         <li>
                                             <a asp-action="index" asp-controller="course">courses</a>
-                                           
+
                                         </li>
                                         <li>
                                             <a asp-action="index" asp-controller="event">event</a>
-                                           
+
                                         </li>
                                         <li class="hidden-sm">
                                             <a asp-action="index" asp-controller="teacher">teacher</a>
-                                           
+
                                         </li>
-                                       
+
                                         <li><a asp-action="index" asp-controller="contact">Contact</a></li>
                                         <li><a href="#">Buy Now</a>
                                     </ul>
                                 </nav>
                             </div>
                             <div class="mobile-menu hidden-lg hidden-md one"></div>
-                            <!-- Main Menu End -->
+                          
                         </div>
                     </div>
                 </div>
@@ -213,11 +211,11 @@
             <div class="row">
                 <div class="col-md-6 col-sm-12 col-xs-12">
 
-                    @for (int i = 0; i < Model.Events.Count; i+=2)
+                    @for (int i = 0; i < Math.Min(4, Model.Events.Count); i++)
                     {
                         <div class="single-event mb-35">
                             <div class="event-date">
-                               
+
                                 <h3><a href="event-details.html"> @Model.Events[i].Date.ToString("dd")<span>@Model.Events[i].Date.ToString("MMM")</span></a></h3>
                             </div>
                             <div class="event-content text-left">
@@ -233,12 +231,11 @@
                                 </div>
                             </div>
                         </div>
-
                     }
 
                 </div>
                 <div class="col-md-6 hidden-sm hidden-xs">
-                    @for (int i = 1; i < Model.Events.Count; i += 2)
+                    @for (int i = 4; i < Math.Min(8, Model.Events.Count); i++)
                     {
                         <div class="single-event mb-35">
                             <div class="event-date">
@@ -258,42 +255,40 @@
                                 </div>
                             </div>
                         </div>
-
                     }
-
                 </div>
             </div>
         </div>
     </div>
- 
+
     <!-- Event Area End -->
     <!-- Testimonial Area Start -->
-        <div class="testimonial-area pt-110 pb-105 text-center">
-            <div class="container">
-                <div class="row">
-                    <div class="testimonial-owl owl-theme owl-carousel">
-                        @foreach (var item in Model.TestiMonies)
-                        {
-                            <div class="col-md-8 col-md-offset-2 col-sm-12">
+    <div class="testimonial-area pt-110 pb-105 text-center">
+        <div class="container">
+            <div class="row">
+                <div class="testimonial-owl owl-theme owl-carousel">
+                    @foreach (var item in Model.TestiMonies)
+                    {
+                        <div class="col-md-8 col-md-offset-2 col-sm-12">
 
-                                <div class="single-testimonial">
-                                    <div class="testimonial-info">
-                                        <div class="testimonial-img">
-                                            <img src="~/uploads/testimonial/@item.ImgName" alt="testimonial">
-                                        </div>
-                                        <div class="testimonial-content">
-                                            <p>@item.Desc</p>
-                                            <h4>@item.FullName</h4>
-                                            <h5>@item.Position</h5>
-                                        </div>
+                            <div class="single-testimonial">
+                                <div class="testimonial-info">
+                                    <div class="testimonial-img">
+                                        <img src="~/uploads/testimonial/@item.ImgName" alt="testimonial">
+                                    </div>
+                                    <div class="testimonial-content">
+                                        <p>@item.Desc</p>
+                                        <h4>@item.FullName</h4>
+                                        <h5>@item.Position</h5>
                                     </div>
                                 </div>
                             </div>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
+    </div>
     <!-- Testimonial Area End -->
     <!-- Blog Area Start -->
     <div class="blog-area pt-150 pb-150">
@@ -479,5 +474,4 @@
     <script src="~/js/main.js"></script>
 </body>
 
-<!-- Mirrored from demo.devitems.com/eduhome/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 21 Jun 2020 19:44:03 GMT -->
 </html>

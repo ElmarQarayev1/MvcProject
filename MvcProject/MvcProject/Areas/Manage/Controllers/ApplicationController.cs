@@ -34,9 +34,6 @@ namespace MvcProject.Areas.Manage.Controllers
             }
             return View(pageData);
         }
-
-
-
         [HttpPost]
         public async Task<IActionResult> Reject(int id)
         {
@@ -56,7 +53,7 @@ namespace MvcProject.Areas.Manage.Controllers
                 return RedirectToAction("notfound", "error");
             }
 
-            await _eduhomeHub.Clients.User(app.AppUser.Id).SendAsync("ShowNotification", "Rejected");
+            await _eduhomeHub.Clients.User(app.AppUser.Id).SendAsync("CourseRejected", app.CreatedAt.ToString("dd-MMM-yyyy"));
 
             _emailService.Send(recipientEmail, subject, body);
 
@@ -81,8 +78,7 @@ namespace MvcProject.Areas.Manage.Controllers
             {
                 return RedirectToAction("notfound", "error");
             }
-
-            await _eduhomeHub.Clients.User(app.AppUser.Id).SendAsync("ShowNotification", "Accepted");
+            await _eduhomeHub.Clients.User(app.AppUser.Id).SendAsync("CourseAccepted", app.CreatedAt.ToString("dd-MMM-yyyy"));
             _emailService.Send(recipientEmail, subject, body);
             return RedirectToAction("Index");
         }

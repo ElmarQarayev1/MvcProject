@@ -13,7 +13,8 @@ namespace MvcProject.Areas.Manage.ViewModels
 		[Required]
 		[MaxLength(40)]
 		[MinLength(8)]
-		public string Password { get; set; }
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
 	}
 }
 

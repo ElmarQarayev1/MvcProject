@@ -242,6 +242,7 @@ namespace MvcProject.Areas.Manage.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["ProfileUpdateError"] = "Please correct the errors and try again.";
                 return View(profileVM);
             }
 
@@ -261,6 +262,7 @@ namespace MvcProject.Areas.Manage.Controllers
                 {
                     foreach (var error in passwordResult.Errors)
                     {
+                        TempData["ProfileUpdateError"] = "Please correct the errors and try again.";
                         ModelState.AddModelError("", error.Description);
                     }
                     return View(profileVM);
@@ -274,16 +276,20 @@ namespace MvcProject.Areas.Manage.Controllers
                 {
                     if (err.Code == "DuplicateUserName")
                     {
+                        TempData["ProfileUpdateError"] = "Please correct the errors and try again.";
                         ModelState.AddModelError("UserName", "UserName is already taken");
                     }
                     else
                     {
+                        TempData["ProfileUpdateError"] = "Please correct the errors and try again.";
                         ModelState.AddModelError("", err.Description);
                     }
                 }
+
+               
                 return View(profileVM);
             }
-         
+            TempData["ProfileUpdateSuccess"] = "Profile updated successfully!";
             await _signInManager.SignInAsync(appUser, false);
     
             return RedirectToAction("login","account");
