@@ -13,7 +13,6 @@ using ResetPasswordViewModel = MvcProject.Areas.Manage.ViewModels.ResetPasswordV
 namespace MvcProject.Areas.Manage.Controllers
 {
     [Area("manage")]
-    [Authorize]
     public class AccountController:Controller
 	{
         private readonly UserManager<AppUser> _userManager;

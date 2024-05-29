@@ -11,9 +11,8 @@ namespace MvcProject.Models
             [Key]
             public string Key { get; set; }
             [MaxLength(500)]
-            public string Value { get; set; }         
-
-       
+            public string Value { get; set; }
+        
     }
 }
 

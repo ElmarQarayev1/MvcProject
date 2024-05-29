@@ -19,7 +19,6 @@ namespace MvcProject.Controllers
             {
                 Infos = _context.Infos.ToList(),
                 Teachers = _context.Teachers.Take(4).ToList()
-
             };
              return View(aboutViewModel);
         }

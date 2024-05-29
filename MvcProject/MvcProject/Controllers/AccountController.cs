@@ -112,14 +112,13 @@ namespace MvcProject.Controllers
             return RedirectToAction("login");
         }
 
-
-   
+  
         public IActionResult Login()
         {
             return View();
         }
 
-       
+
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Login(MemberLoginViewModel member, string returnUrl)
