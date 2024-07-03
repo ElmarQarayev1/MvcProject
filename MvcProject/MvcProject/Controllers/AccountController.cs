@@ -435,7 +435,8 @@ namespace MvcProject.Controllers
                 {
                     UserName = username,
                     Email = email,
-                    FullName = username
+                    FullName = username,
+                    EmailConfirmed = true,
                 };
 
 
@@ -450,8 +451,15 @@ namespace MvcProject.Controllers
                     }
                     return View("Login", new { message = "User creation failed. Please try again." });
                 }
+               
 
                 await _userManager.AddToRoleAsync(appUser, "member");
+            }
+            else if (!appUser.EmailConfirmed)
+            {
+
+                appUser.EmailConfirmed = true;
+                await _userManager.UpdateAsync(appUser);
             }
 
             await _signInManager.SignInAsync(appUser, isPersistent: false);
